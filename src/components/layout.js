@@ -4,7 +4,7 @@ import Helmet from 'react-helmet'
 import { StaticQuery, graphql } from 'gatsby'
 import { Container, Grid, Menu } from 'semantic-ui-react'
 
-import Header from './header'
+import SiteHeader from './SiteHeader'
 
 import 'semantic-ui-less/semantic.less'
 import { Link } from 'gatsby'
@@ -34,21 +34,16 @@ const Layout = ({ children, data }) => (
           ]}
         />
 
-        <Header siteTitle={data.site.siteMetadata.title} />
+        <SiteHeader siteTitle={data.site.siteMetadata.title} />
 
         <Container>
           <Grid relaxed stackable>
-            <Grid.Column mobile={16} tablet={4} computer={4}>
-              <Menu vertical fluid>
-                <LinkedItem to='/' exact>Home</LinkedItem>
-                <LinkedItem to='/page-2'>Second Page</LinkedItem>
-                <LinkedItem to='/404'>404 Example Page</LinkedItem>
-              </Menu>
-            </Grid.Column>
 
             <Grid.Column mobile={16} tablet={8} computer={8}>
               {children}
             </Grid.Column>
+            <Grid.Row>
+              </Grid.Row>
           </Grid>
         </Container>
       </>
