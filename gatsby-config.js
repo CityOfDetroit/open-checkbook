@@ -1,3 +1,7 @@
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
+
 module.exports = {
   siteMetadata: {
     title: 'Detroit open checkbook',
@@ -8,9 +12,11 @@ module.exports = {
     {
       resolve: 'gatsby-source-pg',
       options: {
-        connectionString: "postgres://gisteam@0.tcp.ngrok.io:18800/checkbook",
-        schema: 'public'
+        connectionString: process.env.PG_CONN,
+        schema: 'public',
+        refetchInterval: 120,
+        watchPg: true
       }
     }
   ],
-}
+};

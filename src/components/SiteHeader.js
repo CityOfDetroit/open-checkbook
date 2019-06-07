@@ -7,7 +7,7 @@ import _ from "lodash"
 import logo from "../images/cod-logo.jpg"
 
 const SiteHeader = ({ siteTitle }) => (
-  <header style={{ borderBottom: `5px solid #feb70d`, marginBottom: `1.5rem` }}>
+  <header style={{ borderBottom: `5px solid #feb70d`}}>
     <div style={{ margin: `0 auto`, maxWidth: 960, padding: `1rem 1rem`, display: `flex`, justifyContent: `space-between`, alignItems: `center`, alignContent: `middle`, flexWrap: `wrap` }}>
       <div style={{ display: `flex`, alignItems: `center` }}>
         <div style={{ width: `70px` }}>

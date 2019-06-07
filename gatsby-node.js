@@ -21,12 +21,12 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
     } 
   `);
 
+  // Make a page for each agency or department
   res.data.postgres.agencies.forEach(a => {
     createPage({
       path: `/agency/${a.deptSlug}`,
       component: path.resolve('./src/templates/agency-page.js'),
       context: {
-        number: a.deptNumber,
         name: a.deptName,
       },
     });
