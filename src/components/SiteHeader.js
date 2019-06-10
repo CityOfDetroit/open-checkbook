@@ -1,7 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
 import { Image, Header } from "semantic-ui-react"
-import PropTypes from "prop-types"
 import _ from "lodash"
 
 import logo from "../images/cod-logo.jpg"

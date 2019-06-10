@@ -1,8 +1,8 @@
 import React from 'react'
-
-import { Button, List, Grid, Header } from 'semantic-ui-react'
-import Layout from '../components/layout'
+import { List, Grid, Header } from 'semantic-ui-react'
 import { graphql } from 'gatsby'
+
+import Layout from '../components/layout'
 import { Search } from '../components/Search'
 
 const IndexPage = ({ data }) => {
