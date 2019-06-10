@@ -49,7 +49,7 @@ const IndexPage = ({ data }) => {
               .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
               .slice(0, 10)
               .map((f, i) => (
-              <List.Item header={`${i+1}. ${f.fundName}`} content={`$${f.totalAmount.toLocaleString()}`}/>
+              <List.Item key={i} header={`${i+1}. ${f.fundName}`} content={`$${f.totalAmount.toLocaleString()}`}/>
             ))}
           </List>
         </Grid.Column>
@@ -64,7 +64,7 @@ const IndexPage = ({ data }) => {
               .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
               .slice(0, 10)
               .map((v, i) => (
-              <List.Item header={`${i+1}. ${v.vendorName}`} content={`$${v.totalAmount.toLocaleString()}`}/>
+              <List.Item key={i} header={`${i+1}. ${v.vendorName}`} content={`$${v.totalAmount.toLocaleString()}`}/>
             ))}
           </List>
         </Grid.Column>
