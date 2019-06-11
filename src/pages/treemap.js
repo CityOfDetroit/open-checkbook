@@ -25,7 +25,11 @@ const TreemapPage = ({ data }) => {
   // define Highcharts options
   const options = {
     chart: {
-      height: 800
+      height: 800,
+      style: {
+        fontFamily: 'inherit'
+      },
+      animation: false
     },
     series: [{
       type: 'treemap',
@@ -36,9 +40,10 @@ const TreemapPage = ({ data }) => {
         dataLabels: {
           enabled: true
         },
-        borderWidth: 3
+        borderWidth: 4
       }],
       colorByPoint: true,
+      colors: ['#9fd5b3', '#004445', '#33566b', '#2e3761', '#cb4d4f', '#94456c', '#6d3679', '#5f355a', '#FEB70A', '#da7527', '#b6683a'],
       allowPointSelect: true,
       point: {
         events: {
@@ -46,6 +51,9 @@ const TreemapPage = ({ data }) => {
             navigate(this.slug);
           }
         }
+      },
+      animation: {
+        duration: 0
       }
     }],
     title: {
@@ -76,7 +84,6 @@ export const query = graphql`
   {
     postgres {
       allAgenciesList {
-        deptName
         deptNameShorthand
         deptSlug
         totalAmount
