@@ -1,0 +1,172 @@
+import React from 'react';
+import { graphql } from 'gatsby';
+import _ from 'lodash';
+import HighchartsReact from 'highcharts-react-official';
+import Highcharts from 'highcharts';
+import drilldown from 'highcharts/modules/drilldown';
+drilldown(Highcharts);
+
+const Drilldown = ({ data }) => {
+  let agencies = data.postgres.allAgenciesList
+
+  let series = []
+
+  series.push({
+    name: 'Departments',
+    colorByPoint: false,
+    color: "#004445",
+    data: agencies.map(a => {
+      return {
+        name: a.deptNameShorthand,
+        y: a.accountsPayablesByAgencyCodeList.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
+        drilldown: a.deptNameShorthand
+      }
+    })
+  })
+
+  let drilldown = {
+    drillUpButton: {
+      position: {y: -40}
+    },
+    series: []
+  }
+
+  // iterate through AGENCIES
+  agencies.forEach(a => {
+    // group by Cost Center
+    let costCenterGrouping = _.groupBy(a.accountsPayablesByAgencyCodeList, 'costcenterDesc')
+
+    drilldown.series.push({
+      id: a.deptNameShorthand,
+      name: "Cost Centers",
+      colorByPoint: false,
+      color: "#279989",
+      data: Object.keys(costCenterGrouping).map(c => {
+        let costCenterPayments = costCenterGrouping[c]
+        return {
+          name: c,
+          y: costCenterPayments.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
+          drilldown: `${a.deptNumber}_${c}`
+        }
+      })
+    })
+    
+    // iterate through COST CENTERS
+    Object.keys(costCenterGrouping).forEach(c => {
+      // push to the drilldown series
+      let expenseObjectGrouping = _.groupBy(costCenterGrouping[c], 'objectDescShorthand')
+
+      drilldown.series.push({
+        id: `${a.deptNumber}_${c}`,
+        name: "Expense Objects",
+        colorByPoint: false,
+        color: "#9fd5b3",
+        data: Object.keys(expenseObjectGrouping).map(e => {
+          let expenseObjectPayments = expenseObjectGrouping[e]
+          return {
+            name: e,
+            y: expenseObjectPayments.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
+            drilldown: `${a.deptNumber}_${c}_${e}`
+          }
+        })
+      })
+
+      // iterate through EXPENSE OBJECTS
+      Object.keys(expenseObjectGrouping).forEach(e => {
+        let vendorGrouping = _.groupBy(expenseObjectGrouping[e], 'vendorName')
+
+        drilldown.series.push({
+          id: `${a.deptNumber}_${c}_${e}`,
+          name: "Vendors",
+          colorByPoint: false,
+          color: "#feb70d",
+          data: Object.keys(vendorGrouping).map(v => {
+            let paymentsToVendor = vendorGrouping[v]
+            return {
+              name: v,
+              y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0)
+            }
+          })
+        })
+      })
+    })
+  })
+
+  let chartOptions = {
+    chart: {
+
+      type: "bar"
+    },
+    height: 1850,
+    style: {
+        fontFamily: ["Montserrat", "sans-serif"]
+    },
+    title: {
+      text: "Open Checkbook Prototype"
+    },
+    xAxis: {
+        type: "category"
+    },
+    yAxis: {
+        title: {
+            text: "Total Spent"
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    credits: {
+        enabled: false
+    },
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+            }
+        }
+    },
+    series: series,
+    drilldown: drilldown
+  }
+
+  return (
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={chartOptions}
+    />
+  )
+}
+
+export const query = graphql`
+{
+  postgres {
+    allAgenciesList{
+      dept
+      deptNumber
+      parent
+      deptName
+      deptNameShorthand
+      deptNameAbbreviation
+      deptSlug
+      accountsPayablesByAgencyCodeList {
+        vendorType
+        vendorName
+        invoicePaymentDistAmount
+        fundCode
+        fundDesc
+        agencyCode
+        agencyDesc
+        costcenterCode
+        costcenterDesc
+        objectCode
+        objectDesc
+        objectDescShorthand
+        vendorId
+      }
+    }
+  }
+}
+`;
+
+export default Drilldown;
