@@ -1,7 +1,6 @@
 import React from 'react';
-import { graphql } from 'gatsby';
+import { graphql, navigate } from 'gatsby';
 import { Container, Header } from 'semantic-ui-react';
-import _ from 'lodash';
 
 import SiteHeader from '../components/SiteHeader';
 
@@ -10,34 +9,27 @@ import Highcharts from 'highcharts';
 import treemap from 'highcharts/modules/treemap';
 treemap(Highcharts);
 
-const SecondPage = ({ data }) => {
+const TreemapPage = ({ data }) => {
   // make expected treemap data format
   const chartData = [];
   for (let d in data.postgres.allAgenciesList) {
     let dataPoint = {
       name: data.postgres.allAgenciesList[d].deptNameShorthand,
-      value: parseFloat(data.postgres.allAgenciesList[d].totalAmount)
+      value: parseFloat(data.postgres.allAgenciesList[d].totalAmount),
+      slug: `/agency/${data.postgres.allAgenciesList[d].deptSlug}`
     };
 
     chartData.push(dataPoint);
   }
 
-  // merge & sum all dwsd into single agency (do in source data in future)
-  const dedupedChartData = _.chain(chartData)
-    .groupBy('name')
-    .map(function(objects, dept) {
-      return {
-        name: dept,
-        value: _.sumBy(objects, 'value')
-      };
-    })
-    .value();
-
   // define Highcharts options
   const options = {
+    chart: {
+      height: 800
+    },
     series: [{
       type: 'treemap',
-      data: dedupedChartData,
+      data: chartData,
       layoutAlgorithm: 'squarified',
       levels: [{
         level: 1,
@@ -48,35 +40,19 @@ const SecondPage = ({ data }) => {
       }],
       colorByPoint: true,
       allowPointSelect: true,
-      // see https://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/plotoptions/series-point-events-select/
       point: {
         events: {
           select: function () {
-            var text = this.name + ' was last selected',
-                chart = this.series.chart;
-            if (!chart.lbl) {
-              chart.lbl = chart.renderer.label(text, 100, 70)
-                .attr({
-                  padding: 10,
-                  r: 5,
-                  fill: Highcharts.getOptions().colors[1],
-                  zIndex: 5
-                })
-                .css({
-                  color: '#FFFFFF'
-                })
-                .add();
-            } else {
-              chart.lbl.attr({
-                text: text
-              });
-            }
+            navigate(this.slug);
           }
         }
       }
     }],
     title: {
-      text: 'Vendor Spending by Agency'
+      text: null
+    },
+    credits: {
+      enabled: false
     }
   };
   
@@ -94,7 +70,7 @@ const SecondPage = ({ data }) => {
   );
 };
 
-export default SecondPage;
+export default TreemapPage;
 
 export const query = graphql`
   {
@@ -102,6 +78,7 @@ export const query = graphql`
       allAgenciesList {
         deptName
         deptNameShorthand
+        deptSlug
         totalAmount
       }
     }
