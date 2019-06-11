@@ -4,6 +4,8 @@ import _ from 'lodash';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
 import drilldown from 'highcharts/modules/drilldown';
+import Helpers from '../helpers';
+
 drilldown(Highcharts);
 
 const Drilldown = ({ data }) => {
@@ -17,7 +19,7 @@ const Drilldown = ({ data }) => {
     color: "#004445",
     data: agencies.map(a => {
       return {
-        name: a.deptNameShorthand,
+        name: a.deptNameAbbreviation,
         y: a.accountsPayablesByAgencyCodeList.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
         drilldown: a.deptNameShorthand
       }
@@ -95,9 +97,9 @@ const Drilldown = ({ data }) => {
   let chartOptions = {
     chart: {
 
-      type: "bar"
+      type: "bar",
+      height: 900,
     },
-    height: 1850,
     style: {
         fontFamily: ["Montserrat", "sans-serif"]
     },
@@ -123,8 +125,13 @@ const Drilldown = ({ data }) => {
             borderWidth: 0,
             dataLabels: {
                 enabled: true,
+                formatter: function() { return Helpers.stringToMoney(this.y) }
             }
         }
+    },
+    tooltip: {
+      headerFormat: `<span style="font-size:14px">{series.name}</span><br>`,
+      pointFormat: function () { return `<span style="color:{point.color}">{point.name}</span>: ${this.y}` }
     },
     series: series,
     drilldown: drilldown
