@@ -1,6 +1,7 @@
 import React from "react";
 import { graphql} from "gatsby";
-import { Header, Grid, List, Container } from 'semantic-ui-react';
+import { Header, Grid, List, Container, Table, TableHeader } from 'semantic-ui-react';
+import Helpers from '../helpers'
 
 import Layout from '../components/layout';
 
@@ -20,13 +21,22 @@ export default ({ data }) => {
           <Header as='h3'>
             All payments
           </Header>
-          <List divided relaxed>
+          <Table>
+            <Table.Header>
+              <Table.HeaderCell>Amount</Table.HeaderCell>
+              <Table.HeaderCell>Date</Table.HeaderCell>
+              <Table.HeaderCell>Dep't</Table.HeaderCell>
+              <Table.HeaderCell>Category</Table.HeaderCell>
+            </Table.Header>
             {v.payments.map((p, i) => (
-              <List.Item key={i}>
-                ${p.invoicePaymentDistAmount} to {p.vendorName} on {p.checkDate} for {p.objectDesc}
-              </List.Item>
+              <Table.Row>
+                <Table.Cell>{Helpers.stringToMoney(p.invoicePaymentDistAmount)}</Table.Cell>
+                <Table.Cell>{p.checkDate}</Table.Cell>
+                <Table.Cell>{p.agencyDesc}</Table.Cell>
+                <Table.Cell>{p.objectDesc}</Table.Cell>
+              </Table.Row>
             ))}
-          </List>
+          </Table>
         </Container>
       </Grid.Row>
 

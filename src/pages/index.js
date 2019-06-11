@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, Grid, Header } from 'semantic-ui-react'
+import { List, Grid, Header, Statistic } from 'semantic-ui-react'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
@@ -33,8 +33,8 @@ const IndexPage = ({ data }) => {
             content="Total vendor spending"
             style={{ color: 'white' }}
           />
-          <Header as="h4" content={vendors.reduce((a, v) => a + v.totalAmount, 0).toLocaleString()} />
-          <Header as="h4" content={`${data.postgres.allAccountsPayables.totalCount} transactions`} />
+          <Statistic value={vendors.reduce((a, v) => a + v.totalAmount, 0).toLocaleString()} label={`dollars spent`} style={{color: 'white'}} />
+          <Header as="h4" content={`${data.postgres.allAccountsPayables.totalCount} transactions`} style={{ color: 'white' }} />
         </Grid.Column>
       </Grid.Row>
       <Grid.Row style={mainRowStyle}>
@@ -49,7 +49,7 @@ const IndexPage = ({ data }) => {
               .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
               .slice(0, 10)
               .map((f, i) => (
-              <List.Item key={i} header={`${i+1}. ${f.fundName}`} content={`$${f.totalAmount.toLocaleString()}`}/>
+              <List.Item key={i} header={`${i+1}. ${f.fundName}`} content={`$${f.totalAmount.toLocaleString()}`} style={{ color: 'white' }}/>
             ))}
           </List>
         </Grid.Column>
@@ -64,7 +64,7 @@ const IndexPage = ({ data }) => {
               .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
               .slice(0, 10)
               .map((v, i) => (
-              <List.Item key={i} header={`${i+1}. ${v.vendorName}`} content={`$${v.totalAmount.toLocaleString()}`}/>
+              <List.Item key={i} header={`${i+1}. ${v.vendorName}`} content={`$${v.totalAmount.toLocaleString()}`} style={{ color: 'white' }}/>
             ))}
           </List>
         </Grid.Column>
