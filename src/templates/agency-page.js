@@ -5,14 +5,16 @@ import _ from 'lodash';
 
 import Layout from '../components/layout';
 import PaymentsTable from '../components/PaymentsTable';
+import SummaryTable from '../components/SummaryTable';
 import ExpenseCategoryChart from '../components/ExpenseCategoryChart';
 
 import Helpers from '../helpers';
 
 export default ({ data }) => {
   const a = data.postgres.agency[0];
+  const agencyPayments = a.accountsPayablesByAgencyCodeList;
 
-  const vendorStats = _(a.accountsPayablesByAgencyCodeList)
+  const vendorStats = _(agencyPayments)
     .groupBy('vendorName')
     .map((vendor, key) => ({
         name: key,
@@ -22,7 +24,7 @@ export default ({ data }) => {
     .orderBy(['sumPayments', 'name'], ['desc', 'asc'])
     .value();
 
-  const ccStats = _(a.accountsPayablesByAgencyCodeList)
+  const ccStats = _(agencyPayments)
     .groupBy('costcenterDesc')
     .map((cc, key) => ({
       name: key,
@@ -32,13 +34,35 @@ export default ({ data }) => {
     .orderBy(['sumPayments', 'name'], ['desc', 'asc'])
     .value();
 
-  const expenseChartData = _(a.accountsPayablesByAgencyCodeList)
+  const expenseChartData = _(agencyPayments)
     .groupBy('objectDescShorthand')
     .map((obj, key) => ({
       name: key,
       value: obj.reduce((a, o) => a + parseFloat(o.invoicePaymentDistAmount), 0)
     }))
     .value();
+
+  // experiment in simplified "all payments" data table
+  const simplified = _(agencyPayments)
+    .map((a) => ({
+      vendorName: a.vendorName,
+      amount: parseFloat(a.invoicePaymentDistAmount),
+      categories: a.fundDesc + '-' + a.costcenterDesc + '-' + a.objectDesc
+    }))
+    .value();
+
+  // thanks https://bl.ocks.org/joyrexus/9837596
+  var nest = function (seq, keys) {
+    if (!keys.length)
+      return seq;
+    var first = keys[0];
+    var rest = keys.slice(1);
+    return _.mapValues(_.groupBy(seq, first), function (value) { 
+      return nest(value, rest);
+    });
+  };
+
+  const maybe = nest(simplified, ['vendorName', 'categories']);
 
   return (
     <Layout>
@@ -97,12 +121,13 @@ export default ({ data }) => {
       <Grid.Row>
         <Segment basic style={{ width: '100%' }}>
           <Header as='h3' floated='left' textAlign='left'>
-            All Payments
+            Summary of all Payments
             <Header.Subheader>
-              {a.accountsPayablesByAgencyCodeList.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} vendors
+              {agencyPayments.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} vendors
             </Header.Subheader>
           </Header>
-          <PaymentsTable tableData={a.accountsPayablesByAgencyCodeList} />
+          <SummaryTable tableData={maybe} />
+          <PaymentsTable tableData={agencyPayments} />
         </Segment>
       </Grid.Row>
     </Layout>
