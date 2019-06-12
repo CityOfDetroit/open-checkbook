@@ -1,4 +1,5 @@
 import React from "react";
+import _ from 'lodash';
 import { graphql} from "gatsby";
 import { Header, Grid, List, Container, Table, TableHeader } from 'semantic-ui-react';
 import Helpers from '../helpers'
@@ -8,12 +9,29 @@ import Layout from '../components/layout';
 export default ({ data }) => {
   const v = data.postgres.vendor[0];
 
+  const byDept = _.groupBy(v.payments, 'agencyDesc')
+
   return (
     <Layout>
       <Grid.Row>
-        <Header as='h2'>
-          {v.vendorName}
-        </Header>
+        <Container>
+
+        <Header as='h2' content={v.vendorName} subheader={`1611 Hubbard, Detroit, MI`}/>
+        </Container>
+      </Grid.Row>
+
+      <Grid.Row>
+        <Container>
+
+        <Header as='h3' content={`Summary of payments`}/>
+        <List>
+
+        {Object.keys(byDept).map(d => (
+          <List.Item header={d} content={byDept[d].reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0)} />
+          ))}
+          </List>
+        </Container>
+
       </Grid.Row>
 
       <Grid.Row>
@@ -53,7 +71,7 @@ export const query = graphql`
       vendor: allVendorsList(condition: {vendorId: $id}) {
         vendorType
         vendorName
-        payments: accountsPayablesByVendorIdList {
+        payments: accountsPayablesByVendorIdList(orderBy: CHECK_DATE_ASC) {
           paymentHistDistId
           paymentMethod
           checkNumber
