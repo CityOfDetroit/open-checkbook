@@ -12,7 +12,8 @@ const PaymentsTable = ({ tableData }) => (
         <Table.HeaderCell>Check Date</Table.HeaderCell>
         <Table.HeaderCell>Fund</Table.HeaderCell>
         <Table.HeaderCell>Cost Center</Table.HeaderCell>
-        <Table.HeaderCell>Object</Table.HeaderCell>
+        <Table.HeaderCell>Expense Category</Table.HeaderCell>
+        <Table.HeaderCell>Expense</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
     <Table.Body>
@@ -23,7 +24,8 @@ const PaymentsTable = ({ tableData }) => (
           <Table.Cell>{t.checkDate}</Table.Cell>
           <Table.Cell>{t.fundDesc}</Table.Cell>
           <Table.Cell>{t.costcenterDesc}</Table.Cell>
-          <Table.Cell>{t.objectDescShorthand}: {t.objectDesc}</Table.Cell>
+          <Table.Cell>{t.objectDescShorthand}</Table.Cell>
+          <Table.Cell>{t.objectDesc}</Table.Cell>
         </Table.Row>
       ))}
     </Table.Body>
