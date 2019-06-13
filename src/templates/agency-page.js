@@ -56,17 +56,17 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      <Grid.Row>
-        <Header as='h2' floated='left' textAlign='left'>
+      <Grid.Row style={{padding: '3em 0em', background: '#f2f2f2'}}>
+        <Header as='h2' style={{fontWeight: 900, textTransform: 'uppercase'}}>
           {a.deptName}
           <Header.Subheader>Spent {Helpers.stringToMoney(a.totalAmount)} in FY17-18</Header.Subheader>
         </Header>
       </Grid.Row>
 
-      <Grid.Row columns={2} stretched>
+      <Grid.Row columns={2} stretched style={{padding:'3em', background: '#004445'}}>
         <Grid.Column>
-          <Segment padded>
-            <Header as='h3'>
+          <Segment padded style={{background:'#004445', border: '1px solid white'}}>
+            <Header as='h3' style={{color:'white'}}>
               Top Vendors
             </Header>
             <List divided ordered>
@@ -74,7 +74,7 @@ export default ({ data }) => {
                 <List.Item key={i}>
                   <List.Content>
                     <List.Header as='a'>{v.name}</List.Header>
-                    <List.Description>{Helpers.floatToMoney(v.sumPayments)}</List.Description>
+                    <List.Description style={{color:'white'}}>{Helpers.floatToMoney(v.sumPayments)}</List.Description>
                   </List.Content>
                 </List.Item>
               ))}

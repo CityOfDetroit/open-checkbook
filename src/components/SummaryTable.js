@@ -10,7 +10,7 @@ const SummaryTable = ({ tableData, payments }) => {
     .value()
 
   return (
-    <Table>
+    <Table striped>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Vendor</Table.HeaderCell>
