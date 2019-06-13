@@ -4,16 +4,15 @@ import { Header, Grid, List, Segment } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import Layout from '../components/layout';
-import PaymentsTable from '../components/PaymentsTable';
 import SummaryTable from '../components/SummaryTable';
 import ExpenseCategoryChart from '../components/ExpenseCategoryChart';
-
 import Helpers from '../helpers';
 
 export default ({ data }) => {
   const a = data.postgres.agency[0];
   const agencyPayments = a.accountsPayablesByAgencyCodeList;
 
+  // top n vendors
   const vendorStats = _(agencyPayments)
     .groupBy('vendorName')
     .map((vendor, key) => ({
@@ -24,6 +23,7 @@ export default ({ data }) => {
     .orderBy(['sumPayments', 'name'], ['desc', 'asc'])
     .value();
 
+  // top n cost centers
   const ccStats = _(agencyPayments)
     .groupBy('costcenterDesc')
     .map((cc, key) => ({
@@ -34,6 +34,7 @@ export default ({ data }) => {
     .orderBy(['sumPayments', 'name'], ['desc', 'asc'])
     .value();
 
+  // Highcharts treemap data structure
   const expenseChartData = _(agencyPayments)
     .groupBy('objectDescShorthand')
     .map((obj, key) => ({
@@ -42,27 +43,16 @@ export default ({ data }) => {
     }))
     .value();
 
-  // experiment in simplified "all payments" data table
+  // group my multiple categories so we can make a "structured table" keyed on vendors and unique combos of expense categories
   const simplified = _(agencyPayments)
     .map((a) => ({
       vendorName: a.vendorName,
       amount: parseFloat(a.invoicePaymentDistAmount),
-      categories: a.fundDesc + '-' + a.costcenterDesc + '-' + a.objectDesc
+      categories: a.fundDesc + ',' + a.costcenterDesc + ',' + a.objectDescShorthand + ',' + a.objectDesc
     }))
     .value();
 
-  // thanks https://bl.ocks.org/joyrexus/9837596
-  var nest = function (seq, keys) {
-    if (!keys.length)
-      return seq;
-    var first = keys[0];
-    var rest = keys.slice(1);
-    return _.mapValues(_.groupBy(seq, first), function (value) { 
-      return nest(value, rest);
-    });
-  };
-
-  const maybe = nest(simplified, ['vendorName', 'categories']);
+  const structuredTableData = Helpers.nest(simplified, ['vendorName', 'categories']);
 
   return (
     <Layout>
@@ -126,8 +116,7 @@ export default ({ data }) => {
               {agencyPayments.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} vendors
             </Header.Subheader>
           </Header>
-          <SummaryTable tableData={maybe} />
-          <PaymentsTable tableData={agencyPayments} />
+          <SummaryTable tableData={structuredTableData} />
         </Segment>
       </Grid.Row>
     </Layout>
