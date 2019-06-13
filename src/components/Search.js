@@ -21,6 +21,7 @@ export const Search = ({ agencies }) => {
       selection
       placeholder='Search for a department or vendor name' 
       options={_.sortBy(dropdownOptions, 'text')} 
+      style = {{padding: `1.5em 1em`, border: `2px solid #004445`}}
     />
   );
 };

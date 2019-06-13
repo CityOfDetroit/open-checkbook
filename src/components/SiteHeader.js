@@ -15,13 +15,13 @@ const SiteHeader = ({ siteTitle }) => (
           </a>
         </div>
         <Link to="/" style={{ color: `black`, textDecoration: `none`, textAlign: `right` }}>
-          <Header as='h2'>{_.toUpper(siteTitle)}</Header>
+          <Header as='h2' style={{ fontWeight: 900}}>{_.toUpper(siteTitle)}</Header>
         </Link>
       </div>
-      <Link to="/" style={{ color: `#004445`, textDecoration: `none`, marginLeft: `auto`, marginRight: `3em` }}>
+      <Link to="/" style={{ color: `#004445`, textDecoration: `none`, marginLeft: `auto`, marginRight: `3em`, borderBottom: `1px dotted #18252a` }}>
         HOME
       </Link>
-      <Link to="/about" style={{ color: `#004445`, textDecoration: `none` }}>
+      <Link to="/about" style={{ color: `#004445`, textDecoration: `none`, borderBottom: `1px dotted #18252a`  }}>
         ABOUT
       </Link>
     </div>
