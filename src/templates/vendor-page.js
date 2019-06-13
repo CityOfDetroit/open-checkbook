@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql} from "gatsby";
-import { Header, Grid, List, Container, Table, TableHeader } from 'semantic-ui-react';
+import { Header, Grid, Container, Table } from 'semantic-ui-react';
 import Helpers from '../helpers'
 
 import Layout from '../components/layout';

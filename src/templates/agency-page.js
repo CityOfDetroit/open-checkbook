@@ -1,68 +1,123 @@
 import React from "react";
 import { graphql} from "gatsby";
-import { Header, Grid, Segment, List, Container } from 'semantic-ui-react';
+import { Header, Grid, List, Segment } from 'semantic-ui-react';
+import _ from 'lodash';
 
 import Layout from '../components/layout';
-import PaymentsTable from '../components/PaymentsTable';
+import SummaryTable from '../components/SummaryTable';
+import ExpenseCategoryChart from '../components/ExpenseCategoryChart';
 import Helpers from '../helpers';
 
 export default ({ data }) => {
   const a = data.postgres.agency[0];
+  const agencyPayments = a.accountsPayablesByAgencyCodeList;
+
+  // top n vendors
+  const vendorStats = _(agencyPayments)
+    .groupBy('vendorName')
+    .map((vendor, key) => ({
+        name: key,
+        numPayments: vendor.length,
+        sumPayments: vendor.reduce((a, v) => a + parseFloat(v.invoicePaymentDistAmount), 0)
+    }))
+    .orderBy(['sumPayments', 'name'], ['desc', 'asc'])
+    .value();
+
+  // top n cost centers
+  const ccStats = _(agencyPayments)
+    .groupBy('costcenterDesc')
+    .map((cc, key) => ({
+      name: key,
+      numPayments: cc.length,
+      sumPayments: cc.reduce((a, c) => a + parseFloat(c.invoicePaymentDistAmount), 0)
+    }))
+    .orderBy(['sumPayments', 'name'], ['desc', 'asc'])
+    .value();
+
+  // Highcharts treemap data structure
+  const expenseChartData = _(agencyPayments)
+    .groupBy('objectDescShorthand')
+    .map((obj, key) => ({
+      name: key,
+      value: obj.reduce((a, o) => a + parseFloat(o.invoicePaymentDistAmount), 0)
+    }))
+    .value();
+
+  // group my multiple categories so we can make a "structured table" keyed on vendors and unique combos of expense categories
+  const simplified = _(agencyPayments)
+    .map((a) => ({
+      vendorName: a.vendorName,
+      amount: parseFloat(a.invoicePaymentDistAmount),
+      categories: a.fundDesc + ',' + a.costcenterDesc + ',' + a.objectDescShorthand + ',' + a.objectDesc
+    }))
+    .value();
+
+  const structuredTableData = Helpers.nest(simplified, ['vendorName', 'categories']);
 
   return (
     <Layout>
       <Grid.Row>
-        <Header as='h2'>
+        <Header as='h2' floated='left' textAlign='left'>
           {a.deptName}
+          <Header.Subheader>Spent {Helpers.stringToMoney(a.totalAmount)} in FY17-18</Header.Subheader>
         </Header>
       </Grid.Row>
 
-      <Grid.Row>
-        <Segment.Group compact size='big'>
-          <Segment>
-            <strong>{a.accountsPayablesByAgencyCodeList.length.toLocaleString()}</strong> payments made to vendors in FY17-18
+      <Grid.Row columns={2} stretched>
+        <Grid.Column>
+          <Segment padded>
+            <Header as='h3'>
+              Top Vendors
+            </Header>
+            <List divided ordered>
+              {vendorStats.slice(0,5).map((v, i) => (
+                <List.Item key={i}>
+                  <List.Content>
+                    <List.Header as='a'>{v.name}</List.Header>
+                    <List.Description>{Helpers.floatToMoney(v.sumPayments)}</List.Description>
+                  </List.Content>
+                </List.Item>
+              ))}
+            </List>
           </Segment>
-          <Segment>
-            <strong>{Helpers.stringToMoney(a.totalAmount)}</strong> total spent on goods & services
+
+          <Segment padded>
+            <Header as='h3'>
+              Top Cost Centers
+            </Header>
+            <List divided ordered>
+              {ccStats.slice(0,5).map((c, i) => (
+                <List.Item key={i}>
+                  <List.Content>
+                    <List.Header>{c.name}</List.Header>
+                    <List.Description>{Helpers.floatToMoney(c.sumPayments)}</List.Description>
+                  </List.Content>
+                </List.Item>
+              ))}
+            </List>
           </Segment>
-        </Segment.Group>
+        </Grid.Column>
+
+        <Grid.Column>
+          <Segment padded>
+            <Header as='h3'>
+              Spending by Expense Category
+            </Header>
+            <ExpenseCategoryChart data={expenseChartData} />
+          </Segment>
+        </Grid.Column>
       </Grid.Row>
 
       <Grid.Row>
-        <Container>
-          <Header as='h3'>
-            Biggest payments
+        <Segment basic style={{ width: '100%' }}>
+          <Header as='h3' floated='left' textAlign='left'>
+            Summary of all Payments
+            <Header.Subheader>
+              {agencyPayments.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} vendors
+            </Header.Subheader>
           </Header>
-          <List divided relaxed>
-            {data.postgres.biggestPayments[0].accountsPayablesByAgencyCodeList.map((b, i) => (
-              <List.Item key={i}>
-                {Helpers.stringToMoney(b.invoicePaymentDistAmount)} to {b.vendorName} on {b.checkDate} for {b.objectDesc}
-              </List.Item>
-            ))}
-          </List>
-        </Container>
-      </Grid.Row>
-
-      <Grid.Row>
-        <Container>
-          <Header as='h3'>
-            Most recent payments
-          </Header>
-          <List divided relaxed>
-            {data.postgres.mostRecentPayments[0].accountsPayablesByAgencyCodeList.map((r, j) => (
-              <List.Item key={j}>
-                {Helpers.stringToMoney(r.invoicePaymentDistAmount)} to {r.vendorName} on {r.checkDate} for {r.objectDesc}
-              </List.Item>
-            ))}
-          </List>
-        </Container>
-      </Grid.Row>
-
-      <Grid.Row>
-        <Header as='h3'>
-          ALL PAYMENTS
-        </Header>
-        <PaymentsTable tableData={a.accountsPayablesByAgencyCodeList} />
+          <SummaryTable tableData={structuredTableData} payments={agencyPayments} />
+        </Segment>
       </Grid.Row>
     </Layout>
   );
@@ -83,24 +138,6 @@ export const query = graphql`
           checkDate
           fundDesc
           costcenterDesc
-          objectDesc
-          objectDescShorthand
-        }
-      }
-      biggestPayments: allAgenciesList(condition: {deptName: $name}) {
-        accountsPayablesByAgencyCodeList(first: 5, orderBy: INVOICE_PAYMENT_DIST_AMOUNT_DESC) {
-          vendorName
-          invoicePaymentDistAmount
-          checkDate
-          objectDesc
-          objectDescShorthand
-        }
-      }
-      mostRecentPayments: allAgenciesList(condition: {deptName: $name}) {
-        accountsPayablesByAgencyCodeList(first: 5, orderBy: CHECK_DATE_DESC) {
-          vendorName
-          invoicePaymentDistAmount
-          checkDate
           objectDesc
           objectDescShorthand
         }
