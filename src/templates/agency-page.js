@@ -116,7 +116,7 @@ export default ({ data }) => {
               {agencyPayments.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} vendors
             </Header.Subheader>
           </Header>
-          <SummaryTable tableData={structuredTableData} />
+          <SummaryTable tableData={structuredTableData} payments={agencyPayments} />
         </Segment>
       </Grid.Row>
     </Layout>
