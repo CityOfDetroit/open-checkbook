@@ -17,7 +17,7 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
           deptNameAbbreviation
           deptSlug
         }
-        vendors: allVendorsList(first: 500) {
+        vendors: allVendorsList(condition: {vendorId: 13243}) {
           vendorName
           vendorType
           vendorId

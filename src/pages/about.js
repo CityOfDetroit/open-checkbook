@@ -6,8 +6,8 @@ import FAQ from '../components/faq'
 
 let dataFaq = [
   {
-    question: 'Who runs this site, anyway?',
-    answer: 'We do.',
+    question: 'What payments are displayed in this tool?',
+    answer: 'All payments to vendors. This does not include expenses such as salaries.',
   },
   {
     question: "Wait, we don't even have any answer for this question?",
@@ -54,6 +54,11 @@ const AboutPage = () => {
           <Header as="h4">About the City's finances</Header>
 
           <FAQ data={dataFaq} />
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column width={16}>
+          <Header as="h2">Glossary of terms</Header>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
