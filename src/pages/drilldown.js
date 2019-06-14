@@ -20,7 +20,7 @@ const Drilldown = ({ data }) => {
     data: agencies.map(a => {
       return {
         name: a.deptNameAbbreviation,
-        y: a.accountsPayablesByAgencyCodeList.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
+        y: a.accountsPayablesByAgencyCodeMaskedList.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
         drilldown: a.deptNameShorthand
       }
     })
@@ -36,7 +36,7 @@ const Drilldown = ({ data }) => {
   // iterate through AGENCIES
   agencies.forEach(a => {
     // group by Cost Center
-    let costCenterGrouping = _.groupBy(a.accountsPayablesByAgencyCodeList, 'costcenterDesc')
+    let costCenterGrouping = _.groupBy(a.accountsPayablesByAgencyCodeMaskedList, 'costcenterDesc')
 
     drilldown.series.push({
       id: a.deptNameShorthand,
@@ -156,8 +156,7 @@ export const query = graphql`
       deptNameShorthand
       deptNameAbbreviation
       deptSlug
-      accountsPayablesByAgencyCodeList {
-        vendorType
+      accountsPayablesByAgencyCodeMaskedList {
         vendorName
         invoicePaymentDistAmount
         fundCode
@@ -169,7 +168,7 @@ export const query = graphql`
         objectCode
         objectDesc
         objectDescShorthand
-        vendorId
+        vendorNumber
       }
     }
   }

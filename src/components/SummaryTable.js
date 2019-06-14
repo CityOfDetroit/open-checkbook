@@ -3,6 +3,11 @@ import _ from 'lodash';
 import { Table } from "semantic-ui-react";
 import Helpers from "../helpers";
 
+const VendorHeader = ({ vendor }) => (
+  <div>
+  </div>
+)
+
 const SummaryTable = ({ tableData, payments }) => {
 
   let byVendor = _(payments)
@@ -10,7 +15,7 @@ const SummaryTable = ({ tableData, payments }) => {
     .value()
 
   return (
-    <Table striped>
+    <Table>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Vendor</Table.HeaderCell>
@@ -25,7 +30,7 @@ const SummaryTable = ({ tableData, payments }) => {
         {Object.keys(tableData).map((t, i) => (
           <>
             {Object.keys(tableData[t]).map((c, j) => (
-              <Table.Row>
+              <Table.Row style={{backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB' }}>
                 {j === 0 ? 
                   <Table.Cell rowSpan={Object.keys(tableData[t]).length} content={<div>{t}<p>{byVendor[t].length} payments for {Helpers.floatToMoney(byVendor[t].reduce((a, p) => { return a + parseFloat(p.invoicePaymentDistAmount) }, 0))}</p></div>} style={{ fontWeight: 600 }} verticalAlign='top' /> 
                   : null}

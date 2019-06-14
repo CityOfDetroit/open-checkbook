@@ -89,15 +89,14 @@ export default ({ data }) => {
 };
 
 export const query = graphql`
-  query($id: Int!) {
+  query($number: String!) {
     site {
       pathPrefix
     }
     postgres {
-      vendor: allVendorsList(condition: {vendorId: $id}) {
-        vendorType
+      vendor: allVendorsList(condition: {vendorNumber: $number}) {
         vendorName
-        payments: accountsPayablesByVendorIdList(orderBy: CHECK_DATE_ASC) {
+        payments: accountsPayablesByVendorNumberList(orderBy: CHECK_DATE_ASC) {
           paymentHistDistId
           paymentMethod
           checkNumber
@@ -105,7 +104,6 @@ export const query = graphql`
           checkAmount
           checkRunName
           statusCode
-          vendorType
           vendorName
           paymentNum
           periodName
@@ -129,7 +127,7 @@ export const query = graphql`
           objectDesc
           objectDescShorthand
           poNumber
-          vendorId
+          vendorNumber
         }
       }
     }

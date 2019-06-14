@@ -17,10 +17,9 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
           deptNameAbbreviation
           deptSlug
         }
-        vendors: allVendorsList(condition: {vendorId: 13243}) {
+        vendors: allVendorsList(condition: {showInStats: true}) {
           vendorName
-          vendorType
-          vendorId
+          vendorNumber
         }
       }  
     } 
@@ -40,11 +39,10 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
   // Make a page for each vendor
   res.data.postgres.vendors.forEach(v => {
     createPage({
-      path: `/vendor/${v.vendorId}`,
+      path: `/vendor/${v.vendorNumber}`,
       component: path.resolve('./src/templates/vendor-page.js'),
       context: {
-        id: v.vendorId,
-        name: v.vendorName
+        number: v.vendorNumber
       },
     });
   });

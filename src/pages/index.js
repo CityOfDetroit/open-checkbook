@@ -124,7 +124,7 @@ export const query = graphql`
         fundName
         totalAmount
       }
-      allVendorsList {
+      allVendorsList(condition: {showInStats: true}) {
         vendorName
         totalAmount
       }

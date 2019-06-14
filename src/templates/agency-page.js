@@ -10,7 +10,7 @@ import Helpers from '../helpers';
 
 export default ({ data }) => {
   const a = data.postgres.agency[0];
-  const agencyPayments = a.accountsPayablesByAgencyCodeList;
+  const agencyPayments = a.accountsPayablesByAgencyCodeMaskedList;
 
   // top n vendors
   const vendorStats = _(agencyPayments)
@@ -132,8 +132,8 @@ export const query = graphql`
       agency: allAgenciesList(condition: {deptName: $name}) {
         deptName
         totalAmount
-        accountsPayablesByAgencyCodeList {
-          vendorName
+        accountsPayablesByAgencyCodeMaskedList {
+          
           invoicePaymentDistAmount
           checkDate
           fundDesc
