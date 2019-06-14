@@ -1,14 +1,21 @@
 import React from "react";
 import _ from 'lodash';
+import { Link } from 'gatsby';
 import { Table } from "semantic-ui-react";
 import Helpers from "../helpers";
 
-const VendorHeader = ({ vendor }) => (
+const VendorHeader = ({ vendor, grouped, link, number }) => (
   <div>
+    {vendor} {link ? <Link to={`/vendor/${number}`}>>></Link> : null}
+    <p>
+      {grouped[vendor].length} payments for {Helpers.floatToMoney(grouped[vendor].reduce((a, p) => { return a + parseFloat(p.invoicePaymentDistAmount) }, 0))}
+    </p>
   </div>
 )
 
-const SummaryTable = ({ tableData, payments }) => {
+const SummaryTable = ({ tableData, payments, show }) => {
+
+  console.log(tableData)
 
   let byVendor = _(payments)
     .groupBy('vendorName')
@@ -32,7 +39,7 @@ const SummaryTable = ({ tableData, payments }) => {
             {Object.keys(tableData[t]).map((c, j) => (
               <Table.Row style={{backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB' }}>
                 {j === 0 ? 
-                  <Table.Cell rowSpan={Object.keys(tableData[t]).length} content={<div>{t}<p>{byVendor[t].length} payments for {Helpers.floatToMoney(byVendor[t].reduce((a, p) => { return a + parseFloat(p.invoicePaymentDistAmount) }, 0))}</p></div>} style={{ fontWeight: 600 }} verticalAlign='top' /> 
+                  <Table.Cell rowSpan={Object.keys(tableData[t]).length} content={<VendorHeader vendor={t} grouped={byVendor} link={show[t]} number={tableData[t][Object.keys(tableData[t])[0]][0].vendorNumber} />} style={{ fontWeight: 600 }} verticalAlign='top' /> 
                   : null}
                 <Table.Cell content={Helpers.floatToMoney(tableData[t][c].reduce((a, p) => { return a + p.amount }, 0))} />
                 <Table.Cell content={c.split(',')[0]} />

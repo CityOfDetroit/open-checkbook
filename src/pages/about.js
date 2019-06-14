@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Grid } from 'semantic-ui-react'
+import { Header, Grid, List } from 'semantic-ui-react'
 
 import Layout from '../components/layout'
 import FAQ from '../components/faq'
@@ -59,6 +59,16 @@ const AboutPage = () => {
       <Grid.Row>
         <Grid.Column width={16}>
           <Header as="h2">Glossary of terms</Header>
+          <List>
+            <List.Item>Cost center</List.Item>
+            <List.Item>Fund</List.Item>
+            <List.Item>Expense Object</List.Item>
+            <List.Item>Vendor</List.Item>
+            <List.Item>Agency</List.Item>
+            <List.Item>Check</List.Item>
+            <List.Item>Invoice</List.Item>
+            <List.Item></List.Item>
+          </List>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>

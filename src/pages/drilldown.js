@@ -156,7 +156,7 @@ export const query = graphql`
       deptNameShorthand
       deptNameAbbreviation
       deptSlug
-      accountsPayablesByAgencyCodeMaskedList {
+      accountsPayablesByAgencyCodeMaskedList(first: 20) {
         vendorName
         invoicePaymentDistAmount
         fundCode

@@ -1,5 +1,5 @@
 import React from "react";
-import { graphql} from "gatsby";
+import { graphql, Link } from "gatsby";
 import { Header, Grid, List, Segment } from 'semantic-ui-react';
 import _ from 'lodash';
 
@@ -12,11 +12,13 @@ export default ({ data }) => {
   const a = data.postgres.agency[0];
   const agencyPayments = a.accountsPayablesByAgencyCodeMaskedList;
 
+  console.log(_.groupBy(agencyPayments, 'vendorName'))
   // top n vendors
   const vendorStats = _(agencyPayments)
     .groupBy('vendorName')
     .map((vendor, key) => ({
         name: key,
+        number: vendor[0].vendorNumber,
         numPayments: vendor.length,
         sumPayments: vendor.reduce((a, v) => a + parseFloat(v.invoicePaymentDistAmount), 0)
     }))
@@ -47,6 +49,7 @@ export default ({ data }) => {
   const simplified = _(agencyPayments)
     .map((a) => ({
       vendorName: a.vendorName,
+      vendorNumber: a.vendorNumber,
       amount: parseFloat(a.invoicePaymentDistAmount),
       categories: a.fundDesc + ',' + a.costcenterDesc + ',' + a.objectDescShorthand + ',' + a.objectDesc
     }))
@@ -54,6 +57,18 @@ export default ({ data }) => {
 
   const structuredTableData = Helpers.nest(simplified, ['vendorName', 'categories']);
 
+  // get the show/hide status for each vendor
+  let vendorShowStats = _(agencyPayments)
+    .groupBy('vendorName')
+    .value()
+  let show = {}
+  Object.keys(vendorShowStats).forEach(v => {
+    let anyTrue = vendorShowStats[v].map(vss => vss.vendorByVendorNumber.showInStats)
+    show[v] = !anyTrue.some(a => a === false)
+  })
+
+  console.log(show)
+  console.log(show['Travel'])
   return (
     <Layout>
       <Grid.Row style={{padding: '3em 0em', background: '#f2f2f2'}}>
@@ -73,7 +88,7 @@ export default ({ data }) => {
               {vendorStats.slice(0,5).map((v, i) => (
                 <List.Item key={i}>
                   <List.Content>
-                    <List.Header as='a'>{v.name}</List.Header>
+                    <List.Header style={{color: 'white'}}>{v.name} {show[v.name] ? <Link to={`/vendor/${v.number}`}>>></Link> : null}</List.Header>
                     <List.Description style={{color:'white'}}>{Helpers.floatToMoney(v.sumPayments)}</List.Description>
                   </List.Content>
                 </List.Item>
@@ -116,7 +131,7 @@ export default ({ data }) => {
               {agencyPayments.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} vendors
             </Header.Subheader>
           </Header>
-          <SummaryTable tableData={structuredTableData} payments={agencyPayments} />
+          <SummaryTable tableData={structuredTableData} payments={agencyPayments} show={show} />
         </Segment>
       </Grid.Row>
     </Layout>
@@ -132,8 +147,12 @@ export const query = graphql`
       agency: allAgenciesList(condition: {deptName: $name}) {
         deptName
         totalAmount
-        accountsPayablesByAgencyCodeMaskedList {
-          
+        accountsPayablesByAgencyCodeMaskedList(orderBy: VENDOR_NAME_ASC) {
+          vendorName
+          vendorNumber
+          vendorByVendorNumber {
+            showInStats
+          }
           invoicePaymentDistAmount
           checkDate
           fundDesc

@@ -8,8 +8,10 @@ import Layout from '../components/layout';
 
 export default ({ data }) => {
   const v = data.postgres.vendor[0];
+  console.log(v)
 
   const byDept = _.groupBy(v.payments, 'agencyDesc')
+  console.log(byDept)
   const byObject = _.groupBy(v.payments, 'objectDesc')
 
   return (
@@ -18,7 +20,7 @@ export default ({ data }) => {
         <Grid.Column>
 
         <Container>
-        <Header as='h2' content={v.vendorName} subheader={`1611 Hubbard, Detroit, MI`}/>
+        <Header as='h2' content={v.vendorName} subheader={v.vendorAddress}/>
         </Container>
         </Grid.Column>
       </Grid.Row>
@@ -33,7 +35,7 @@ export default ({ data }) => {
             <List divided ordered style={{maxHeight: '30vh', overflowY: 'scroll'}}>
             {Object.keys(byDept).map(d => (
               <List.Item>
-                <List.Header>{d}</List.Header>
+                <List.Header>{d === null ? `Non-departmental` : d}</List.Header>
                 <List.Content>{Helpers.floatToMoney(byDept[d].reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}</List.Content>
                 <List.Description>{byDept[d].length} payments</List.Description>
               </List.Item>
@@ -96,6 +98,7 @@ export const query = graphql`
     postgres {
       vendor: allVendorsList(condition: {vendorNumber: $number}) {
         vendorName
+        vendorAddress
         payments: accountsPayablesByVendorNumberList(orderBy: CHECK_DATE_ASC) {
           paymentHistDistId
           paymentMethod
