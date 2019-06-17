@@ -1,7 +1,7 @@
 import React from "react";
 import _ from 'lodash';
-import { graphql} from "gatsby";
-import { Header, Grid, Container, Table, Segment, List } from 'semantic-ui-react';
+import { graphql, Link } from "gatsby";
+import { Header, Grid, Table, Segment, List } from 'semantic-ui-react';
 
 import Helpers from '../helpers';
 import Layout from '../components/layout';
@@ -12,29 +12,27 @@ export default ({ data }) => {
   const byCostCenter = _.groupBy(v.payments, 'costcenterDesc');
   const byObject = _.groupBy(v.payments, 'objectDescShorthand');
 
-  console.log(byCostCenter);
-
   return (
     <Layout>
       <Grid.Row>
-        <Grid.Column>
-          <Container>
+        <Grid.Column width={12}>
+          <Segment basic>
             <Header as='h2' content={v.vendorName} subheader={v.vendorAddress}/>
-          </Container>
+          </Segment>
         </Grid.Column>
       </Grid.Row>
 
       <Grid.Row columns={3}>
-        <Grid.Column>
+        <Grid.Column width={4}>
           <Segment basic>
             <Header as='h3'>
               Payments by Agency
             </Header>
-            <List divided>
+            <List divided relaxed>
               {Object.keys(byDept).map((d, i) => (
                 <List.Item key={i}>
                   <List.Content>
-                    <List.Header>{d === null ? `Non-departmental` : d}</List.Header>
+                    <List.Header>{d === null ? `Non-departmental` : d} <Link to={`/agency/${byDept[d].deptSlug}`}>>></Link></List.Header>
                     <List.Description>{byDept[d].length.toLocaleString()} payments for {Helpers.floatToMoney(byDept[d].reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}</List.Description>
                   </List.Content>
                 </List.Item>
@@ -43,12 +41,12 @@ export default ({ data }) => {
           </Segment>
         </Grid.Column>
 
-        <Grid.Column>
+        <Grid.Column width={4}>
           <Segment basic>
             <Header as='h3'>
               Payments by Cost Center
             </Header>
-            <List divided>
+            <List divided relaxed>
               {Object.keys(byCostCenter).map((d, i) => (
                 <List.Item key={i}>
                   <List.Content>
@@ -61,12 +59,12 @@ export default ({ data }) => {
           </Segment>
         </Grid.Column>
 
-        <Grid.Column>
+        <Grid.Column width={4}>
           <Segment basic>
             <Header as='h3'>
               Payments by Expense Category
             </Header>
-            <List divided>
+            <List divided relaxed>
               {Object.keys(byObject).map((d, i) => (
                 <List.Item key={i}>
                   <List.Content>
@@ -89,7 +87,7 @@ export default ({ data }) => {
                 {v.payments.length} payments totaling {Helpers.floatToMoney(v.payments.reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}
               </Header.Subheader>
             </Header>
-            <Table striped>
+            <Table striped stackable>
               <Table.Header>
                 <Table.HeaderCell>Agency</Table.HeaderCell>
                 <Table.HeaderCell textAlign='right'>Payment Amount</Table.HeaderCell>
@@ -130,37 +128,18 @@ export const query = graphql`
         vendorName
         vendorAddress
         payments: accountsPayablesByVendorNumberList(orderBy: CHECK_DATE_ASC) {
-          paymentHistDistId
-          paymentMethod
           checkNumber
           checkDate
           checkAmount
-          checkRunName
           statusCode
           vendorName
-          paymentNum
-          periodName
-          accountingDate
-          invoicePaymentAmount
           invoicePaymentDistAmount
-          invoiceDistAmount
-          invoiceSource
-          invoiceNumber
-          invoiceAmount
-          invoiceDate
-          fundCode
           fundDesc
-          agencyCode
           agencyDesc
-          appropCode
           appropDesc
-          costcenterCode
           costcenterDesc
-          objectCode
           objectDesc
           objectDescShorthand
-          poNumber
-          vendorNumber
         }
       }
     }

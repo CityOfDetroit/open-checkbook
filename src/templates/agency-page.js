@@ -5,7 +5,6 @@ import _ from 'lodash';
 
 import Layout from '../components/layout';
 import SummaryTable from '../components/SummaryTable';
-import ExpenseCategoryChart from '../components/ExpenseCategoryChart';
 import Helpers from '../helpers';
 
 export default ({ data }) => {
@@ -46,14 +45,14 @@ export default ({ data }) => {
     .orderBy(['sumPayments', 'name'], ['desc', 'asc'])
     .value();
 
-  // Highcharts treemap data structure
-  const expenseChartData = _(agencyPayments)
-    .groupBy('objectDescShorthand')
-    .map((obj, key) => ({
-      name: key,
-      value: obj.reduce((a, o) => a + parseFloat(o.invoicePaymentDistAmount), 0)
-    }))
-    .value();
+  // // Highcharts treemap data structure
+  // const expenseChartData = _(agencyPayments)
+  //   .groupBy('objectDescShorthand')
+  //   .map((obj, key) => ({
+  //     name: key,
+  //     value: obj.reduce((a, o) => a + parseFloat(o.invoicePaymentDistAmount), 0)
+  //   }))
+  //   .value();
 
   // group by multiple categories so we can make a "structured table" keyed on vendors and unique combos of expense categories
   const simplified = _(agencyPayments)
@@ -80,22 +79,24 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      <Grid.Row style={{padding: '3em 0em', textAlign: `left`, justifyContent: `left`}}>
+      <Grid.Row>
         <Grid.Column width={12}>
-          <Header as='h2' style={{fontWeight: 900, textTransform: 'uppercase'}}>
-            {a.deptName}
-            <Header.Subheader>Spent {Helpers.stringToMoney(a.totalAmount)} in fiscal year 2017-2018</Header.Subheader>
-          </Header>
+          <Segment basic>
+            <Header as='h2'>
+              {a.deptName}
+              <Header.Subheader>{Helpers.stringToMoney(a.totalAmount)} total payments in fiscal year 2017-2018</Header.Subheader>
+            </Header>
+          </Segment>
         </Grid.Column>
       </Grid.Row>
 
-      <Grid.Row columns={3} style={{padding:'3em'}}>
-        <Grid.Column>
+      <Grid.Row columns={3}>
+        <Grid.Column width={4}>
           <Segment basic>
             <Header as='h3'>
               Top Vendors
             </Header>
-            <List divided ordered>
+            <List divided ordered relaxed>
               {vendorStats.slice(0,5).map((v, i) => (
                 <List.Item key={i}>
                   <List.Content>
@@ -108,12 +109,12 @@ export default ({ data }) => {
           </Segment>
           </Grid.Column>
 
-          <Grid.Column>
+          <Grid.Column width={4}>
           <Segment basic>
             <Header as='h3'>
               Top Cost Centers
             </Header>
-            <List divided ordered>
+            <List divided ordered relaxed>
               {ccStats.slice(0,5).map((c, i) => (
                 <List.Item key={i}>
                   <List.Content>
@@ -126,13 +127,13 @@ export default ({ data }) => {
           </Segment>
         </Grid.Column>
 
-        <Grid.Column>
+        <Grid.Column width={4}>
           <Segment basic>
             <Header as='h3'>
-              Spending by Expense Category
+              Total Payments by Expense Category
             </Header>
             {/* <ExpenseCategoryChart data={expenseChartData} /> */}
-            <List divided>
+            <List divided relaxed>
               {expStats.map((e, i) => (
                 <List.Item key={i}>
                   <List.Content>
@@ -148,9 +149,9 @@ export default ({ data }) => {
 
       <Grid.Row>
         <Grid.Column width={12}>
-          <Segment basic style={{ width: '100%' }}>
+          <Segment basic>
             <Header as='h3' floated='left' textAlign='left'>
-              Summary of all Payments
+              Summary of All Payments
               <Header.Subheader>
                 {agencyPayments.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} vendors
               </Header.Subheader>

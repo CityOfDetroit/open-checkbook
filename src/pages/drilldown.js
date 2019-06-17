@@ -4,7 +4,10 @@ import _ from 'lodash';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
 import drilldown from 'highcharts/modules/drilldown';
+
+import Layout from '../components/layout';
 import Helpers from '../helpers';
+import { Grid } from 'semantic-ui-react';
 
 drilldown(Highcharts);
 
@@ -104,14 +107,14 @@ const Drilldown = ({ data }) => {
         fontFamily: ["Montserrat", "sans-serif"]
     },
     title: {
-      text: "Open Checkbook Prototype"
+      text: ""
     },
     xAxis: {
         type: "category"
     },
     yAxis: {
         title: {
-            text: "Total Spent"
+            text: "Total Payments"
         }
     },
     legend: {
@@ -138,11 +141,17 @@ const Drilldown = ({ data }) => {
   }
 
   return (
-    <HighchartsReact
-      highcharts={Highcharts}
-      options={chartOptions}
-    />
-  )
+    <Layout>
+      <Grid.Row>
+        <Grid.Column width={16}>
+          <HighchartsReact
+            highcharts={Highcharts}
+            options={chartOptions}
+          />
+        </Grid.Column>
+      </Grid.Row>
+    </Layout>
+  );
 }
 
 export const query = graphql`
@@ -156,6 +165,7 @@ export const query = graphql`
       deptNameShorthand
       deptNameAbbreviation
       deptSlug
+      totalAmount
       accountsPayablesByAgencyCodeMaskedList(first: 20) {
         vendorName
         invoicePaymentDistAmount

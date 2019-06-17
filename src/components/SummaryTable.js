@@ -1,7 +1,7 @@
 import React from "react";
 import _ from 'lodash';
 import { Link } from 'gatsby';
-import { Table, Header } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 import Helpers from "../helpers";
 
 const VendorHeader = ({ vendor, grouped, link, number }) => (

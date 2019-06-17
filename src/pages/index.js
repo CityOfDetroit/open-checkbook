@@ -4,7 +4,7 @@ import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 import { Search } from '../components/Search'
-import Footer from '../components/Footer'
+import Helpers from '../helpers';
 
 const IndexPage = ({ data }) => {
   let depts = data.postgres.allAgencies.edges.map(e => e.node)
@@ -44,21 +44,22 @@ const IndexPage = ({ data }) => {
         <Grid.Column width={6}>
           <div style={{padding: `2em`}}>
             <Header
-              as="h3"
+              as="h2"
               content="Top Funds"
             />
-            <List>
+            <List ordered size='big'>
               {funds.filter(f => f.totalAmount !== null)
                 .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
                 .slice(0, 10)
                 .map((f, i) => (
                 <List.Item key={i}>
-                  <List.Header as='h2' style={{fontWeight: 900}}>
-                    <span style={{fontSize: `0.75em`, fontWeight: 300, marginRight: `5px`}}>{`${i+1}.`}</span>
-                    <span  style={{fontSize: `0.9em`}}>{f.fundName}</span>
-                  </List.Header>
-                  <List.Content style={{marginLeft: `1.25em`}}>
-                    {`$${f.totalAmount.toLocaleString()}`}
+                  <List.Content style={{ marginLeft: '.5em' }}>
+                    <List.Header>
+                      {f.fundName}
+                    </List.Header>
+                    <List.Description>
+                      {Helpers.stringToMoney(f.totalAmount)}
+                    </List.Description>
                   </List.Content>
                 </List.Item>
               ))}
@@ -68,21 +69,22 @@ const IndexPage = ({ data }) => {
         <Grid.Column width={6}>
           <div style={{padding: `2em`}}>
             <Header
-              as="h3"
+              as="h2"
               content="Top Vendors"
             />
-            <List>
+            <List ordered size='big'>
               {vendors.filter(v => v.totalAmount !== null)
                 .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
                 .slice(0, 10)
                 .map((v, i) => (
                 <List.Item key={i}>
-                  <List.Header as='h2' style={{fontWeight: 900}}>
-                    <span style={{fontSize: `0.75em`, fontWeight: 300, marginRight: `5px`}}>{`${i+1}.`}</span>
-                    <span style={{fontSize: `0.9em`}}>{v.vendorName}</span>
-                  </List.Header>
-                  <List.Content style={{marginLeft: `1.25em`, fontSize: `1.25em`}}>
-                    {`$${v.totalAmount.toLocaleString()}`}
+                  <List.Content style={{ marginLeft: '.5em' }}>
+                    <List.Header>
+                      {v.vendorName}
+                    </List.Header>
+                    <List.Description>
+                      {Helpers.stringToMoney(v.totalAmount)}
+                    </List.Description>
                   </List.Content>
                 </List.Item>
               ))}
@@ -110,6 +112,7 @@ export const query = graphql`
             deptNameShorthand
             deptNameAbbreviation
             deptSlug
+            totalAmount
           }
         }
       }

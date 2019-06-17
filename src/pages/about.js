@@ -1,104 +1,108 @@
-import React from 'react'
-import { Header, Grid, List } from 'semantic-ui-react'
+import React from 'react';
+import { Header, Grid, List, Placeholder } from 'semantic-ui-react';
 
-import Layout from '../components/layout'
-import FAQ from '../components/faq'
+import Layout from '../components/layout';
+import FAQ from '../components/faq';
 
-let dataFaq = [
+let faqs = [
   {
-    question: 'What payments are displayed in this tool?',
-    answer: 'All payments to vendors. This does not include expenses such as salaries.',
+    question: 'How often is the data updated?',
+    answer: 'The data is updated monthly.',
   },
   {
-    question: "Wait, we don't even have any answer for this question?",
+    question: "When is the City of Detroit's fiscal year?",
+    answer: "The fiscal year begins July 1 and ends June 30."
   },
-]
+  {
+    question: "What is the General Fund?",
+    answer: "The General Fund is the primary fund used by the City of Detroit. The activities being paid for through the General Fund constitute the core administrative and operational tasks of the City."
+  },
+  {
+    question: "Which types of payments are included in the open checkbook?",
+    answer: ""
+  }, 
+  {
+    question: "Which types of payments are excluded or masked in the open checkbook?",
+    answer: ""
+  },
+  {
+    question: "Where can I access the data displayed in the open checkbook?",
+    answer: "Access this data on Detroit's open data portal."
+  },
+  {
+    question: "Where can I get detailed information on the City's budget and finances?",
+    answer: "Access detailed budget and finance information on the City of Detroit website Financial Report page."
+  },
+  {
+    question: "How can I become a City of Detroit vendor?",
+    answer: "Start by visiting https://detroitmi.gov/how-do-i/do-business-city."
+  }
+];
 
 const AboutPage = () => {
   return (
     <Layout>
-      <Grid.Row textAlign="left">
-        <Grid.Column width={16}>
-          <Header as="h1">About</Header>
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row textAlign="left">
-        <Grid.Column width={16}>
-          <p>
-            This site provides information about food safety inspections in the
-            City of Detroit.
-          </p>
-          <p>
-            The data includes restaurants and other food service establishments,
-            like school cafeterias and stadium concessions, that are inspected
-            by the .
-          </p>
-          <p>
-            Grocery stores, liquor stores, and other packaged food
-            establishments are inspected by the and are not included here.
-          </p>
-          <p>
-            If a restaurant, bar, or other food service establishment that
-            prepares or serves food and beverages in Detroit is not found in
-            this data, for follow up. Please include the name and address of the
-            establishment, and the date and time of your visit in your message.
-          </p>
-        </Grid.Column>
-      </Grid.Row>
       <Grid.Row>
-        <Grid.Column width={16}>
-          <Header as="h2">Frequently Asked Questions</Header>
-          <Header as="h4">About the data</Header>
-
-          <FAQ data={dataFaq} />
-          <Header as="h4">About the City's finances</Header>
-
-          <FAQ data={dataFaq} />
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column width={16}>
-          <Header as="h2">Glossary of terms</Header>
-          <List>
-            <List.Item>Cost center</List.Item>
-            <List.Item>Fund</List.Item>
-            <List.Item>Expense Object</List.Item>
-            <List.Item>Vendor</List.Item>
-            <List.Item>Agency</List.Item>
-            <List.Item>Check</List.Item>
-            <List.Item>Invoice</List.Item>
-            <List.Item></List.Item>
-          </List>
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column width={16}>
-          <Header as="h2">Share Feedback</Header>
-          <p>
-            This site is built by the{' '}
-            <a href={null} target="_blank" rel="noopener noreferrer">
-              {null}
-            </a>
-            team at the City of Detroit in partnership with the Detroit Health
-            Department using{' '}
-            <a href={null} target="_blank" rel="noopener noreferrer">
-              {null}
-            </a>
-            . Our code is on
-            <a href={null} target="_blank" rel="noopener noreferrer"></a>.
-          </p>
-          <p>
-            Have an idea or question? Use{' '}
-            <a href={null} target="_blank" rel="noopener noreferrer">
-              {null}
-            </a>
-            to get in touch with our project team or email{' '}
-            <a href={null} target="_blank" rel="noopener noreferrer"></a>.
-          </p>
+        <Grid.Column width={12}>
+          <Header as="h1">ABOUT</Header>
+          <section style={{ marginBottom: '1em' }}>
+            <p>
+              In this site, you can access City of Detroit payment information. We are providing this data to advocate transparency, financial integrity and accountability. 
+            </p>
+            <p>  
+              Open Checkbook allows users to view the amount and category of City payments on a variety of dimensions. Users can navigate City payment data using various charts and graphs to see how dollars from various funding sources are being spent. 
+            </p>
+            <p>
+              Open Checkbook allows users to view payment data by Fund, Department, Division, Unit, Payment Category, and Payment Class. Because of the large number of individual values in certain cases, we have grouped the information for ease of reference. Grouped information can be expanded to view the underlying detail. Encumbrances are not included in this Open Payments Data tool. 
+            </p>
+            <p>
+              You may find it helpful to browse through the Open Data Finance Glossary for terminologies used in this data tool. For more information about the City of Detroit, please visit <a href='https://www.detroitmi.gov'>City of Detroit</a> and check out our <a href='https://detroitmi.gov/departments/office-chief-financial-officer/financial-reports'>Financial Reports page</a> which includes links to various City of Detroit financial reports, including the Comprehensive Annual Financial Report, Single Audit, Four-Year Financial Plan (annual budget), and Monthly Financial Reports. 
+            </p>
+            <p>
+              Thank you for visiting the City’s Open Checkbook website.
+            </p>
+          </section>
+          <section style={{ marginBottom: '1em' }}>
+            <Header as="h2">Frequently Asked Questions</Header>
+            <FAQ data={faqs} />
+          </section>
+          <section style={{ marginBottom: '1em' }}>
+            <Header as="h2">Glossary of terms</Header>
+            <List bulleted>
+              <List.Item>Payment:</List.Item>
+              <List.Item>Vendor:</List.Item>
+              <List.Item>Fund:</List.Item>
+              <List.Item>Cost Center:</List.Item>
+              <List.Item>Expense Object:</List.Item>
+            </List>
+          </section>
+          <section style={{ marginBottom: '1em' }}>
+            <Header as='h2'>Disclaimer</Header>
+            <p>
+              The information contained in this website is for general information purposes only. The information is provided by the City of Detroit and while the intent is to keep the information up to date and correct, the City makes no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the information contained on this website for any purpose. Any reliance you place on such information is therefore strictly at your own risk. For audited financial statements, please view the City of Detroit Comprehensive Annual Financial Report (CAFR) section located within the <a href='https://detroitmi.gov/departments/office-chief-financial-officer/financial-reports'>City of Detroit Financial Reports page</a>. 
+            </p>
+            <p>
+              In no event will the City of Detroit be liable for any loss or damage including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or profits arising out of, or in connection with, the use of this website. 
+            </p>
+            <p>  
+              Through this website you may be able to link to other websites which are not under the control of the City of Detroit. The City of Detroit has no control over the nature, content and availability of those sites. The inclusion of any links does not necessarily imply a recommendation or endorse the views expressed within them. 
+            </p>
+            <p>  
+              Every effort is made to keep the website accessible. However, the City of Detroit assumes no responsibility, and will not be liable, for the website being temporarily unavailable due to technical issues beyond its control.
+            </p>
+          </section>
+          <section style={{ marginBottom: '1em' }}>
+            <Header as="h2">Share Feedback</Header>
+            <Placeholder.Paragraph>
+              <Placeholder.Line></Placeholder.Line>
+              <Placeholder.Line></Placeholder.Line>
+              <Placeholder.Line></Placeholder.Line>
+            </Placeholder.Paragraph>
+          </section>
         </Grid.Column>
       </Grid.Row>
     </Layout>
-  )
+  );
 }
 
-export default AboutPage
+export default AboutPage;
