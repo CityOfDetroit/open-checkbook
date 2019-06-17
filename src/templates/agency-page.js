@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql, Link } from "gatsby";
-import { Header, Grid, List, Segment } from 'semantic-ui-react';
+import { Header, Grid, List, Segment, GridColumn } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import Layout from '../components/layout';
@@ -12,7 +12,6 @@ export default ({ data }) => {
   const a = data.postgres.agency[0];
   const agencyPayments = a.accountsPayablesByAgencyCodeMaskedList;
 
-  console.log(_.groupBy(agencyPayments, 'vendorName'))
   // top n vendors
   const vendorStats = _(agencyPayments)
     .groupBy('vendorName')
@@ -36,6 +35,17 @@ export default ({ data }) => {
     .orderBy(['sumPayments', 'name'], ['desc', 'asc'])
     .value();
 
+  // top n expense categories
+  const expStats = _(agencyPayments)
+    .groupBy('objectDescShorthand')
+    .map((exp, key) => ({
+      name: key,
+      numPayments: exp.length,
+      sumPayments: exp.reduce((a, e) => a + parseFloat(e.invoicePaymentDistAmount), 0)
+    }))
+    .orderBy(['sumPayments', 'name'], ['desc', 'asc'])
+    .value();
+
   // Highcharts treemap data structure
   const expenseChartData = _(agencyPayments)
     .groupBy('objectDescShorthand')
@@ -45,7 +55,7 @@ export default ({ data }) => {
     }))
     .value();
 
-  // group my multiple categories so we can make a "structured table" keyed on vendors and unique combos of expense categories
+  // group by multiple categories so we can make a "structured table" keyed on vendors and unique combos of expense categories
   const simplified = _(agencyPayments)
     .map((a) => ({
       vendorName: a.vendorName,
@@ -60,43 +70,44 @@ export default ({ data }) => {
   // get the show/hide status for each vendor
   let vendorShowStats = _(agencyPayments)
     .groupBy('vendorName')
-    .value()
-  let show = {}
-  Object.keys(vendorShowStats).forEach(v => {
-    let anyTrue = vendorShowStats[v].map(vss => vss.vendorByVendorNumber.showInStats)
-    show[v] = !anyTrue.some(a => a === false)
-  })
+    .value();
 
-  console.log(show)
-  console.log(show['Travel'])
+  let show = {};
+  Object.keys(vendorShowStats).forEach(v => {
+    let anyTrue = vendorShowStats[v].map(vss => vss.vendorByVendorNumber.showInStats);
+    show[v] = !anyTrue.some(a => a === false);
+  });
+
   return (
     <Layout>
-      <Grid.Row style={{padding: '3em 0em', background: '#f2f2f2'}}>
+      <Grid.Row style={{padding: '3em 0em'}} left>
         <Header as='h2' style={{fontWeight: 900, textTransform: 'uppercase'}}>
           {a.deptName}
-          <Header.Subheader>Spent {Helpers.stringToMoney(a.totalAmount)} in FY17-18</Header.Subheader>
+          <Header.Subheader>Spent {Helpers.stringToMoney(a.totalAmount)} in fiscal year 2017-2018</Header.Subheader>
         </Header>
       </Grid.Row>
 
-      <Grid.Row columns={2} stretched style={{padding:'3em', background: '#004445'}}>
+      <Grid.Row columns={3} style={{padding:'3em'}}>
         <Grid.Column>
-          <Segment padded style={{background:'#004445', border: '1px solid white'}}>
-            <Header as='h3' style={{color:'white'}}>
+          <Segment basic>
+            <Header as='h3'>
               Top Vendors
             </Header>
             <List divided ordered>
               {vendorStats.slice(0,5).map((v, i) => (
                 <List.Item key={i}>
                   <List.Content>
-                    <List.Header style={{color: 'white'}}>{v.name} {show[v.name] ? <Link to={`/vendor/${v.number}`}>>></Link> : null}</List.Header>
-                    <List.Description style={{color:'white'}}>{Helpers.floatToMoney(v.sumPayments)}</List.Description>
+                    <List.Header>{v.name} {show[v.name] ? <Link to={`/vendor/${v.number}`}>>></Link> : null}</List.Header>
+                    <List.Description>{Helpers.floatToMoney(v.sumPayments)}</List.Description>
                   </List.Content>
                 </List.Item>
               ))}
             </List>
           </Segment>
+          </Grid.Column>
 
-          <Segment padded>
+          <Grid.Column>
+          <Segment basic>
             <Header as='h3'>
               Top Cost Centers
             </Header>
@@ -114,25 +125,37 @@ export default ({ data }) => {
         </Grid.Column>
 
         <Grid.Column>
-          <Segment padded>
+          <Segment basic>
             <Header as='h3'>
               Spending by Expense Category
             </Header>
-            <ExpenseCategoryChart data={expenseChartData} />
+            {/* <ExpenseCategoryChart data={expenseChartData} /> */}
+            <List divided>
+              {expStats.map((e, i) => (
+                <List.Item key={i}>
+                  <List.Content>
+                    <List.Header>{e.name}</List.Header>
+                    <List.Description>{Helpers.floatToMoney(e.sumPayments)}</List.Description>
+                  </List.Content>
+                </List.Item>
+              ))}
+            </List>
           </Segment>
         </Grid.Column>
       </Grid.Row>
 
       <Grid.Row>
-        <Segment basic style={{ width: '100%' }}>
-          <Header as='h3' floated='left' textAlign='left'>
-            Summary of all Payments
-            <Header.Subheader>
-              {agencyPayments.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} vendors
-            </Header.Subheader>
-          </Header>
-          <SummaryTable tableData={structuredTableData} payments={agencyPayments} show={show} />
-        </Segment>
+        <Grid.Column width={12}>
+          <Segment basic style={{ width: '100%' }}>
+            <Header as='h3' floated='left' textAlign='left'>
+              Summary of all Payments
+              <Header.Subheader>
+                {agencyPayments.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} vendors
+              </Header.Subheader>
+            </Header>
+            <SummaryTable tableData={structuredTableData} payments={agencyPayments} show={show} />
+          </Segment>
+        </Grid.Column>
       </Grid.Row>
     </Layout>
   );
