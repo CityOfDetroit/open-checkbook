@@ -8,7 +8,7 @@
 
 @textTransform: none;
 @fontFamily: @headerFont;
-@fontWeight: @headerFontWeight;
+@fontWeight: 900;
 @lineHeight: @headerLineHeight;
 @lineHeightOffset: @headerLineHeightOffset;
 
@@ -24,7 +24,7 @@
 /* Sub Heading */
 @subHeadingDistance: @2px;
 @subHeadingFontSize: @relativeTiny;
-@subHeadingFontWeight: @bold;
+@subHeadingFontWeight: 900;
 @subHeadingTextTransform: uppercase;
 @subHeadingColor: '';
 

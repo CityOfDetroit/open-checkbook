@@ -8,12 +8,15 @@
     "gatsby-plugin-less": "^2.0.0-beta.5",
     "gatsby-plugin-react-helmet": "next",
     "gatsby-source-pg": "^0.1.4",
+    "gh-pages": "^2.0.1",
+    "highcharts": "^7.1.2",
+    "highcharts-react-official": "^2.2.2",
     "less": "^3.8.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-helmet": "^5.2.0",
     "semantic-ui-less": "^2.3.3",
-    "semantic-ui-react": "^0.82.1"
+    "semantic-ui-react": "^0.87.1"
   },
   "keywords": [
     "gatsby"

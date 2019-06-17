@@ -17,6 +17,10 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
           deptNameAbbreviation
           deptSlug
         }
+        vendors: allVendorsList(condition: {showInStats: true}) {
+          vendorName
+          vendorNumber
+        }
       }  
     } 
   `);
@@ -28,6 +32,17 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
       component: path.resolve('./src/templates/agency-page.js'),
       context: {
         name: a.deptName,
+      },
+    });
+  });
+
+  // Make a page for each vendor
+  res.data.postgres.vendors.forEach(v => {
+    createPage({
+      path: `/vendor/${v.vendorNumber}`,
+      component: path.resolve('./src/templates/vendor-page.js'),
+      context: {
+        number: v.vendorNumber
       },
     });
   });

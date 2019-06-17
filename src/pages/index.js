@@ -1,9 +1,10 @@
 import React from 'react'
-import { List, Grid, Header } from 'semantic-ui-react'
+import { List, Grid, Header, Statistic } from 'semantic-ui-react'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 import { Search } from '../components/Search'
+import Helpers from '../helpers';
 
 const IndexPage = ({ data }) => {
   let depts = data.postgres.allAgencies.edges.map(e => e.node)
@@ -11,64 +12,87 @@ const IndexPage = ({ data }) => {
   let vendors = data.postgres.allVendorsList
 
   let searchRowStyle = {
-    backgroundColor: '#F2F2F2',
+    padding: '3em 0em'
   }
 
-  let mainRowStyle = {
-    backgroundColor: '#004445',
-    color: 'white',
+  let totalRowStyle = {
+    paddingTop: '2rem'
   }
+
   return (
     <Layout>
       <Grid.Row style={searchRowStyle}>
         <Grid.Column width={8}>
-          <Search agencies={depts} />
+          <Search agencies={depts} vendors={vendors} />
         </Grid.Column>
       </Grid.Row>
 
-      <Grid.Row style={mainRowStyle} centered>
+      <Grid.Row style={totalRowStyle} centered>
         <Grid.Column width={12}>
-          <Header
-            as="h3"
-            content="Total vendor spending"
-            style={{ color: 'white' }}
-          />
-          <Header as="h4" content={vendors.reduce((a, v) => a + v.totalAmount, 0).toLocaleString()} />
-          <Header as="h4" content={`${data.postgres.allAccountsPayables.totalCount} transactions`} />
+          <div style={{padding: `2em`}}>
+            <h2>
+              Total Vendor Spending, Fiscal Year 2017-2018
+            </h2>
+            <Statistic>
+              <Statistic.Value style={{fontWeight: '900', letterSpacing: '2px'}}>${vendors.reduce((a, v) => a + v.totalAmount, 0).toLocaleString()}</Statistic.Value>
+            </Statistic>
+          </div>
         </Grid.Column>
       </Grid.Row>
-      <Grid.Row style={mainRowStyle}>
+
+      <Grid.Row>
         <Grid.Column width={6}>
-          <Header
-            as="h3"
-            content="Top funds"
-            style={{ color: 'white' }}
-          />
-          <List>
-            {funds.filter(f => f.totalAmount !== null)
-              .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
-              .slice(0, 10)
-              .map((f, i) => (
-              <List.Item header={`${i+1}. ${f.fundName}`} content={`$${f.totalAmount.toLocaleString()}`}/>
-            ))}
-          </List>
+          <div style={{padding: `2em`}}>
+            <Header
+              as="h2"
+              content="Top Funds"
+            />
+            <List ordered size='big'>
+              {funds.filter(f => f.totalAmount !== null)
+                .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
+                .slice(0, 10)
+                .map((f, i) => (
+                <List.Item key={i}>
+                  <List.Content style={{ marginLeft: '.5em' }}>
+                    <List.Header>
+                      {f.fundName}
+                    </List.Header>
+                    <List.Description>
+                      {Helpers.stringToMoney(f.totalAmount)}
+                    </List.Description>
+                  </List.Content>
+                </List.Item>
+              ))}
+            </List>
+          </div>
         </Grid.Column>
         <Grid.Column width={6}>
-          <Header
-            as="h3"
-            content="Top vendors"
-            style={{ color: 'white' }}
-          />
-          <List>
-            {vendors.filter(v => v.totalAmount !== null)
-              .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
-              .slice(0, 10)
-              .map((v, i) => (
-              <List.Item header={`${i+1}. ${v.vendorName}`} content={`$${v.totalAmount.toLocaleString()}`}/>
-            ))}
-          </List>
+          <div style={{padding: `2em`}}>
+            <Header
+              as="h2"
+              content="Top Vendors"
+            />
+            <List ordered size='big'>
+              {vendors.filter(v => v.totalAmount !== null)
+                .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
+                .slice(0, 10)
+                .map((v, i) => (
+                <List.Item key={i}>
+                  <List.Content style={{ marginLeft: '.5em' }}>
+                    <List.Header>
+                      {v.vendorName}
+                    </List.Header>
+                    <List.Description>
+                      {Helpers.stringToMoney(v.totalAmount)}
+                    </List.Description>
+                  </List.Content>
+                </List.Item>
+              ))}
+            </List>
+          </div>
         </Grid.Column>
       </Grid.Row>
+
     </Layout>
   )
 }
@@ -87,6 +111,8 @@ export const query = graphql`
             deptName
             deptNameShorthand
             deptNameAbbreviation
+            deptSlug
+            totalAmount
           }
         }
       }
@@ -94,8 +120,9 @@ export const query = graphql`
         fundName
         totalAmount
       }
-      allVendorsList {
+      allVendorsList(condition: {showInStats: true}) {
         vendorName
+        vendorNumber
         totalAmount
       }
       allAccountsPayables {
