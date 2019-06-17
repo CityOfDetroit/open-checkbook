@@ -6,6 +6,7 @@ module.exports = {
   siteMetadata: {
     title: 'Detroit open checkbook',
   },
+  pathPrefix: "/open-checkbook",
   plugins: [
     'gatsby-plugin-react-helmet', 
     'gatsby-plugin-less',
