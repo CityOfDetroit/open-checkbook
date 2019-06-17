@@ -18,6 +18,6 @@ Set your `development` or `production` environment variables by copying `.env.ex
 cp .env.example ./.env.development
 ```
 
-Our current dev secret is: `PG_CONN=postgres://gisteam@0.tcp.ngrok.io:18800/checkbook`
-
 Start the development server: `gatsby develop`
+
+Deploy to gh-pages: `yarn run deploy`
