@@ -45,7 +45,7 @@ const IndexPage = ({ data }) => {
           <div style={{padding: `2em`}}>
             <Header
               as="h3"
-              content="Top funds"
+              content="Top Funds"
             />
             <List>
               {funds.filter(f => f.totalAmount !== null)
@@ -69,7 +69,7 @@ const IndexPage = ({ data }) => {
           <div style={{padding: `2em`}}>
             <Header
               as="h3"
-              content="Top vendors"
+              content="Top Vendors"
             />
             <List>
               {vendors.filter(v => v.totalAmount !== null)

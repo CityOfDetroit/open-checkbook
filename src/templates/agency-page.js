@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql, Link } from "gatsby";
-import { Header, Grid, List, Segment, GridColumn } from 'semantic-ui-react';
+import { Header, Grid, List, Segment } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import Layout from '../components/layout';
@@ -80,11 +80,13 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      <Grid.Row style={{padding: '3em 0em'}} left>
-        <Header as='h2' style={{fontWeight: 900, textTransform: 'uppercase'}}>
-          {a.deptName}
-          <Header.Subheader>Spent {Helpers.stringToMoney(a.totalAmount)} in fiscal year 2017-2018</Header.Subheader>
-        </Header>
+      <Grid.Row style={{padding: '3em 0em', textAlign: `left`, justifyContent: `left`}}>
+        <Grid.Column width={12}>
+          <Header as='h2' style={{fontWeight: 900, textTransform: 'uppercase'}}>
+            {a.deptName}
+            <Header.Subheader>Spent {Helpers.stringToMoney(a.totalAmount)} in fiscal year 2017-2018</Header.Subheader>
+          </Header>
+        </Grid.Column>
       </Grid.Row>
 
       <Grid.Row columns={3} style={{padding:'3em'}}>
