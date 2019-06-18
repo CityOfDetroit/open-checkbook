@@ -9,17 +9,16 @@
 @fontName          : 'Montserrat';
 @fontSmoothing     : antialiased;
 
-@headerFont        : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@pageFont          : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@headerFont        : 'Montserrat', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont          : 'Montserrat', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
-@googleFontName    : @fontName;
+@googleFontName    : 'Montserrat';
 @importGoogleFonts : true;
 @googleFontSizes   : '400,700,400italic,700italic, 900';
 @googleSubset      : 'latin';
 
 @googleProtocol    : 'https://';
 @googleFontRequest : '@{googleFontName}:@{googleFontSizes}&subset=@{googleSubset}';
-
 
 @bold              : bold;
 @normal            : normal;

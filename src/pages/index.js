@@ -1,15 +1,40 @@
 import React from 'react'
 import { List, Grid, Header, Statistic } from 'semantic-ui-react'
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
+import _ from 'lodash';
 
 import Layout from '../components/layout'
 import { Search } from '../components/Search'
 import Helpers from '../helpers';
 
 const IndexPage = ({ data }) => {
-  let depts = data.postgres.allAgencies.edges.map(e => e.node)
+  let depts = data.postgres.allAgenciesList
   let funds = data.postgres.allFundsList
   let vendors = data.postgres.allVendorsList
+
+  let topDepts = _(depts)
+    .groupBy('deptName') // dedupes dwsd
+    .map((objs, key) => ({
+      'dept': key,
+      // 'slug': objs[key].deptSlug,
+      'total': objs.reduce((a, p) => a + parseFloat(p.totalAmount), 0)
+    }))
+    .filter(function(o) { return o.total > 0 })
+    .sortBy(['total'])
+    .reverse()
+    .slice(0, 10)
+    .value();
+
+  let topVendors = _(vendors)
+    .map((v) => ({
+      'vendor': v.vendorName,
+      'slug': v.vendorNumber,
+      'total': v.totalAmount
+    }))
+    .sortBy(['total'])
+    .reverse()
+    .slice(0, 10)
+    .value();
 
   let searchRowStyle = {
     padding: '3em 0em'
@@ -45,20 +70,17 @@ const IndexPage = ({ data }) => {
           <div style={{padding: `2em`}}>
             <Header
               as="h2"
-              content="Top Funds"
+              content="Top Agencies"
             />
             <List ordered size='big'>
-              {funds.filter(f => f.totalAmount !== null)
-                .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
-                .slice(0, 10)
-                .map((f, i) => (
+              {topDepts.map((f, i) => (
                 <List.Item key={i}>
                   <List.Content style={{ marginLeft: '.5em' }}>
                     <List.Header>
-                      {f.fundName}
+                      {f.dept} <Link to={`/agency/#`}>>></Link>
                     </List.Header>
                     <List.Description>
-                      {Helpers.stringToMoney(f.totalAmount)}
+                      {Helpers.stringToMoney(f.total)}
                     </List.Description>
                   </List.Content>
                 </List.Item>
@@ -66,6 +88,7 @@ const IndexPage = ({ data }) => {
             </List>
           </div>
         </Grid.Column>
+
         <Grid.Column width={6}>
           <div style={{padding: `2em`}}>
             <Header
@@ -73,17 +96,14 @@ const IndexPage = ({ data }) => {
               content="Top Vendors"
             />
             <List ordered size='big'>
-              {vendors.filter(v => v.totalAmount !== null)
-                .sort((a, b) => { return parseFloat(a.totalAmount) < parseFloat(b.totalAmount) })
-                .slice(0, 10)
-                .map((v, i) => (
+              {topVendors.map((v, i) => (
                 <List.Item key={i}>
                   <List.Content style={{ marginLeft: '.5em' }}>
                     <List.Header>
-                      {v.vendorName}
+                      {v.vendor}
                     </List.Header>
                     <List.Description>
-                      {Helpers.stringToMoney(v.totalAmount)}
+                      {Helpers.stringToMoney(v.total)} <Link to={`/vendor/${v.slug}`}>>></Link>
                     </List.Description>
                   </List.Content>
                 </List.Item>
@@ -102,19 +122,15 @@ export default IndexPage
 export const query = graphql`
   {
     postgres {
-      allAgencies {
-        edges {
-          node {
-            dept
-            deptNumber
-            parent
-            deptName
-            deptNameShorthand
-            deptNameAbbreviation
-            deptSlug
-            totalAmount
-          }
-        }
+      allAgenciesList {
+        dept
+        deptNumber
+        parent
+        deptName
+        deptNameShorthand
+        deptNameAbbreviation
+        deptSlug
+        totalAmount
       }
       allFundsList {
         fundName
