@@ -1,15 +1,20 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 import _ from 'lodash';
-import HighchartsReact from 'highcharts-react-official';
-import Highcharts from 'highcharts';
-import drilldown from 'highcharts/modules/drilldown';
+import { Grid } from 'semantic-ui-react';
 
 import Layout from '../components/layout';
 import Helpers from '../helpers';
-import { Grid } from 'semantic-ui-react';
 
-drilldown(Highcharts);
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import drilldown from 'highcharts/modules/drilldown';
+
+// from https://www.npmjs.com/package/highcharts-react-official NextJS server-side section
+if (typeof Highcharts === 'object') {
+  drilldown(Highcharts);
+}
+
 
 const Drilldown = ({ data }) => {
   let agencies = data.postgres.allAgenciesList

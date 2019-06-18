@@ -4,10 +4,13 @@ import { Container, Header } from 'semantic-ui-react';
 
 import SiteHeader from '../components/SiteHeader';
 
-import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import treemap from 'highcharts/modules/treemap';
-treemap(Highcharts);
+
+if (typeof Highcharts === 'object') {
+  treemap(Highcharts);
+}
 
 const TreemapPage = ({ data }) => {
   // make expected treemap data format

@@ -8,9 +8,8 @@ import { Search } from '../components/Search'
 import Helpers from '../helpers';
 
 const IndexPage = ({ data }) => {
-  let depts = data.postgres.allAgenciesList
-  let funds = data.postgres.allFundsList
-  let vendors = data.postgres.allVendorsList
+  let depts = data.postgres.allAgenciesList;
+  let vendors = data.postgres.allVendorsList;
 
   let topDepts = _(depts)
     .groupBy('deptName') // dedupes dwsd
@@ -130,10 +129,6 @@ export const query = graphql`
         deptNameShorthand
         deptNameAbbreviation
         deptSlug
-        totalAmount
-      }
-      allFundsList {
-        fundName
         totalAmount
       }
       allVendorsList(condition: {showInStats: true}) {
