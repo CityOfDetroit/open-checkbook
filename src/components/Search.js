@@ -31,7 +31,7 @@ export const Search = ({ agencies, vendors }) => {
         text: v.vendorName,
         as: Link,
         to: `/vendor/${v.vendorNumber}`,
-        label: { color: 'red', circular: true, empty: true }
+        label: { color: 'purple', circular: true, empty: true }
       }
     })
     .value();
@@ -44,9 +44,9 @@ export const Search = ({ agencies, vendors }) => {
       search 
       selection
       labeled
-      placeholder='Search for a department or vendor name' 
+      placeholder='Search for agencies and vendors' 
       options={dropdownOptions}
-      style = {{ padding: `1.5em 1em`, border: `2px solid #004445`, fontSize: `1.5em`}}
+      style={{ border: '3px solid #004445' }}
     />
   );
 };
