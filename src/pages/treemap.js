@@ -70,7 +70,7 @@ const TreemapPage = ({ data }) => {
   return (
     <>
       <SiteHeader siteTitle={data.site.siteMetadata.title} />
-      <Header as='h2' textAlign='center'>Highcharts Sandbox</Header>
+      <Header as='h2' textAlign='center'>PROTOTYPE</Header>
       <Container>
         <HighchartsReact
           highcharts={Highcharts}

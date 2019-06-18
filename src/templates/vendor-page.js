@@ -17,7 +17,12 @@ export default ({ data }) => {
       <Grid.Row>
         <Grid.Column width={12}>
           <Segment basic>
-            <Header as='h2' content={v.vendorName} subheader={v.vendorAddress}/>
+            <Header as='h2'>
+              {v.vendorName}
+              <Header.Subheader>
+                {v.payments[0].vendorType !== null ? `${v.payments[0].vendorType} based in ${v.vendorAddress}` : `${v.vendorAddress}`}
+              </Header.Subheader>
+            </Header>
           </Segment>
         </Grid.Column>
       </Grid.Row>
@@ -32,7 +37,7 @@ export default ({ data }) => {
               {Object.keys(byDept).map((d, i) => (
                 <List.Item key={i}>
                   <List.Content>
-                    <List.Header>{d === null ? `Non-departmental` : d} <Link to={`/agency/${byDept[d].deptSlug}`}>>></Link></List.Header>
+                    <List.Header>{d === null ? `Non-departmental` : d} <Link to={`/agency/${byDept[d][0].agencyByAgencyCodeMasked.deptSlug}`}>>></Link></List.Header>
                     <List.Description>{byDept[d].length.toLocaleString()} payments for {Helpers.floatToMoney(byDept[d].reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}</List.Description>
                   </List.Content>
                 </List.Item>
@@ -44,10 +49,10 @@ export default ({ data }) => {
         <Grid.Column width={4}>
           <Segment basic>
             <Header as='h3'>
-              Payments by Cost Center
+              Top Cost Centers
             </Header>
-            <List divided relaxed>
-              {Object.keys(byCostCenter).map((d, i) => (
+            <List ordered divided relaxed>
+              {Object.keys(byCostCenter).slice(0,5).map((d, i) => (
                 <List.Item key={i}>
                   <List.Content>
                     <List.Header>{d}</List.Header>
@@ -136,10 +141,17 @@ export const query = graphql`
           invoicePaymentDistAmount
           fundDesc
           agencyDesc
+          agencyByAgencyCodeMasked {
+            deptName
+            deptSlug
+            totalAmount
+          }
           appropDesc
           costcenterDesc
           objectDesc
           objectDescShorthand
+          vendorType
+          partyType
         }
       }
     }

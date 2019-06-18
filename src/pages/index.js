@@ -1,10 +1,10 @@
-import React from 'react'
-import { List, Grid, Header, Statistic } from 'semantic-ui-react'
-import { graphql, Link } from 'gatsby'
+import React from 'react';
+import { List, Grid, Header, Segment } from 'semantic-ui-react';
+import { graphql, Link } from 'gatsby';
 import _ from 'lodash';
 
-import Layout from '../components/layout'
-import { Search } from '../components/Search'
+import Layout from '../components/layout';
+import { Search } from '../components/Search';
 import Helpers from '../helpers';
 
 const IndexPage = ({ data }) => {
@@ -15,7 +15,7 @@ const IndexPage = ({ data }) => {
     .groupBy('deptName') // dedupes dwsd
     .map((objs, key) => ({
       'dept': key,
-      // 'slug': objs[key].deptSlug,
+      'slug': objs[0].deptSlug,
       'total': objs.reduce((a, p) => a + parseFloat(p.totalAmount), 0)
     }))
     .filter(function(o) { return o.total > 0 })
@@ -35,88 +35,90 @@ const IndexPage = ({ data }) => {
     .slice(0, 10)
     .value();
 
-  let searchRowStyle = {
-    padding: '3em 0em'
-  }
+  // let searchRowStyle = {
+  //   padding: '3em 0em'
+  // }
 
-  let totalRowStyle = {
-    paddingTop: '2rem'
-  }
+  // let totalRowStyle = {
+  //   paddingTop: '2rem'
+  // }
 
   return (
     <Layout>
-      <Grid.Row style={searchRowStyle}>
-        <Grid.Column width={8}>
-          <Search agencies={depts} vendors={vendors} />
+      <Grid.Row>
+        <Grid.Column width={10}>
+          <Segment basic size='huge'>
+            <Search agencies={depts} vendors={vendors} />
+          </Segment>
         </Grid.Column>
       </Grid.Row>
 
-      <Grid.Row style={totalRowStyle} centered>
+      <Grid.Row>
         <Grid.Column width={12}>
-          <div style={{padding: `2em`}}>
-            <h2>
-              Total Vendor Spending, Fiscal Year 2017-2018
-            </h2>
-            <Statistic>
-              <Statistic.Value style={{fontWeight: '900', letterSpacing: '2px'}}>${vendors.reduce((a, v) => a + v.totalAmount, 0).toLocaleString()}</Statistic.Value>
-            </Statistic>
-          </div>
+          <Segment basic size='huge'>
+            <Header as='h1'>
+              {Helpers.floatToMoney(vendors.reduce((a, v) => a + parseFloat(v.totalAmount), 0))}
+              <Header.Subheader>
+                Total Payments in Fiscal Year 2017-2018
+              </Header.Subheader>
+            </Header>
+          </Segment>
         </Grid.Column>
       </Grid.Row>
 
       <Grid.Row>
         <Grid.Column width={6}>
-          <div style={{padding: `2em`}}>
+          <Segment basic>
             <Header
               as="h2"
               content="Top Agencies"
             />
-            <List ordered size='big'>
-              {topDepts.map((f, i) => (
+            <List ordered relaxed divided size='big'>
+              {topDepts.map((d, i) => (
                 <List.Item key={i}>
                   <List.Content style={{ marginLeft: '.5em' }}>
                     <List.Header>
-                      {f.dept} <Link to={`/agency/#`}>>></Link>
+                      <Link to={`/agency/${d.slug}`}>{d.dept} >></Link>
                     </List.Header>
                     <List.Description>
-                      {Helpers.stringToMoney(f.total)}
+                      {Helpers.floatToMoney(d.total)}
                     </List.Description>
                   </List.Content>
                 </List.Item>
               ))}
             </List>
-          </div>
+          </Segment>
         </Grid.Column>
 
         <Grid.Column width={6}>
-          <div style={{padding: `2em`}}>
+          <Segment basic>
             <Header
               as="h2"
               content="Top Vendors"
             />
-            <List ordered size='big'>
+            <List ordered relaxed divided size='big'>
               {topVendors.map((v, i) => (
                 <List.Item key={i}>
                   <List.Content style={{ marginLeft: '.5em' }}>
                     <List.Header>
-                      {v.vendor}
+                      <Link to={`/vendor/${v.slug}`}>{v.vendor} >></Link>
                     </List.Header>
                     <List.Description>
-                      {Helpers.stringToMoney(v.total)} <Link to={`/vendor/${v.slug}`}>>></Link>
+                      {Helpers.stringToMoney(v.total)}
                     </List.Description>
                   </List.Content>
                 </List.Item>
               ))}
             </List>
-          </div>
+          </Segment>
         </Grid.Column>
       </Grid.Row>
 
     </Layout>
-  )
+  );
 }
 
-export default IndexPage
+export default IndexPage;
 
 export const query = graphql`
   {
@@ -135,10 +137,7 @@ export const query = graphql`
         vendorName
         vendorNumber
         totalAmount
-      }
-      allAccountsPayables {
-        totalCount
       }    
     }
   }
-`
+`;

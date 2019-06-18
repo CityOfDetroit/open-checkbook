@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 import _ from 'lodash';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Segment } from 'semantic-ui-react';
 
 import Layout from '../components/layout';
 import Helpers from '../helpers';
@@ -14,7 +14,6 @@ import drilldown from 'highcharts/modules/drilldown';
 if (typeof Highcharts === 'object') {
   drilldown(Highcharts);
 }
-
 
 const Drilldown = ({ data }) => {
   let agencies = data.postgres.allAgenciesList
@@ -104,38 +103,40 @@ const Drilldown = ({ data }) => {
 
   let chartOptions = {
     chart: {
-
       type: "bar",
-      height: 900,
+      height: 1200
     },
     style: {
-        fontFamily: ["Montserrat", "sans-serif"]
+      fontFamily: ["Montserrat", "sans-serif"]
     },
     title: {
-      text: ""
+      text: "PROTOTYPE"
     },
     xAxis: {
-        type: "category"
+      type: "category"
     },
     yAxis: {
-        title: {
-            text: "Total Payments"
-        }
+      title: {
+          text: "Total Payments"
+      }
     },
     legend: {
-        enabled: false
+      enabled: false
     },
     credits: {
-        enabled: false
+      enabled: false
     },
     plotOptions: {
-        series: {
-            borderWidth: 0,
-            dataLabels: {
-                enabled: true,
-                formatter: function() { return Helpers.stringToMoney(this.y) }
-            }
-        }
+      series: {
+          // pointWidth: 25,
+          // pointPadding: 2, // between bars
+          // groupPadding: 2, // between series
+          borderWidth: 0,
+          dataLabels: {
+              enabled: true,
+              formatter: function() { return Helpers.stringToMoney(this.y) }
+          }
+      }
     },
     tooltip: {
       headerFormat: `<span style="font-size:14px">{series.name}</span><br>`,
@@ -149,10 +150,12 @@ const Drilldown = ({ data }) => {
     <Layout>
       <Grid.Row>
         <Grid.Column width={16}>
-          <HighchartsReact
-            highcharts={Highcharts}
-            options={chartOptions}
-          />
+          <Segment basic>
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={chartOptions}
+            />
+          </Segment>
         </Grid.Column>
       </Grid.Row>
     </Layout>
