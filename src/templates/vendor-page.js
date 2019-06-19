@@ -5,12 +5,25 @@ import { Header, Grid, Table, Segment, List } from 'semantic-ui-react';
 
 import Helpers from '../helpers';
 import Layout from '../components/layout';
+import AgencyGroupedTable from '../components/AgencyGroupedTable';
 
 export default ({ data }) => {
   const v = data.postgres.vendor[0];
+  const vendorPayments = v.payments;
   const byDept = _.groupBy(v.payments, 'agencyDesc');
   const byCostCenter = _.groupBy(v.payments, 'costcenterDesc');
   const byObject = _.groupBy(v.payments, 'objectDescShorthand');
+
+  const simpler = _(vendorPayments)
+    .map((v) => ({
+      agencyName: v.agencyByAgencyCodeMasked.deptName,
+      agencySlug: v.agencyByAgencyCodeMasked.deptSlug,
+      amount: parseFloat(v.invoicePaymentDistAmount),
+      categories: v.fundDesc + ',' + v.costcenterDesc + ',' + v.objectDescShorthand + ',' + v.objectDesc
+    }))
+    .value();
+
+  const structuredTableDataByAgency = Helpers.nest(simpler, ['agencyName', 'categories']);
 
   return (
     <Layout>
@@ -92,6 +105,7 @@ export default ({ data }) => {
                 {v.payments.length} payments totaling {Helpers.floatToMoney(v.payments.reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}
               </Header.Subheader>
             </Header>
+            <AgencyGroupedTable tableData={structuredTableDataByAgency} payments={vendorPayments} />
             <Table striped stackable>
               <Table.Header>
                 <Table.HeaderCell>Agency</Table.HeaderCell>
@@ -132,7 +146,7 @@ export const query = graphql`
       vendor: allVendorsList(condition: {vendorNumber: $number}) {
         vendorName
         vendorAddress
-        payments: accountsPayablesByVendorNumberList(orderBy: CHECK_DATE_ASC) {
+        payments: accountsPayablesByVendorNumberList(first: 10) {
           checkNumber
           checkDate
           checkAmount

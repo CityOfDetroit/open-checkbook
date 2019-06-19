@@ -4,25 +4,28 @@ import { Link } from 'gatsby';
 import { Table } from "semantic-ui-react";
 import Helpers from "../helpers";
 
-const VendorHeader = ({ vendor, grouped, link, number }) => (
+const AgencyHeader = ({ agency, grouped, link, number }) => (
   <div>
-    {vendor} {link ? <Link to={`/vendor/${number}`}>>></Link> : null}
+    {agency} {link ? <Link to={`/agency/${number}`}>>></Link> : null}
     <p style={{ fontWeight: 500 }}>
-      {grouped[vendor].length} payments for {Helpers.floatToMoney(grouped[vendor].reduce((a, p) => { return a + parseFloat(p.invoicePaymentDistAmount) }, 0))}
+      {grouped[agency].length || grouped['undefined'].length} payments for {Helpers.floatToMoney(grouped[agency].reduce((a, p) => { return a + parseFloat(p.invoicePaymentDistAmount) }, 0))}
     </p>
   </div>
 );
 
-const SummaryTable = ({ tableData, payments, show }) => {
-  let byVendor = _(payments)
-    .groupBy('vendorName')
+const AgencyGroupedTable = ({ tableData, payments }) => {
+  console.log(payments);
+  let byAgency = _(payments)
+    .groupBy('fundDesc')
     .value();
+    
+  console.log(byAgency);
 
   return (
     <Table>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>Vendor</Table.HeaderCell>
+          <Table.HeaderCell>Agency</Table.HeaderCell>
           <Table.HeaderCell textAlign='right'>Total Payments</Table.HeaderCell>
           <Table.HeaderCell>Fund</Table.HeaderCell>
           <Table.HeaderCell>Cost Center</Table.HeaderCell>
@@ -38,7 +41,7 @@ const SummaryTable = ({ tableData, payments, show }) => {
                 {j === 0 ? 
                   <Table.Cell 
                     rowSpan={Object.keys(tableData[t]).length} 
-                    content={<VendorHeader vendor={t} grouped={byVendor} link={show[t]} number={tableData[t][Object.keys(tableData[t])[0]][0].vendorNumber} />} 
+                    content={t} 
                     style={{ fontWeight: 600 }} 
                     verticalAlign='top' /> 
                   : null}
@@ -55,4 +58,4 @@ const SummaryTable = ({ tableData, payments, show }) => {
     </Table>
 )};
 
-export default SummaryTable;
+export default AgencyGroupedTable;

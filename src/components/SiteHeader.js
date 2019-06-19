@@ -6,10 +6,11 @@ import _ from "lodash"
 import logo from "../images/cod-logo.jpg"
 
 const SiteHeader = ({ siteTitle }) => (
+  
   <Grid.Row>
     <Grid.Column width={12}>  
     <header style={{ borderBottom: `5px solid #feb70d`}}>
-      <div style={{ margin: `0 auto`, padding: `1rem 1rem`, display: `flex`, justifyContent: `space-between`, alignItems: `center`, alignContent: `middle`, flexWrap: `wrap`, maxWidth: `76.5%` }}>
+      <div style={{ margin: `0 auto`, padding: `1rem 1rem`, display: `flex`, justifyContent: `space-between`, alignItems: `center`, alignContent: `middle`, flexWrap: `wrap`}}>
         <div style={{ display: `flex`, alignItems: `center` }}>
           <div style={{ width: `70px` }}>
             <a href="https://detroitmi.gov/" target='_blank' rel='noopener noreferrer'>

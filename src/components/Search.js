@@ -46,7 +46,7 @@ export const Search = ({ agencies, vendors }) => {
       labeled
       placeholder='Search for agencies and vendors' 
       options={dropdownOptions}
-      style={{ border: '3px solid #004445' }}
+      style={{ border: '2px solid #004445' }}
     />
   );
 };

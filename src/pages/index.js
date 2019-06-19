@@ -46,7 +46,7 @@ const IndexPage = ({ data }) => {
   return (
     <Layout>
       <Grid.Row>
-        <Grid.Column width={10}>
+        <Grid.Column width={12}>
           <Segment basic size='huge'>
             <Search agencies={depts} vendors={vendors} />
           </Segment>
