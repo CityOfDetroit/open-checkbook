@@ -6,6 +6,7 @@ import _ from 'lodash';
 import Layout from '../components/layout';
 import SummaryTable from '../components/SummaryTable';
 import Helpers from '../helpers';
+import Footer from '../components/Footer';
 
 export default ({ data }) => {
   const a = data.postgres.agency[0];
@@ -73,6 +74,13 @@ export default ({ data }) => {
 
   const structuredTableData = Helpers.nest(simplified, ['vendorName', 'categories']);
 
+  const bottomHeader = { 
+    verticalAlign: 'bottom',
+    margin: 0,
+    display: 'table-cell',
+    height: '50px'
+  }
+
   // get the show/hide status for each vendor
   let vendorShowStats = _(agencyPayments)
     .groupBy('vendorName')
@@ -101,7 +109,7 @@ export default ({ data }) => {
       <Grid.Row columns={3}>
         <Grid.Column width={4}>
           <Segment basic>
-            <Header as='h3'>
+            <Header as='h3' style={bottomHeader}>
               Top Vendors
             </Header>
             <List divided ordered relaxed>
@@ -119,7 +127,7 @@ export default ({ data }) => {
 
           <Grid.Column width={4}>
           <Segment basic>
-            <Header as='h3'>
+            <Header as='h3' style={bottomHeader}>
               Top Cost Centers
             </Header>
             <List divided ordered relaxed>
@@ -137,7 +145,7 @@ export default ({ data }) => {
 
         <Grid.Column width={4}>
           <Segment basic>
-            <Header as='h3'>
+            <Header as='h3' style={bottomHeader}>
               Total Payments by Expense Category
             </Header>
             {/* <ExpenseCategoryChart data={expenseChartData} /> */}
@@ -168,6 +176,7 @@ export default ({ data }) => {
           </Segment>
         </Grid.Column>
       </Grid.Row>
+      <Footer/>
     </Layout>
   );
 };

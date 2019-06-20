@@ -6,6 +6,7 @@ import { Header, Grid, Segment, List, Breadcrumb } from 'semantic-ui-react';
 import Helpers from '../helpers';
 import Layout from '../components/layout';
 import AgencyGroupedTable from '../components/AgencyGroupedTable';
+import Footer from '../components/Footer';
 
 export default ({ data }) => {
   const v = data.postgres.vendor[0];
@@ -142,6 +143,7 @@ export default ({ data }) => {
           </Segment>
         </Grid.Column>
       </Grid.Row>
+      <Footer/>
     </Layout>
   );
 };
