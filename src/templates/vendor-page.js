@@ -50,7 +50,7 @@ export default ({ data }) => {
       </Grid.Row>
 
       <Grid.Row columns={3}>
-        <Grid.Column width={4}>
+        {/* <Grid.Column width={4}>
           <Segment basic>
             <Header as='h3'>
               Payments by Agency
@@ -66,9 +66,9 @@ export default ({ data }) => {
               ))}
             </List>
           </Segment>
-        </Grid.Column>
+        </Grid.Column> */}
 
-        <Grid.Column width={4}>
+        <Grid.Column width={6}>
           <Segment basic>
             <Header as='h3'>
               Top Cost Centers
@@ -86,10 +86,10 @@ export default ({ data }) => {
           </Segment>
         </Grid.Column>
 
-        <Grid.Column width={4}>
+        <Grid.Column width={6}>
           <Segment basic>
             <Header as='h3'>
-              Payments by Expense Category
+              Total Payments by Expense Category
             </Header>
             <List divided relaxed>
               {Object.keys(byObject).map((d, i) => (
@@ -109,9 +109,9 @@ export default ({ data }) => {
         <Grid.Column width={12}>
           <Segment basic>
             <Header as='h3'>
-              All Payments
+              Summary of All Payments
               <Header.Subheader>
-                {v.payments.length} payments totaling {Helpers.floatToMoney(v.payments.reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}
+                {v.payments.length.toLocaleString()} payments made by N agencies totaling {Helpers.floatToMoney(v.payments.reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}
               </Header.Subheader>
             </Header>
             <AgencyGroupedTable tableData={structuredTableDataByAgency} payments={vendorPayments} />
@@ -156,7 +156,7 @@ export const query = graphql`
         vendorName
         vendorAddress
         vendorNumber
-        payments: accountsPayablesByVendorNumberList(first: 10) {
+        payments: accountsPayablesByVendorNumberList(orderBy: AGENCY_DESC_ASC, first: 10) {
           checkNumber
           checkDate
           checkAmount
