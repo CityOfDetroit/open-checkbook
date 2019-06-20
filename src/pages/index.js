@@ -6,6 +6,7 @@ import _ from 'lodash';
 import Layout from '../components/layout';
 import { Search } from '../components/Search';
 import Helpers from '../helpers';
+import Footer from '../components/Footer';
 
 const IndexPage = ({ data }) => {
   let depts = data.postgres.allAgenciesList;
@@ -46,7 +47,7 @@ const IndexPage = ({ data }) => {
   return (
     <Layout>
       <Grid.Row>
-        <Grid.Column width={10}>
+        <Grid.Column width={12}>
           <Segment basic size='huge'>
             <Search agencies={depts} vendors={vendors} />
           </Segment>
@@ -114,6 +115,7 @@ const IndexPage = ({ data }) => {
         </Grid.Column>
       </Grid.Row>
 
+      <Footer/>
     </Layout>
   );
 }

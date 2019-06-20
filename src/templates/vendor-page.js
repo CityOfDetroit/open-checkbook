@@ -1,22 +1,45 @@
 import React from "react";
 import _ from 'lodash';
 import { graphql, Link } from "gatsby";
-import { Header, Grid, Table, Segment, List } from 'semantic-ui-react';
+import { Header, Grid, Segment, List, Breadcrumb } from 'semantic-ui-react';
 
 import Helpers from '../helpers';
 import Layout from '../components/layout';
+import AgencyGroupedTable from '../components/AgencyGroupedTable';
+import Footer from '../components/Footer';
 
 export default ({ data }) => {
   const v = data.postgres.vendor[0];
+  const vendorPayments = v.payments;
   const byDept = _.groupBy(v.payments, 'agencyDesc');
   const byCostCenter = _.groupBy(v.payments, 'costcenterDesc');
   const byObject = _.groupBy(v.payments, 'objectDescShorthand');
+
+  // set up breadcrumbs
+  const crumbs = [
+    {key: 'Home', content: <Link to="/">Home</Link>, link: true},
+    {key: 'Vendor', content: 'Vendor', link: false},
+    {key: `${v.vendorName}`, content: <Link to={`/vendor/${v.vendorNumber}`}>{v.vendorName}</Link>, link: true, active: true}
+  ];
+
+  // grouped table data
+  const simpler = _(vendorPayments)
+    .map((v) => ({
+      agencyName: v.agencyByAgencyCodeMasked.deptName,
+      agencySlug: v.agencyByAgencyCodeMasked.deptSlug,
+      amount: parseFloat(v.invoicePaymentDistAmount),
+      categories: v.fundDesc + ',' + v.costcenterDesc + ',' + v.objectDescShorthand + ',' + v.objectDesc
+    }))
+    .value();
+
+  const structuredTableDataByAgency = Helpers.nest(simpler, ['agencyName', 'categories']);
 
   return (
     <Layout>
       <Grid.Row>
         <Grid.Column width={12}>
           <Segment basic>
+            <Breadcrumb icon='angle right' sections={crumbs} />
             <Header as='h2'>
               {v.vendorName}
               <Header.Subheader>
@@ -28,7 +51,7 @@ export default ({ data }) => {
       </Grid.Row>
 
       <Grid.Row columns={3}>
-        <Grid.Column width={4}>
+        {/* <Grid.Column width={4}>
           <Segment basic>
             <Header as='h3'>
               Payments by Agency
@@ -44,9 +67,9 @@ export default ({ data }) => {
               ))}
             </List>
           </Segment>
-        </Grid.Column>
+        </Grid.Column> */}
 
-        <Grid.Column width={4}>
+        <Grid.Column width={6}>
           <Segment basic>
             <Header as='h3'>
               Top Cost Centers
@@ -64,10 +87,10 @@ export default ({ data }) => {
           </Segment>
         </Grid.Column>
 
-        <Grid.Column width={4}>
+        <Grid.Column width={6}>
           <Segment basic>
             <Header as='h3'>
-              Payments by Expense Category
+              Total Payments by Expense Category
             </Header>
             <List divided relaxed>
               {Object.keys(byObject).map((d, i) => (
@@ -87,12 +110,13 @@ export default ({ data }) => {
         <Grid.Column width={12}>
           <Segment basic>
             <Header as='h3'>
-              All Payments
+              Summary of All Payments
               <Header.Subheader>
-                {v.payments.length} payments totaling {Helpers.floatToMoney(v.payments.reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}
+                {v.payments.length.toLocaleString()} payments made by N agencies totaling {Helpers.floatToMoney(v.payments.reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}
               </Header.Subheader>
             </Header>
-            <Table striped stackable>
+            <AgencyGroupedTable tableData={structuredTableDataByAgency} payments={vendorPayments} />
+            {/* <Table striped stackable>
               <Table.Header>
                 <Table.HeaderCell>Agency</Table.HeaderCell>
                 <Table.HeaderCell textAlign='right'>Payment Amount</Table.HeaderCell>
@@ -115,10 +139,11 @@ export default ({ data }) => {
                   </Table.Row>
                 ))}
               </Table.Body>
-            </Table>
+            </Table> */}
           </Segment>
         </Grid.Column>
       </Grid.Row>
+      <Footer/>
     </Layout>
   );
 };
@@ -132,7 +157,8 @@ export const query = graphql`
       vendor: allVendorsList(condition: {vendorNumber: $number}) {
         vendorName
         vendorAddress
-        payments: accountsPayablesByVendorNumberList(orderBy: CHECK_DATE_ASC) {
+        vendorNumber
+        payments: accountsPayablesByVendorNumberList(orderBy: AGENCY_DESC_ASC, first: 10) {
           checkNumber
           checkDate
           checkAmount

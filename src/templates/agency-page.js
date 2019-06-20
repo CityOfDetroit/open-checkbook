@@ -1,15 +1,23 @@
 import React from "react";
 import { graphql, Link } from "gatsby";
-import { Header, Grid, List, Segment } from 'semantic-ui-react';
+import { Header, Grid, List, Segment, Breadcrumb } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import Layout from '../components/layout';
 import SummaryTable from '../components/SummaryTable';
 import Helpers from '../helpers';
+import Footer from '../components/Footer';
 
 export default ({ data }) => {
   const a = data.postgres.agency[0];
   const agencyPayments = a.accountsPayablesByAgencyCodeMaskedList;
+
+  // set up breadcrumbs
+  const crumbs = [
+    {key: 'Home', content: <Link to="/">Home</Link>, link: true},
+    {key: 'Agency', content: 'Agency', link: false},
+    {key: `${a.deptName}`, content: <Link to={`/agency/${a.deptSlug}`}>{a.deptNameShorthand}</Link>, link: true, active: true}
+  ];
 
   // top n vendors
   const vendorStats = _(agencyPayments)
@@ -66,6 +74,13 @@ export default ({ data }) => {
 
   const structuredTableData = Helpers.nest(simplified, ['vendorName', 'categories']);
 
+  const bottomHeader = { 
+    verticalAlign: 'bottom',
+    margin: 0,
+    display: 'table-cell',
+    height: '50px'
+  }
+
   // get the show/hide status for each vendor
   let vendorShowStats = _(agencyPayments)
     .groupBy('vendorName')
@@ -82,6 +97,7 @@ export default ({ data }) => {
       <Grid.Row>
         <Grid.Column width={12}>
           <Segment basic>
+            <Breadcrumb icon='right angle' sections={crumbs} />
             <Header as='h2'>
               {a.deptName}
               <Header.Subheader>{Helpers.stringToMoney(a.totalAmount)} total payments in fiscal year 2017-2018</Header.Subheader>
@@ -93,7 +109,7 @@ export default ({ data }) => {
       <Grid.Row columns={3}>
         <Grid.Column width={4}>
           <Segment basic>
-            <Header as='h3'>
+            <Header as='h3' style={bottomHeader}>
               Top Vendors
             </Header>
             <List divided ordered relaxed>
@@ -111,7 +127,7 @@ export default ({ data }) => {
 
           <Grid.Column width={4}>
           <Segment basic>
-            <Header as='h3'>
+            <Header as='h3' style={bottomHeader}>
               Top Cost Centers
             </Header>
             <List divided ordered relaxed>
@@ -129,7 +145,7 @@ export default ({ data }) => {
 
         <Grid.Column width={4}>
           <Segment basic>
-            <Header as='h3'>
+            <Header as='h3' style={bottomHeader}>
               Total Payments by Expense Category
             </Header>
             {/* <ExpenseCategoryChart data={expenseChartData} /> */}
@@ -160,6 +176,7 @@ export default ({ data }) => {
           </Segment>
         </Grid.Column>
       </Grid.Row>
+      <Footer/>
     </Layout>
   );
 };
@@ -172,6 +189,8 @@ export const query = graphql`
     postgres {
       agency: allAgenciesList(condition: {deptName: $name}) {
         deptName
+        deptNameShorthand
+        deptSlug
         totalAmount
         accountsPayablesByAgencyCodeMaskedList(orderBy: VENDOR_NAME_ASC) {
           vendorName

@@ -42,7 +42,7 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
       path: `/vendor/${v.vendorNumber}`,
       component: path.resolve('./src/templates/vendor-page.js'),
       context: {
-        number: v.vendorNumber
+        number: v.vendorNumber,
       },
     });
   });

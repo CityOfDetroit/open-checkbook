@@ -23,7 +23,7 @@ const SummaryTable = ({ tableData, payments, show }) => {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Vendor</Table.HeaderCell>
-          <Table.HeaderCell textAlign='right'>Total Payments</Table.HeaderCell>
+          <Table.HeaderCell>Total Payments</Table.HeaderCell>
           <Table.HeaderCell>Fund</Table.HeaderCell>
           <Table.HeaderCell>Cost Center</Table.HeaderCell>
           <Table.HeaderCell>Expense Category</Table.HeaderCell>
@@ -36,13 +36,17 @@ const SummaryTable = ({ tableData, payments, show }) => {
             {Object.keys(tableData[t]).map((c, j) => (
               <Table.Row key={i + j} style={{backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB' }}>
                 {j === 0 ? 
-                  <Table.Cell rowSpan={Object.keys(tableData[t]).length} content={<VendorHeader vendor={t} grouped={byVendor} link={show[t]} number={tableData[t][Object.keys(tableData[t])[0]][0].vendorNumber} />} style={{ fontWeight: 600 }} verticalAlign='top' /> 
+                  <Table.Cell 
+                    rowSpan={Object.keys(tableData[t]).length} 
+                    content={<VendorHeader vendor={t} grouped={byVendor} link={show[t]} number={tableData[t][Object.keys(tableData[t])[0]][0].vendorNumber} />} 
+                    style={{ fontWeight: 600 }} 
+                    verticalAlign='top' /> 
                   : null}
-                <Table.Cell textAlign='right' content={Helpers.floatToMoney(tableData[t][c].reduce((a, p) => { return a + p.amount }, 0))} />
-                <Table.Cell content={c.split(',')[0]} />
-                <Table.Cell content={c.split(',')[1]} />
-                <Table.Cell content={c.split(',')[2]} />
-                <Table.Cell content={c.split(',')[3]} />
+                <Table.Cell  verticalAlign='top' textAlign='right' content={Helpers.floatToMoney(tableData[t][c].reduce((a, p) => { return a + p.amount }, 0))} />
+                <Table.Cell  verticalAlign='top' content={c.split(',')[0]} />
+                <Table.Cell  verticalAlign='top' content={c.split(',')[1]} />
+                <Table.Cell  verticalAlign='top' content={c.split(',')[2]} />
+                <Table.Cell  verticalAlign='top' content={c.split(',')[3]} />
               </Table.Row>
             ))}
           </>

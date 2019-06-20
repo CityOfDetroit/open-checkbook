@@ -10,29 +10,44 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import drilldown from 'highcharts/modules/drilldown';
 
-// from https://www.npmjs.com/package/highcharts-react-official NextJS server-side section
 if (typeof Highcharts === 'object') {
   drilldown(Highcharts);
 }
 
 const Drilldown = ({ data }) => {
-  let agencies = data.postgres.allAgenciesList
+  let agencies = data.postgres.allAgenciesList;
+  
+  // Omit legacy agencies, Default Cost Center, and Non Departmental
+  let sortedAgencies = _(agencies)
+    .filter(function(o) { return o.accountsPayablesByAgencyCodeMaskedList.length > 0 })
+    .filter(function(p) { return p.deptName !== 'Default Cost Center' })
+    .filter(function(q) { return q.deptName !== 'Non Departmental' })
+    .sortBy('totalAmount')
+    .reverse()
+    .value();
 
-  let series = []
-
+  // top level chart data
+  let series = [];
   series.push({
-    name: 'Departments',
+    name: 'Agencies',
     colorByPoint: false,
     color: "#004445",
-    data: agencies.map(a => {
+    dataLabels: {
+      enabled: true,
+      formatter: function () { 
+        return Helpers.stringToMoney(this.y); 
+      }
+    },
+    data: sortedAgencies.map(a => {
       return {
-        name: a.deptNameAbbreviation,
+        name: a.deptNameShorthand,
         y: a.accountsPayablesByAgencyCodeMaskedList.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
         drilldown: a.deptNameShorthand
       }
     })
-  })
+  });
 
+  // drilldown chart data levels
   let drilldown = {
     drillUpButton: {
       position: {y: -40}
@@ -40,9 +55,8 @@ const Drilldown = ({ data }) => {
     series: []
   }
 
-  // iterate through AGENCIES
-  agencies.forEach(a => {
-    // group by Cost Center
+  // iterate through AGENCIES, group by COST CENTER
+  sortedAgencies.forEach(a => {
     let costCenterGrouping = _.groupBy(a.accountsPayablesByAgencyCodeMaskedList, 'costcenterDesc')
 
     drilldown.series.push({
@@ -60,14 +74,13 @@ const Drilldown = ({ data }) => {
       })
     })
     
-    // iterate through COST CENTERS
+    // iterate through COST CENTERS, group by EXPENSE CATEGORIES
     Object.keys(costCenterGrouping).forEach(c => {
-      // push to the drilldown series
       let expenseObjectGrouping = _.groupBy(costCenterGrouping[c], 'objectDescShorthand')
 
       drilldown.series.push({
         id: `${a.deptNumber}_${c}`,
-        name: "Expense Objects",
+        name: "Expense Categories",
         colorByPoint: false,
         color: "#9fd5b3",
         data: Object.keys(expenseObjectGrouping).map(e => {
@@ -80,7 +93,7 @@ const Drilldown = ({ data }) => {
         })
       })
 
-      // iterate through EXPENSE OBJECTS
+      // iterate through EXPENSE OBJECTS, group by VENDOR
       Object.keys(expenseObjectGrouping).forEach(e => {
         let vendorGrouping = _.groupBy(expenseObjectGrouping[e], 'vendorName')
 
@@ -90,10 +103,20 @@ const Drilldown = ({ data }) => {
           colorByPoint: false,
           color: "#feb70d",
           data: Object.keys(vendorGrouping).map(v => {
-            let paymentsToVendor = vendorGrouping[v]
-            return {
-              name: v,
-              y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0)
+            let paymentsToVendor = vendorGrouping[v];
+            
+            // if we show that vendor in our stats, link the bar
+            if (paymentsToVendor[0].vendorByVendorName.showInStats === true) {
+              return {
+                name: v,
+                y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
+                drilldown: `${a.deptNumber}_${c}_${e}_vendor` 
+              }
+            } else {
+              return {
+                name: v,
+                y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0)
+              }
             }
           })
         })
@@ -104,7 +127,22 @@ const Drilldown = ({ data }) => {
   let chartOptions = {
     chart: {
       type: "bar",
-      height: 1200
+      height: 1200,
+      events: {
+        drilldown: function(e) { 
+          if (e.point.drilldown.slice(-6) === 'vendor') {
+            let split = e.point.drilldown.split("_");
+            let details = {
+              agency: split[0],
+              cc: split[1],
+              expense: split[2],
+              vendor: e.point.name 
+            }; 
+
+            console.log(details); // eventually navigate or link and pass details as state/props
+          }
+        },
+      }
     },
     style: {
       fontFamily: ["Montserrat", "sans-serif"]
@@ -128,19 +166,22 @@ const Drilldown = ({ data }) => {
     },
     plotOptions: {
       series: {
-          // pointWidth: 25,
-          // pointPadding: 2, // between bars
-          // groupPadding: 2, // between series
-          borderWidth: 0,
-          dataLabels: {
-              enabled: true,
-              formatter: function() { return Helpers.stringToMoney(this.y) }
+        // pointWidth: 25,
+        // pointPadding: 2, // between bars
+        // groupPadding: 2, // between series
+        borderWidth: 0,
+        dataLabels: {
+          enabled: true,
+          formatter: function() { 
+            return Helpers.stringToMoney(this.y);
           }
+        }
       }
     },
     tooltip: {
-      headerFormat: `<span style="font-size:14px">{series.name}</span><br>`,
-      pointFormat: function () { return `<span style="color:{point.color}">{point.name}</span>: ${this.y}` }
+      enabled: false,
+      // headerFormat: `<span style="font-size:14px">{series.name}</span><br>`,
+      // pointFormat: function () { return `<span style="color:{point.color}">{point.name}</span>: ${this.y}` }
     },
     series: series,
     drilldown: drilldown
@@ -174,11 +215,9 @@ export const query = graphql`
       deptNameAbbreviation
       deptSlug
       totalAmount
-      accountsPayablesByAgencyCodeMaskedList(first: 20) {
+      accountsPayablesByAgencyCodeMaskedList {
         vendorName
         invoicePaymentDistAmount
-        fundCode
-        fundDesc
         agencyCode
         agencyDesc
         costcenterCode
@@ -187,6 +226,9 @@ export const query = graphql`
         objectDesc
         objectDescShorthand
         vendorNumber
+        vendorByVendorNumber{
+          showInStats
+        }
       }
     }
   }

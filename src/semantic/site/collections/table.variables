@@ -33,7 +33,7 @@
 /* Table Cell */
 @cellVerticalPadding: @relativeMini;
 @cellHorizontalPadding: @relativeMini;
-@cellVerticalAlign: inherit;
+@cellVerticalAlign: top;
 @cellTextAlign: inherit;
 @cellBorder: 1px solid @internalBorderColor;
 
@@ -42,7 +42,7 @@
 @headerDivider: none;
 @headerBackground: @offWhite;
 @headerAlign: inherit;
-@headerVerticalAlign: inherit;
+@headerVerticalAlign: bottom;
 @headerColor: @textColor;
 @headerVerticalPadding: @relativeSmall;
 @headerHorizontalPadding: @cellHorizontalPadding;
