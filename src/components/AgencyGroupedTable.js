@@ -6,20 +6,19 @@ import Helpers from "../helpers";
 
 const AgencyHeader = ({ agency, grouped, link, number }) => (
   <div>
-    {agency} {link ? <Link to={`/agency/${number}`}>>></Link> : null}
+    {agency}
     <p style={{ fontWeight: 500 }}>
-      {grouped[agency].length || grouped['undefined'].length} payments for {Helpers.floatToMoney(grouped[agency].reduce((a, p) => { return a + parseFloat(p.invoicePaymentDistAmount) }, 0))}
+      {agency !== 'Default Cost Center' && agency ? `${grouped[agency].length} payments for ${Helpers.floatToMoney(grouped[agency].reduce((a, p) => { return a + parseFloat(p.invoicePaymentDistAmount) }, 0))}` : `TBD`}
     </p>
   </div>
 );
 
 const AgencyGroupedTable = ({ tableData, payments }) => {
-  console.log(payments);
   let byAgency = _(payments)
-    .groupBy('fundDesc')
+    .groupBy(function(o) {
+      return o.agencyDesc;
+    })
     .value();
-    
-  console.log(byAgency);
 
   return (
     <Table>
@@ -41,7 +40,7 @@ const AgencyGroupedTable = ({ tableData, payments }) => {
                 {j === 0 ? 
                   <Table.Cell 
                     rowSpan={Object.keys(tableData[t]).length} 
-                    content={t} 
+                    content={<AgencyHeader agency={t} grouped={byAgency} />}
                     style={{ fontWeight: 600 }} 
                     verticalAlign='top' /> 
                   : null}

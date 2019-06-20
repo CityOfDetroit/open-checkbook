@@ -1,7 +1,7 @@
 import React from "react";
 import _ from 'lodash';
 import { graphql, Link } from "gatsby";
-import { Header, Grid, Table, Segment, List } from 'semantic-ui-react';
+import { Header, Grid, Segment, List, Breadcrumb } from 'semantic-ui-react';
 
 import Helpers from '../helpers';
 import Layout from '../components/layout';
@@ -14,6 +14,14 @@ export default ({ data }) => {
   const byCostCenter = _.groupBy(v.payments, 'costcenterDesc');
   const byObject = _.groupBy(v.payments, 'objectDescShorthand');
 
+  // set up breadcrumbs
+  const crumbs = [
+    {key: 'Home', content: <Link to="/">Home</Link>, link: true},
+    {key: 'Vendor', content: 'Vendor', link: false},
+    {key: `${v.vendorName}`, content: <Link to={`/vendor/${v.vendorNumber}`}>{v.vendorName}</Link>, link: true, active: true}
+  ];
+
+  // grouped table data
   const simpler = _(vendorPayments)
     .map((v) => ({
       agencyName: v.agencyByAgencyCodeMasked.deptName,
@@ -30,6 +38,7 @@ export default ({ data }) => {
       <Grid.Row>
         <Grid.Column width={12}>
           <Segment basic>
+            <Breadcrumb icon='angle right' sections={crumbs} />
             <Header as='h2'>
               {v.vendorName}
               <Header.Subheader>
@@ -106,7 +115,7 @@ export default ({ data }) => {
               </Header.Subheader>
             </Header>
             <AgencyGroupedTable tableData={structuredTableDataByAgency} payments={vendorPayments} />
-            <Table striped stackable>
+            {/* <Table striped stackable>
               <Table.Header>
                 <Table.HeaderCell>Agency</Table.HeaderCell>
                 <Table.HeaderCell textAlign='right'>Payment Amount</Table.HeaderCell>
@@ -129,7 +138,7 @@ export default ({ data }) => {
                   </Table.Row>
                 ))}
               </Table.Body>
-            </Table>
+            </Table> */}
           </Segment>
         </Grid.Column>
       </Grid.Row>
@@ -146,6 +155,7 @@ export const query = graphql`
       vendor: allVendorsList(condition: {vendorNumber: $number}) {
         vendorName
         vendorAddress
+        vendorNumber
         payments: accountsPayablesByVendorNumberList(first: 10) {
           checkNumber
           checkDate

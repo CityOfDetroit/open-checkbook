@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql, Link } from "gatsby";
-import { Header, Grid, List, Segment } from 'semantic-ui-react';
+import { Header, Grid, List, Segment, Breadcrumb } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import Layout from '../components/layout';
@@ -10,6 +10,13 @@ import Helpers from '../helpers';
 export default ({ data }) => {
   const a = data.postgres.agency[0];
   const agencyPayments = a.accountsPayablesByAgencyCodeMaskedList;
+
+  // set up breadcrumbs
+  const crumbs = [
+    {key: 'Home', content: <Link to="/">Home</Link>, link: true},
+    {key: 'Agency', content: 'Agency', link: false},
+    {key: `${a.deptName}`, content: <Link to={`/agency/${a.deptSlug}`}>{a.deptNameShorthand}</Link>, link: true, active: true}
+  ];
 
   // top n vendors
   const vendorStats = _(agencyPayments)
@@ -82,6 +89,7 @@ export default ({ data }) => {
       <Grid.Row>
         <Grid.Column width={12}>
           <Segment basic>
+            <Breadcrumb icon='right angle' sections={crumbs} />
             <Header as='h2'>
               {a.deptName}
               <Header.Subheader>{Helpers.stringToMoney(a.totalAmount)} total payments in fiscal year 2017-2018</Header.Subheader>
@@ -172,6 +180,8 @@ export const query = graphql`
     postgres {
       agency: allAgenciesList(condition: {deptName: $name}) {
         deptName
+        deptNameShorthand
+        deptSlug
         totalAmount
         accountsPayablesByAgencyCodeMaskedList(orderBy: VENDOR_NAME_ASC) {
           vendorName
