@@ -11,15 +11,15 @@ import Footer from '../components/Footer';
 export default ({ data }) => {
   const v = data.postgres.vendor[0];
   const vendorPayments = v.payments;
-  const byDept = _.groupBy(v.payments, 'agencyDesc');
+  
   const byCostCenter = _.groupBy(v.payments, 'costcenterDesc');
   const byObject = _.groupBy(v.payments, 'objectDescShorthand');
 
   // set up breadcrumbs
   const crumbs = [
-    {key: 'Home', content: <Link to="/">Home</Link>, link: true},
+    {key: 'Home', content: <Link to="/">Home</Link>},
     {key: 'Vendor', content: 'Vendor', link: false},
-    {key: `${v.vendorName}`, content: <Link to={`/vendor/${v.vendorNumber}`}>{v.vendorName}</Link>, link: true, active: true}
+    {key: `${v.vendorName}`, content: <Link to={`/vendor/${v.vendorNumber}`}>{v.vendorName}</Link>, active: true}
   ];
 
   // grouped table data
@@ -50,25 +50,7 @@ export default ({ data }) => {
         </Grid.Column>
       </Grid.Row>
 
-      <Grid.Row columns={3}>
-        {/* <Grid.Column width={4}>
-          <Segment basic>
-            <Header as='h3'>
-              Payments by Agency
-            </Header>
-            <List divided relaxed>
-              {Object.keys(byDept).map((d, i) => (
-                <List.Item key={i}>
-                  <List.Content>
-                    <List.Header>{d === null ? `Non-departmental` : d} <Link to={`/agency/${byDept[d][0].agencyByAgencyCodeMasked.deptSlug}`}>>></Link></List.Header>
-                    <List.Description>{byDept[d].length.toLocaleString()} payments for {Helpers.floatToMoney(byDept[d].reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}</List.Description>
-                  </List.Content>
-                </List.Item>
-              ))}
-            </List>
-          </Segment>
-        </Grid.Column> */}
-
+      <Grid.Row columns={2}>
         <Grid.Column width={6}>
           <Segment basic>
             <Header as='h3'>
@@ -116,30 +98,6 @@ export default ({ data }) => {
               </Header.Subheader>
             </Header>
             <AgencyGroupedTable tableData={structuredTableDataByAgency} payments={vendorPayments} />
-            {/* <Table striped stackable>
-              <Table.Header>
-                <Table.HeaderCell>Agency</Table.HeaderCell>
-                <Table.HeaderCell textAlign='right'>Payment Amount</Table.HeaderCell>
-                <Table.HeaderCell>Check Date</Table.HeaderCell>
-                <Table.HeaderCell>Fund</Table.HeaderCell>
-                <Table.HeaderCell>Cost Center</Table.HeaderCell>
-                <Table.HeaderCell>Expense Category</Table.HeaderCell>
-                <Table.HeaderCell>Expense</Table.HeaderCell>
-              </Table.Header>
-              <Table.Body>
-                {v.payments.map((p, i) => (
-                  <Table.Row key={i}>
-                    <Table.Cell>{p.agencyDesc}</Table.Cell>
-                    <Table.Cell textAlign='right'>{Helpers.stringToMoney(p.invoicePaymentDistAmount)}</Table.Cell>
-                    <Table.Cell>{p.checkDate.slice(0,10)}</Table.Cell>
-                    <Table.Cell>{p.fundDesc}</Table.Cell>
-                    <Table.Cell>{p.costcenterDesc}</Table.Cell>
-                    <Table.Cell>{p.objectDescShorthand}</Table.Cell>
-                    <Table.Cell>{p.objectDesc}</Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table> */}
           </Segment>
         </Grid.Column>
       </Grid.Row>
@@ -158,7 +116,7 @@ export const query = graphql`
         vendorName
         vendorAddress
         vendorNumber
-        payments: accountsPayablesByVendorNumberList(orderBy: AGENCY_DESC_ASC, first: 10) {
+        payments: accountsPayablesByVendorNumberList(orderBy: AGENCY_DESC_ASC, first: 3) {
           checkNumber
           checkDate
           checkAmount

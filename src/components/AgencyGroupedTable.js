@@ -1,10 +1,9 @@
 import React from "react";
 import _ from 'lodash';
-import { Link } from 'gatsby';
 import { Table } from "semantic-ui-react";
 import Helpers from "../helpers";
 
-const AgencyHeader = ({ agency, grouped, link, number }) => (
+const AgencyHeader = ({ agency, grouped }) => (
   <div>
     {agency}
     <p style={{ fontWeight: 500 }}>
@@ -36,7 +35,7 @@ const AgencyGroupedTable = ({ tableData, payments }) => {
         {Object.keys(tableData).map((t, i) => (
           <>
             {Object.keys(tableData[t]).map((c, j) => (
-              <Table.Row key={i + j} style={{backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB' }}>
+              <Table.Row key={i + j} style={{ backgroundColor: i % 2 === 0 ? 'white' : '#F9FAFB' }}>
                 {j === 0 ? 
                   <Table.Cell 
                     rowSpan={Object.keys(tableData[t]).length} 

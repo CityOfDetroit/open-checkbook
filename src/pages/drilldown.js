@@ -1,5 +1,5 @@
 import React from 'react';
-import { graphql } from 'gatsby';
+import { graphql, navigate } from 'gatsby';
 import _ from 'lodash';
 import { Grid, Segment } from 'semantic-ui-react';
 
@@ -105,18 +105,11 @@ const Drilldown = ({ data }) => {
           data: Object.keys(vendorGrouping).map(v => {
             let paymentsToVendor = vendorGrouping[v];
             
-            // if we show that vendor in our stats, link the bar
-            if (paymentsToVendor[0].vendorByVendorName.showInStats === true) {
-              return {
-                name: v,
-                y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
-                drilldown: `${a.deptNumber}_${c}_${e}_vendor` 
-              }
-            } else {
-              return {
-                name: v,
-                y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0)
-              }
+            // TODO only define drilldown where vendor showInStats is true
+            return {
+              name: v,
+              y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0), 
+              drilldown: `${a.deptNumber}_${c}_${e}_vendor`
             }
           })
         })
@@ -137,9 +130,11 @@ const Drilldown = ({ data }) => {
               cc: split[1],
               expense: split[2],
               vendor: e.point.name 
-            }; 
+            };
 
-            console.log(details); // eventually navigate or link and pass details as state/props
+            navigate("/table/", {
+              state: {details}
+            });
           }
         },
       }
