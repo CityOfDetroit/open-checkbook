@@ -1,5 +1,6 @@
 import React from 'react';
-import { Header, Grid, List, Placeholder } from 'semantic-ui-react';
+import { Link } from 'gatsby';
+import { Header, Grid, List, Placeholder, Breadcrumb } from 'semantic-ui-react';
 
 import Layout from '../components/layout';
 import FAQ from '../components/faq';
@@ -40,10 +41,16 @@ let faqs = [
 ];
 
 const AboutPage = () => {
+  const crumbs = [
+    {key: 'Home', content: <Link to="/">Home</Link>},
+    {key: 'Table', content: <Link to="/about/">About</Link>, active: true},
+  ];
+
   return (
     <Layout>
       <Grid.Row>
         <Grid.Column width={12}>
+          <Breadcrumb icon='right angle' sections={crumbs} />
           <Header as="h1">ABOUT</Header>
           <section style={{ marginBottom: '1em' }}>
             <p>
