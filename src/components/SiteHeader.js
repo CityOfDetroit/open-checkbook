@@ -25,8 +25,11 @@ const SiteHeader = ({ siteTitle }) => (
           <Link to="/" style={{ color: `#004445`, textDecoration: `none`, marginLeft: `auto`, marginRight: `3em`, borderBottom: `1px dotted #18252a` }}>
             HOME
           </Link>
-          <Link to="/about" style={{ color: `#004445`, textDecoration: `none`, borderBottom: `1px dotted #18252a`  }}>
+          <Link to="/about/" style={{ color: `#004445`, textDecoration: `none`, borderBottom: `1px dotted #18252a`, marginRight: '3em'  }}>
             ABOUT
+          </Link>
+          <Link to="/drilldown/" style={{ color: `#004445`, textDecoration: `none`, borderBottom: `1px dotted #18252a`  }}>
+            CHART
           </Link>
         </div>
       </header>

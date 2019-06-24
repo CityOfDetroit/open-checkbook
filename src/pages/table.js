@@ -1,11 +1,12 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
-import { Header, Grid, Breadcrumb } from 'semantic-ui-react';
+import { Header, Grid, Breadcrumb, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import Layout from "../components/layout";
+import Helpers from '../helpers';
 
-const Table = ({ location, data }) => {
+const ChartDetail = ({ location, data }) => {
   const allPayments = data.postgres.allAccountsPayablesList;
   const filteredPayments = [];
   const crumbs = [];
@@ -14,7 +15,6 @@ const Table = ({ location, data }) => {
   if (location.state !== null) {
     const params = location.state.details;
 
-    // set up breadcrumbs
     crumbs.push(
       {key: 'Home', content: <Link to="/">Home</Link>},
       {key: 'Chart', content: <Link to="/drilldown/">Chart</Link>},
@@ -28,7 +28,6 @@ const Table = ({ location, data }) => {
       {key: `${params.vendor}`, content: `${params.vendor}`, link: true, active: true}
     );
 
-    // filter allPayments by drilldown chart params
     const filterBy = { 
       'agencyCode': params.agency,
       'costcenterDesc': params.cc,
@@ -55,16 +54,45 @@ const Table = ({ location, data }) => {
             <Header.Subheader>
               {allPayments.length.toLocaleString()} total payments
               <br />
-              {filteredPayments.length > 0 ? `${filteredPayments.length.toLocaleString()} payment match this filter` : ``}
+              {filteredPayments[0].length > 0 ? `${filteredPayments[0].length.toLocaleString()} payments match this filter` : ``}
             </Header.Subheader>
           </Header>
+          
+          <Table stackable striped>
+            <Table.Header>
+              <Table.Row>
+              <Table.HeaderCell>Agency</Table.HeaderCell>
+                <Table.HeaderCell>Vendor</Table.HeaderCell>
+                <Table.HeaderCell textAlign='right'>Payment Amount</Table.HeaderCell>
+                <Table.HeaderCell>Check Date</Table.HeaderCell>
+                <Table.HeaderCell>Fund</Table.HeaderCell>
+                <Table.HeaderCell>Cost Center</Table.HeaderCell>
+                <Table.HeaderCell>Expense Category</Table.HeaderCell>
+                <Table.HeaderCell>Expense</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {filteredPayments[0].map((f, i) => (
+                <Table.Row key={i}>
+                  <Table.Cell>{f.agencyDesc}</Table.Cell>
+                  <Table.Cell>{f.vendorName}</Table.Cell>
+                  <Table.Cell textAlign='right'>{Helpers.stringToMoney(f.invoicePaymentDistAmount)}</Table.Cell>
+                  <Table.Cell>{f.checkDate.slice(0,10)}</Table.Cell>
+                  <Table.Cell>{f.fundDesc}</Table.Cell>
+                  <Table.Cell>{f.costcenterDesc}</Table.Cell>
+                  <Table.Cell>{f.objectDescShorthand}</Table.Cell>
+                  <Table.Cell>{f.objectDesc}</Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
         </Grid.Column>
       </Grid.Row>
     </Layout>
   );
 }
 
-export default Table;
+export default ChartDetail;
 
 export const query = graphql`
   {

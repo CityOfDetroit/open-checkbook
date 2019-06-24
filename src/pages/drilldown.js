@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, navigate } from 'gatsby';
 import _ from 'lodash';
-import { Grid, Segment } from 'semantic-ui-react';
+import { Grid, Segment, Header } from 'semantic-ui-react';
 
 import Layout from '../components/layout';
 import Helpers from '../helpers';
@@ -143,7 +143,7 @@ const Drilldown = ({ data }) => {
       fontFamily: ["Montserrat", "sans-serif"]
     },
     title: {
-      text: "PROTOTYPE"
+      text: "Payments by Agency"
     },
     xAxis: {
       type: "category"
@@ -185,8 +185,12 @@ const Drilldown = ({ data }) => {
   return (
     <Layout>
       <Grid.Row>
-        <Grid.Column width={16}>
+        <Grid.Column width={12}>
           <Segment basic>
+            <Header as='h1'>
+              Chart Page Title TBD
+              <Header.Subheader>This visualization excludes Non Departmental payments.</Header.Subheader>
+            </Header>
             <HighchartsReact
               highcharts={Highcharts}
               options={chartOptions}
