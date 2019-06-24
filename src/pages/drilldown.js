@@ -143,15 +143,31 @@ const Drilldown = ({ data }) => {
       fontFamily: ["Montserrat", "sans-serif"]
     },
     title: {
-      text: "Payments by Agency"
+      text: "Payments by Agency",
+      style: {"font-family":"Montserrat"}
     },
     xAxis: {
-      type: "category"
+      type: "category",
+      lineWidth: 0,
+      minorGridLineWidth: 0,
+      lineColor: 'transparent',
+      minorTickLength: 0,
+      tickLength: 0
     },
     yAxis: {
       title: {
-          text: "Total Payments"
-      }
+          text: "Total Payments",
+          style: {"font-family":"Montserrat"}
+      },
+      labels: {
+        style: {"color": "#18252a", "fontSize": "12px"}
+      }, 
+      lineWidth: 0,
+      minorGridLineWidth: 0,
+      gridLineColor: 'transparent',
+      lineColor: 'transparent',
+      minorTickLength: 0,
+      tickLength: 0
     },
     legend: {
       enabled: false
@@ -167,6 +183,7 @@ const Drilldown = ({ data }) => {
         borderWidth: 0,
         dataLabels: {
           enabled: true,
+          style: {"font-weight":"400", "text-decoration":"none"},
           formatter: function() { 
             return Helpers.stringToMoney(this.y);
           }
@@ -179,7 +196,10 @@ const Drilldown = ({ data }) => {
       // pointFormat: function () { return `<span style="color:{point.color}">{point.name}</span>: ${this.y}` }
     },
     series: series,
-    drilldown: drilldown
+    drilldown: {
+      activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif"},
+      activeDataLabelStyle: {"color": "#f2f2f2", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", "font-weight":"400"}
+    }
   }
 
   return (
