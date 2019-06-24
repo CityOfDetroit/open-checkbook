@@ -12,7 +12,21 @@ export default ({ data }) => {
   const v = data.postgres.vendor[0];
   const vendorPayments = v.payments;
   
-  const byCostCenter = _.groupBy(v.payments, 'costcenterDesc');
+  const byCostCenter = _(v.payments)
+    .groupBy('costcenterDesc')
+    .value();
+
+  const costCenterTotals = Object.keys(byCostCenter)
+    .map((c, i) => ({
+      name: c,
+      numPayments: byCostCenter[c].length,
+      sumPayments: byCostCenter[c].reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0)
+    }));
+
+  const topCostCenters = _(costCenterTotals)
+    .orderBy('sumPayments', 'desc')
+    .value();
+
   const byObject = _.groupBy(v.payments, 'objectDescShorthand');
 
   // set up breadcrumbs
@@ -57,11 +71,11 @@ export default ({ data }) => {
               Top Cost Centers
             </Header>
             <List ordered divided relaxed>
-              {Object.keys(byCostCenter).slice(0,5).map((d, i) => (
+              {topCostCenters.slice(0,5).map((d, i) => (
                 <List.Item key={i}>
                   <List.Content>
-                    <List.Header>{d}</List.Header>
-                    <List.Description>{byCostCenter[d].length.toLocaleString()} payments for {Helpers.floatToMoney(byCostCenter[d].reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}</List.Description>
+                    <List.Header>{d.name}</List.Header>
+                    <List.Description>{d.numPayments.toLocaleString()} payments for {Helpers.floatToMoney(d.sumPayments)}</List.Description>
                   </List.Content>                  
                 </List.Item>
               ))}
@@ -94,7 +108,7 @@ export default ({ data }) => {
             <Header as='h3'>
               Summary of All Payments
               <Header.Subheader>
-                {v.payments.length.toLocaleString()} payments made by N agencies totaling {Helpers.floatToMoney(v.payments.reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}
+                {v.payments.length.toLocaleString()} payments totaling {Helpers.floatToMoney(v.payments.reduce((a,p) => { return a + parseFloat(p.invoicePaymentDistAmount)}, 0))}
               </Header.Subheader>
             </Header>
             <AgencyGroupedTable tableData={structuredTableDataByAgency} payments={vendorPayments} />
@@ -116,7 +130,7 @@ export const query = graphql`
         vendorName
         vendorAddress
         vendorNumber
-        payments: accountsPayablesByVendorNumberList(orderBy: AGENCY_DESC_ASC, first: 3) {
+        payments: accountsPayablesByVendorNumberList(orderBy: AGENCY_DESC_ASC) {
           checkNumber
           checkDate
           checkAmount
