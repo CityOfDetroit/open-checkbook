@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'gatsby';
 import { Dropdown } from 'semantic-ui-react';
 import _ from 'lodash';
 
 export const Search = ({ agencies, vendors }) => {
+
+  let [input, setInput] = useState('')
   
   let exclude = ['Inactive GL Entities'];
   let dropdownAgencies = _(agencies)
@@ -36,7 +38,14 @@ export const Search = ({ agencies, vendors }) => {
     })
     .value();
 
-  let dropdownOptions = [...dropdownAgencies, ...dropdownVendors];
+  let dropdownOptions = []
+  // check here for input length and add vendors add needed
+  if(input.length > 1) {
+    dropdownOptions = [...dropdownVendors, ...dropdownAgencies]
+  }
+  else {
+    dropdownOptions = [...dropdownAgencies];
+  }
 
   return (
     <Dropdown 
@@ -46,6 +55,8 @@ export const Search = ({ agencies, vendors }) => {
       labeled
       placeholder='Search for agencies and vendors' 
       options={dropdownOptions}
+      onSearchChange={(e) => setInput(e.target.value)}
+      value={input}
       style={{ border: '3px solid #004445' }}
     />
   );
