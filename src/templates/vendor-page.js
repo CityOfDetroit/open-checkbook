@@ -116,7 +116,7 @@ export const query = graphql`
         vendorName
         vendorAddress
         vendorNumber
-        payments: accountsPayablesByVendorNumberList(orderBy: AGENCY_DESC_ASC) {
+        payments: accountsPayablesByVendorNumberList(orderBy: AGENCY_DESC_ASC, first: 3) {
           checkNumber
           checkDate
           checkAmount
