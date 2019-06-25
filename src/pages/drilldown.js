@@ -52,7 +52,7 @@ const Drilldown = ({ data }) => {
     drillUpButton: {
       position: {y: -40}
     },
-    activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", width: '100px'},
+    activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", width: '100px', padding: '1em'},
     activeDataLabelStyle: {"color": "#f2f2f2", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", "font-weight":"400"},
     series: []
   }
@@ -73,7 +73,7 @@ const Drilldown = ({ data }) => {
           y: costCenterPayments.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
           drilldown: `${a.deptNumber}_${c}`
         }
-      })
+      }).sort((a, b) => { return a.y < b.y})
     })
     
     // iterate through COST CENTERS, group by EXPENSE CATEGORIES
@@ -92,7 +92,7 @@ const Drilldown = ({ data }) => {
             y: expenseObjectPayments.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
             drilldown: `${a.deptNumber}_${c}_${e}`
           }
-        })
+        }).sort((a, b) => { return a.y < b.y})
       })
 
       // iterate through EXPENSE OBJECTS, group by VENDOR
@@ -113,7 +113,7 @@ const Drilldown = ({ data }) => {
               y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0), 
               drilldown: `${a.deptNumber}_${c}_${e}_vendor`
             }
-          })
+          }).sort((a, b) => { return a.y < b.y})
         })
       })
     })
