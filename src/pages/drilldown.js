@@ -1,7 +1,7 @@
 import React from 'react';
-import { graphql } from 'gatsby';
+import { graphql, navigate, Link } from 'gatsby';
 import _ from 'lodash';
-import { Grid, Segment } from 'semantic-ui-react';
+import { Grid, Segment, Header } from 'semantic-ui-react';
 
 import Layout from '../components/layout';
 import Helpers from '../helpers';
@@ -44,14 +44,27 @@ const Drilldown = ({ data }) => {
         y: a.accountsPayablesByAgencyCodeMaskedList.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
         drilldown: a.deptNameShorthand
       }
-    })
+    }).sort((a,b) => { return a.y < b.y} )
   });
 
   // drilldown chart data levels
   let drilldown = {
     drillUpButton: {
-      position: {y: -40}
+      position: {y: -40},
+      theme: {
+        fill: "transparent",
+        states: {
+          hover: {
+            fill: "#9fd5b3"
+          }
+        },
+        stroke: "transparent",
+        strokeWidth: 0,
+        style: {"color": "#18252a", "cursor": "pointer", "fontSize": "18px", "text-decoration": "none", "font-family": "Montserrat, sans-serif"}
+      }
     },
+    activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif"},
+    activeDataLabelStyle: {"color": "white", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", "font-weight":"400"},
     series: []
   }
 
@@ -71,7 +84,7 @@ const Drilldown = ({ data }) => {
           y: costCenterPayments.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
           drilldown: `${a.deptNumber}_${c}`
         }
-      })
+      }).sort((a, b) => { return a.y < b.y})
     })
     
     // iterate through COST CENTERS, group by EXPENSE CATEGORIES
@@ -90,7 +103,7 @@ const Drilldown = ({ data }) => {
             y: expenseObjectPayments.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
             drilldown: `${a.deptNumber}_${c}_${e}`
           }
-        })
+        }).sort((a, b) => { return a.y < b.y})
       })
 
       // iterate through EXPENSE OBJECTS, group by VENDOR
@@ -105,20 +118,13 @@ const Drilldown = ({ data }) => {
           data: Object.keys(vendorGrouping).map(v => {
             let paymentsToVendor = vendorGrouping[v];
             
-            // if we show that vendor in our stats, link the bar
-            if (paymentsToVendor[0].vendorByVendorName.showInStats === true) {
-              return {
-                name: v,
-                y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
-                drilldown: `${a.deptNumber}_${c}_${e}_vendor` 
-              }
-            } else {
-              return {
-                name: v,
-                y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0)
-              }
+            // TODO only define drilldown where vendor showInStats is true
+            return {
+              name: v,
+              y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0), 
+              drilldown: `${a.deptNumber}_${c}_${e}_vendor`
             }
-          })
+          }).sort((a, b) => { return a.y < b.y})
         })
       })
     })
@@ -137,9 +143,11 @@ const Drilldown = ({ data }) => {
               cc: split[1],
               expense: split[2],
               vendor: e.point.name 
-            }; 
+            };
 
-            console.log(details); // eventually navigate or link and pass details as state/props
+            navigate("/table/", {
+              state: {details}
+            });
           }
         },
       }
@@ -148,15 +156,31 @@ const Drilldown = ({ data }) => {
       fontFamily: ["Montserrat", "sans-serif"]
     },
     title: {
-      text: "PROTOTYPE"
+      text: "Payments by Agency",
+      style: {"font-family":"Montserrat"}
     },
     xAxis: {
-      type: "category"
+      type: "category",
+      lineWidth: 0,
+      minorGridLineWidth: 0,
+      lineColor: 'transparent',
+      minorTickLength: 0,
+      tickLength: 0
     },
     yAxis: {
       title: {
-          text: "Total Payments"
-      }
+          text: "Total Payments",
+          style: {"font-family":"Montserrat"}
+      },
+      labels: {
+        style: {"color": "#18252a", "fontSize": "12px"}
+      }, 
+      lineWidth: 0,
+      minorGridLineWidth: 0,
+      gridLineColor: 'transparent',
+      lineColor: 'transparent',
+      minorTickLength: 0,
+      tickLength: 0
     },
     legend: {
       enabled: false
@@ -172,6 +196,7 @@ const Drilldown = ({ data }) => {
         borderWidth: 0,
         dataLabels: {
           enabled: true,
+          style: {"font-weight":"400", "text-decoration":"none"},
           formatter: function() { 
             return Helpers.stringToMoney(this.y);
           }
@@ -190,8 +215,14 @@ const Drilldown = ({ data }) => {
   return (
     <Layout>
       <Grid.Row>
-        <Grid.Column width={16}>
+        <Grid.Column width={12}>
           <Segment basic>
+            <Header as='h1'>
+              Chart
+              <Header.Subheader>
+                Click on a bar to filter payments by their categories. This visualization excludes <Link to="/agency/non-departmental">Non Departmental</Link> payments.
+              </Header.Subheader>
+            </Header>
             <HighchartsReact
               highcharts={Highcharts}
               options={chartOptions}

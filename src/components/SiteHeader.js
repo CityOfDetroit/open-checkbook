@@ -18,15 +18,18 @@ const SiteHeader = ({ siteTitle }) => (
                 <Image src={logo} style={{ padding: 0, margin: 0, width: `100%`, height: `auto` }} alt="city of detroit logo" />
               </a>
             </div>
-            <Link to="/" style={{ color: `black`, textDecoration: `none`, textAlign: `right` }}>
+            <Link className="header-link" to="/" style={{ color: `black`, textDecoration: `none`, textAlign: `right` }}>
               <Header as='h2' style={{ fontWeight: 900}}>{_.toUpper(siteTitle)}</Header>
             </Link>
           </div>
           <Link to="/" style={{ color: `#004445`, textDecoration: `none`, marginLeft: `auto`, marginRight: `3em`, borderBottom: `1px dotted #18252a` }}>
             HOME
           </Link>
-          <Link to="/about" style={{ color: `#004445`, textDecoration: `none`, borderBottom: `1px dotted #18252a`  }}>
+          <Link to="/about/" style={{ color: `#004445`, textDecoration: `none`, borderBottom: `1px dotted #18252a`, marginRight: '3em'  }}>
             ABOUT
+          </Link>
+          <Link to="/drilldown/" style={{ color: `#004445`, textDecoration: `none`, borderBottom: `1px dotted #18252a`  }}>
+            CHART
           </Link>
         </div>
       </header>

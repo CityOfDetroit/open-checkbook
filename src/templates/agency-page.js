@@ -14,9 +14,9 @@ export default ({ data }) => {
 
   // set up breadcrumbs
   const crumbs = [
-    {key: 'Home', content: <Link to="/">Home</Link>, link: true},
+    {key: 'Home', content: <Link to="/">Home</Link>},
     {key: 'Agency', content: 'Agency', link: false},
-    {key: `${a.deptName}`, content: <Link to={`/agency/${a.deptSlug}`}>{a.deptNameShorthand}</Link>, link: true, active: true}
+    {key: `${a.deptName}`, content: <Link to={`/agency/${a.deptSlug}`}>{a.deptNameShorthand}</Link>, active: true}
   ];
 
   // top n vendors
