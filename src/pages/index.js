@@ -129,12 +129,7 @@ export const query = graphql`
   {
     postgres {
       allAgenciesList {
-        dept
-        deptNumber
-        parent
         deptName
-        deptNameShorthand
-        deptNameAbbreviation
         deptSlug
         totalAmount
       }

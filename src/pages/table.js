@@ -11,7 +11,7 @@ const ChartDetail = ({ location, data }) => {
   const crumbs = [];
   
   // if you navigate to this page from the drilldown chart, we start with filter params
-  if (location.state !== null) {
+  if (location.state) {
     const params = location.state.details;
 
     // filter payments
@@ -114,13 +114,10 @@ export const query = graphql`
           deptSlug
         }
         invoicePaymentDistAmount
-        fundCode
         fundDesc
         agencyCode
         agencyDesc
-        costcenterCode
         costcenterDesc
-        objectCode
         objectDesc
         objectDescShorthand
         fiscalYear
