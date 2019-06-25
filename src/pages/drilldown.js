@@ -63,11 +63,7 @@ const Drilldown = ({ data }) => {
         style: {"color": "#18252a", "cursor": "pointer", "fontSize": "18px", "text-decoration": "none", "font-family": "Montserrat, sans-serif"}
       }
     },
-<<<<<<< HEAD
     activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", width: "100px"},
-=======
-    activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", width: '100px', padding: '1em'},
->>>>>>> bfc2556c45dc417bc6be0b44aeb06e7641a10b22
     activeDataLabelStyle: {"color": "#f2f2f2", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", "font-weight":"400"},
     series: []
   }

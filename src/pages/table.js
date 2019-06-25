@@ -72,10 +72,16 @@ const ChartDetail = ({ location, data }) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {payments.slice(0,50).map((f, i) => (
+              {_.sampleSize(payments, 50).sort((a, b) => { return a.checkDate < b.checkDate}).map((f, i) => (
                 <Table.Row key={i}>
-                  <Table.Cell>{f.agencyDesc}</Table.Cell>
-                  <Table.Cell>{f.vendorName}</Table.Cell>
+                  <Table.Cell>
+                    <Link to={`/agency/${f.agencyByAgencyCodeMasked.deptSlug}`}>{f.agencyDesc}</Link>
+                  </Table.Cell>                  
+                  <Table.Cell>
+                    {f.vendorByVendorNumber.showInStats ?
+                    <Link to={`/vendor/${f.vendorNumber}`}>{f.vendorName}</Link> :
+                    f.vendorName}
+                  </Table.Cell>
                   <Table.Cell textAlign='right'>{Helpers.stringToMoney(f.invoicePaymentDistAmount)}</Table.Cell>
                   <Table.Cell>{f.checkDate.slice(0,10)}</Table.Cell>
                   <Table.Cell>{f.fundDesc}</Table.Cell>
@@ -101,6 +107,12 @@ export const query = graphql`
         checkDate
         vendorName
         vendorNumber
+        vendorByVendorNumber {
+          showInStats
+        }
+        agencyByAgencyCodeMasked {
+          deptSlug
+        }
         invoicePaymentDistAmount
         fundCode
         fundDesc
