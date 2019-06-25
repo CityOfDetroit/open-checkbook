@@ -52,6 +52,8 @@ const Drilldown = ({ data }) => {
     drillUpButton: {
       position: {y: -40}
     },
+    activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", width: '100px'},
+    activeDataLabelStyle: {"color": "#f2f2f2", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", "font-weight":"400"},
     series: []
   }
 
@@ -196,10 +198,7 @@ const Drilldown = ({ data }) => {
       // pointFormat: function () { return `<span style="color:{point.color}">{point.name}</span>: ${this.y}` }
     },
     series: series,
-    drilldown: {
-      activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif"},
-      activeDataLabelStyle: {"color": "#f2f2f2", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", "font-weight":"400"}
-    }
+    drilldown: drilldown
   }
 
   return (
