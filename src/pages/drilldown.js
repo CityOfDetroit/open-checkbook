@@ -1,5 +1,5 @@
 import React from 'react';
-import { graphql, navigate } from 'gatsby';
+import { graphql, navigate, Link } from 'gatsby';
 import _ from 'lodash';
 import { Grid, Segment, Header } from 'semantic-ui-react';
 
@@ -218,8 +218,10 @@ const Drilldown = ({ data }) => {
         <Grid.Column width={12}>
           <Segment basic>
             <Header as='h1'>
-              Chart Page Title TBD
-              <Header.Subheader>This visualization excludes Non Departmental payments.</Header.Subheader>
+              Chart
+              <Header.Subheader>
+                Click on a bar to filter payments by their categories. This visualization excludes <Link to="/agency/non-departmental">Non Departmental</Link> payments.
+              </Header.Subheader>
             </Header>
             <HighchartsReact
               highcharts={Highcharts}

@@ -75,12 +75,12 @@ const ChartDetail = ({ location, data }) => {
               {_.sampleSize(payments, 50).sort((a, b) => { return a.checkDate < b.checkDate}).map((f, i) => (
                 <Table.Row key={i}>
                   <Table.Cell>
-                    <Link to={`/agency/${f.agencyByAgencyCodeMasked.deptSlug}`}>{f.agencyDesc}</Link>
+                    {f.agencyDesc} <Link to={`/agency/${f.agencyByAgencyCodeMasked.deptSlug}`}>>></Link>
                   </Table.Cell>                  
                   <Table.Cell>
                     {f.vendorByVendorNumber.showInStats ?
-                    <Link to={`/vendor/${f.vendorNumber}`}>{f.vendorName}</Link> :
-                    f.vendorName}
+                      <>{f.vendorName} <Link to={`/vendor/${f.vendorNumber}`}>>></Link></> :
+                      f.vendorName}
                   </Table.Cell>
                   <Table.Cell textAlign='right'>{Helpers.stringToMoney(f.invoicePaymentDistAmount)}</Table.Cell>
                   <Table.Cell>{f.checkDate.slice(0,10)}</Table.Cell>
