@@ -50,9 +50,20 @@ const Drilldown = ({ data }) => {
   // drilldown chart data levels
   let drilldown = {
     drillUpButton: {
-      position: {y: -40}
+      position: {y: -40},
+      theme: {
+        fill: "transparent",
+        states: {
+          hover: {
+            fill: "#9fd5b3"
+          }
+        },
+        stroke: "transparent",
+        strokeWidth: 0,
+        style: {"color": "#18252a", "cursor": "pointer", "fontSize": "18px", "text-decoration": "none", "font-family": "Montserrat, sans-serif"}
+      }
     },
-    activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", width: '100px'},
+    activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", width: "100px"},
     activeDataLabelStyle: {"color": "#f2f2f2", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", "font-weight":"400"},
     series: []
   }
