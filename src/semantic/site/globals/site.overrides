@@ -1,6 +1,15 @@
 /*******************************
         Global Overrides
 *******************************/
+a:hover{
+        background: #004445;
+        color: white !important;
+}
+a.header-link:hover{
+        color: #18252a;
+        background: transparent;
+}
+
 .highcharts-drillup-button tspan{
         font-weight: 900
 }
