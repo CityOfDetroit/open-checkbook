@@ -7,17 +7,25 @@ import Layout from "../components/layout";
 import Helpers from '../helpers';
 
 const ChartDetail = ({ location, data }) => {
-  const allPayments = data.postgres.allAccountsPayablesList;
-  const filteredPayments = [];
+  let payments = [];
   const crumbs = [];
   
   // if you navigate to this page from the drilldown chart, we start with filter params
   if (location.state !== null) {
     const params = location.state.details;
 
+    // filter payments
+    const filterBy = { 
+      'agencyCode': params.agency,
+      'costcenterDesc': params.cc,
+      'objectDescShorthand': params.expense,
+      'vendorName': params.vendor
+    };
+    payments = _.filter(data.postgres.allAccountsPayablesList, filterBy);
+
+    // set detailed breadcrumbs to reflect filters
     crumbs.push(
       {key: 'Home', content: <Link to="/">Home</Link>},
-      {key: 'Chart', content: <Link to="/drilldown/">Chart</Link>},
       {key: 'Agency', content: 'Agency', link: false},
       {key: `${params.agency}`, content: `${params.agency}`, link: true},
       {key: 'CC', content: 'Cost Center', link: false},
@@ -28,19 +36,13 @@ const ChartDetail = ({ location, data }) => {
       {key: `${params.vendor}`, content: `${params.vendor}`, link: true, active: true}
     );
 
-    const filterBy = { 
-      'agencyCode': params.agency,
-      'costcenterDesc': params.cc,
-      'objectDescShorthand': params.expense,
-      'vendorName': params.vendor
-    };
-    filteredPayments.push(_.filter(allPayments, filterBy));
-
   // if you navigate here directly we just show you everything
   } else {
+    payments = data.postgres.allAccountsPayablesList;
+
     crumbs.push(
       {key: 'Home', content: <Link to="/">Home</Link>},
-      {key: 'Table', content: <Link to="/table/">All Payments Table</Link>, active: true},
+      {key: 'Table', content: <Link to="/table/">All Payments</Link>, active: true},
     );
   }
   
@@ -52,9 +54,7 @@ const ChartDetail = ({ location, data }) => {
           <Header as='h1'>
             Payments Table
             <Header.Subheader>
-              {allPayments.length.toLocaleString()} total payments
-              <br />
-              {filteredPayments[0].length > 0 ? `${filteredPayments[0].length.toLocaleString()} payments match this filter` : ``}
+              Showing {payments.length.toLocaleString()} payments
             </Header.Subheader>
           </Header>
           
@@ -72,7 +72,7 @@ const ChartDetail = ({ location, data }) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {filteredPayments[0].map((f, i) => (
+              {payments.slice(0,50).map((f, i) => (
                 <Table.Row key={i}>
                   <Table.Cell>{f.agencyDesc}</Table.Cell>
                   <Table.Cell>{f.vendorName}</Table.Cell>
@@ -98,16 +98,10 @@ export const query = graphql`
   {
     postgres {
       allAccountsPayablesList {
-        checkNumber
         checkDate
         vendorName
         vendorNumber
-        paymentNum
-        accountingDate
         invoicePaymentDistAmount
-        invoiceNumber
-        invoiceAmount
-        invoiceDate
         fundCode
         fundDesc
         agencyCode
@@ -118,8 +112,6 @@ export const query = graphql`
         objectDesc
         objectDescShorthand
         fiscalYear
-        vendorMasked
-        agencyCodeMasked
       }
     }
   }
