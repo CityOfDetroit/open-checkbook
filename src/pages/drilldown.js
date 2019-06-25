@@ -44,7 +44,7 @@ const Drilldown = ({ data }) => {
         y: a.accountsPayablesByAgencyCodeMaskedList.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
         drilldown: a.deptNameShorthand
       }
-    })
+    }).sort((a,b) => { return a.y < b.y} )
   });
 
   // drilldown chart data levels
