@@ -7,7 +7,7 @@ const PaymentsTable = ({ tableData }) => (
   <Table>
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell>Vendor</Table.HeaderCell>
+        <Table.HeaderCell>Payee</Table.HeaderCell>
         <Table.HeaderCell>Payment Amount</Table.HeaderCell>
         <Table.HeaderCell>Check Date</Table.HeaderCell>
         <Table.HeaderCell>Fund</Table.HeaderCell>

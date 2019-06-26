@@ -110,7 +110,7 @@ export default ({ data }) => {
         <Grid.Column width={4}>
           <Segment basic>
             <Header as='h3' style={bottomHeader}>
-              Top Vendors
+              Top Payees
             </Header>
             <List divided ordered relaxed>
               {vendorStats.slice(0,5).map((v, i) => (
@@ -169,7 +169,7 @@ export default ({ data }) => {
             <Header as='h3' floated='left' textAlign='left'>
               Summary of All Payments
               <Header.Subheader>
-                {agencyPayments.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} vendors
+                {agencyPayments.length.toLocaleString()} payments made to {vendorStats.length.toLocaleString()} payees
               </Header.Subheader>
             </Header>
             <SummaryTable tableData={structuredTableData} payments={agencyPayments} show={show} />

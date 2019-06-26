@@ -22,7 +22,7 @@ const SummaryTable = ({ tableData, payments, show }) => {
     <Table>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>Vendor</Table.HeaderCell>
+          <Table.HeaderCell>Payee</Table.HeaderCell>
           <Table.HeaderCell>Total Payments</Table.HeaderCell>
           <Table.HeaderCell>Fund</Table.HeaderCell>
           <Table.HeaderCell>Cost Center</Table.HeaderCell>
