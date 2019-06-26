@@ -32,7 +32,7 @@ const ChartDetail = ({ location, data }) => {
       {key: `${params.cc}`, content: `${params.cc}`, link: false},
       {key: 'Expense', content: 'Expense Category', link: false},
       {key: `${params.expense}`, content: `${params.expense}`, link: false},
-      {key: 'Vendor', content: 'Vendor', link: false},
+      {key: 'Vendor', content: 'Payee', link: false},
       {key: `${params.vendor}`, content: `${params.vendor}`, link: true, active: true}
     );
 
@@ -54,7 +54,9 @@ const ChartDetail = ({ location, data }) => {
           <Header as='h1'>
             Payments Table
             <Header.Subheader>
-              Showing {payments.length.toLocaleString()} payments
+              {payments.length > 100000 ? 
+                `Showing 100 of ${payments.length.toLocaleString()} payments` 
+                : `Showing ${payments.length.toLocaleString()} payments`}
             </Header.Subheader>
           </Header>
           
@@ -62,9 +64,10 @@ const ChartDetail = ({ location, data }) => {
             <Table.Header>
               <Table.Row>
               <Table.HeaderCell>Agency</Table.HeaderCell>
-                <Table.HeaderCell>Vendor</Table.HeaderCell>
+                <Table.HeaderCell>Payee</Table.HeaderCell>
                 <Table.HeaderCell textAlign='right'>Payment Amount</Table.HeaderCell>
                 <Table.HeaderCell>Check Date</Table.HeaderCell>
+                <Table.HeaderCell>Fiscal Year</Table.HeaderCell>
                 <Table.HeaderCell>Fund</Table.HeaderCell>
                 <Table.HeaderCell>Cost Center</Table.HeaderCell>
                 <Table.HeaderCell>Expense Category</Table.HeaderCell>
@@ -72,7 +75,7 @@ const ChartDetail = ({ location, data }) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {_.sampleSize(payments, 50).sort((a, b) => { return a.checkDate < b.checkDate}).map((f, i) => (
+              {_.sampleSize(payments, 100).sort((a, b) => { return a.checkDate < b.checkDate}).map((f, i) => (
                 <Table.Row key={i}>
                   <Table.Cell>
                     {f.agencyDesc} <Link to={`/agency/${f.agencyByAgencyCodeMasked.deptSlug}`}>>></Link>
@@ -84,6 +87,7 @@ const ChartDetail = ({ location, data }) => {
                   </Table.Cell>
                   <Table.Cell textAlign='right'>{Helpers.stringToMoney(f.invoicePaymentDistAmount)}</Table.Cell>
                   <Table.Cell>{f.checkDate.slice(0,10)}</Table.Cell>
+                  <Table.Cell>{f.fiscalYear}</Table.Cell>
                   <Table.Cell>{f.fundDesc}</Table.Cell>
                   <Table.Cell>{f.costcenterDesc}</Table.Cell>
                   <Table.Cell>{f.objectDescShorthand}</Table.Cell>
@@ -103,7 +107,7 @@ export default ChartDetail;
 export const query = graphql`
   {
     postgres {
-      allAccountsPayablesList {
+      allAccountsPayablesList(orderBy: CHECK_DATE_DESC) {
         checkDate
         vendorName
         vendorNumber

@@ -53,7 +53,7 @@ export const Search = ({ agencies, vendors }) => {
       search 
       selection
       labeled
-      placeholder='Search for agencies and vendors' 
+      placeholder='Search for agencies and payees' 
       options={dropdownOptions}
       onSearchChange={(e) => setInput(e.target.value)}
       value={input}

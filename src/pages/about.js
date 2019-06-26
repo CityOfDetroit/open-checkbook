@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'gatsby';
-import { Header, Grid, List, Placeholder, Breadcrumb } from 'semantic-ui-react';
+import { Header, Grid, List, Breadcrumb } from 'semantic-ui-react';
 
 import Layout from '../components/layout';
 import FAQ from '../components/faq';
@@ -100,11 +100,7 @@ const AboutPage = () => {
           </section>
           <section style={{ marginBottom: '1em' }}>
             <Header as="h2">Share Feedback</Header>
-            <Placeholder.Paragraph>
-              <Placeholder.Line></Placeholder.Line>
-              <Placeholder.Line></Placeholder.Line>
-              <Placeholder.Line></Placeholder.Line>
-            </Placeholder.Paragraph>
+            <p>Smartsheet Form link TBD</p>
           </section>
         </Grid.Column>
       </Grid.Row>
