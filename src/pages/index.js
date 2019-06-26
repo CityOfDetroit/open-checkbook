@@ -36,14 +36,6 @@ const IndexPage = ({ data }) => {
     .slice(0, 10)
     .value();
 
-  // let searchRowStyle = {
-  //   padding: '3em 0em'
-  // }
-
-  // let totalRowStyle = {
-  //   paddingTop: '2rem'
-  // }
-
   return (
     <Layout>
       <Grid.Row>
@@ -64,7 +56,7 @@ const IndexPage = ({ data }) => {
               </Header.Subheader>
             </Header>
             <div style={{marginTop: `25px`}}>
-              <Link to={`/drilldown`} prefetch={false}>
+              <Link to={`/drilldown/`} prefetch={false}>
                 <button className="all-spending-btn" style={{background: `#feb70d`, padding: `1em`, color: `#18252a`, textDecoration: `none`, textTransform: `uppercase`, fontWeight: 900, fontSize: `14px`}}>View All Payments</button>
               </Link>
               {/* <a className="all-spending-btn" href="/drilldown/" style={{background: `#feb70d`, padding: `1em`, color: `#18252a`, textDecoration: `none`, textTransform: `uppercase`, fontWeight: 900, fontSize: `14px`}}>View All Payments</a> */}
