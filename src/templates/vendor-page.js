@@ -32,7 +32,7 @@ export default ({ data }) => {
   // set up breadcrumbs
   const crumbs = [
     {key: 'Home', content: <Link to="/">Home</Link>},
-    {key: 'Vendor', content: 'Vendor', link: false},
+    {key: 'Vendor', content: 'Payee', link: false},
     {key: `${v.vendorName}`, content: <Link to={`/vendor/${v.vendorNumber}`}>{v.vendorName}</Link>, active: true}
   ];
 

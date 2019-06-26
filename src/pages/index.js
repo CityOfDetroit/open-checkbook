@@ -36,14 +36,6 @@ const IndexPage = ({ data }) => {
     .slice(0, 10)
     .value();
 
-  // let searchRowStyle = {
-  //   padding: '3em 0em'
-  // }
-
-  // let totalRowStyle = {
-  //   paddingTop: '2rem'
-  // }
-
   return (
     <Layout>
       <Grid.Row>
@@ -64,7 +56,14 @@ const IndexPage = ({ data }) => {
               </Header.Subheader>
             </Header>
             <div style={{marginTop: `25px`}}>
+<<<<<<< HEAD
               <a className="all-spending-btn" href="./drilldown" style={{background: `#feb70d`, padding: `1em`, color: `#18252a`, textDecoration: `none`, textTransform: `uppercase`, fontWeight: 900, fontSize: `14px`}}>View All Spending</a>
+=======
+              <Link to={`/drilldown/`} prefetch={false}>
+                <button className="all-spending-btn" style={{background: `#feb70d`, padding: `1em`, color: `#18252a`, textDecoration: `none`, textTransform: `uppercase`, fontWeight: 900, fontSize: `14px`}}>View All Payments</button>
+              </Link>
+              {/* <a className="all-spending-btn" href="/drilldown/" style={{background: `#feb70d`, padding: `1em`, color: `#18252a`, textDecoration: `none`, textTransform: `uppercase`, fontWeight: 900, fontSize: `14px`}}>View All Payments</a> */}
+>>>>>>> 33e3a8f08350c63ec015a135337bce6f93e702f3
             </div>
           </Segment>
         </Grid.Column>
@@ -98,7 +97,7 @@ const IndexPage = ({ data }) => {
           <Segment basic>
             <Header
               as="h2"
-              content="Top Vendors"
+              content="Top Payees"
             />
             <List ordered relaxed divided size='big'>
               {topVendors.map((v, i) => (

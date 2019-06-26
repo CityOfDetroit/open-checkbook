@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import { Dropdown } from 'semantic-ui-react';
 import _ from 'lodash';
 
@@ -31,8 +31,9 @@ export const Search = ({ agencies, vendors }) => {
         key: v.vendorNumber,
         value: v.vendorName,
         text: v.vendorName,
-        as: Link,
-        to: `/vendor/${v.vendorNumber}`,
+        // as: Link,
+        onClick: ((e, d) => navigate(`/vendor/${v.vendorNumber}`)),
+        // to: `/vendor/${v.vendorNumber}`,
         label: { color: 'purple', circular: true, empty: true }
       }
     })
@@ -53,7 +54,7 @@ export const Search = ({ agencies, vendors }) => {
       search 
       selection
       labeled
-      placeholder='Search for agencies and vendors' 
+      placeholder='Search for agencies and payees' 
       options={dropdownOptions}
       onSearchChange={(e) => setInput(e.target.value)}
       value={input}

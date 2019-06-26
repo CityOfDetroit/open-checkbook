@@ -29,7 +29,7 @@ const Drilldown = ({ data }) => {
   // top level chart data
   let series = [];
   series.push({
-    name: 'Agencies',
+    name: 'Agency',
     colorByPoint: false,
     color: "#004445",
     dataLabels: {
@@ -44,7 +44,7 @@ const Drilldown = ({ data }) => {
         y: a.accountsPayablesByAgencyCodeMaskedList.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
         drilldown: a.deptNameShorthand
       }
-    }).sort((a,b) => { return a.y < b.y} )
+    }).sort((a,b) => { return a.y < b.y })
   });
 
   // drilldown chart data levels
@@ -74,7 +74,7 @@ const Drilldown = ({ data }) => {
 
     drilldown.series.push({
       id: a.deptNameShorthand,
-      name: "Cost Centers",
+      name: "Cost Center",
       colorByPoint: false,
       color: "#279989",
       data: Object.keys(costCenterGrouping).map(c => {
@@ -84,7 +84,7 @@ const Drilldown = ({ data }) => {
           y: costCenterPayments.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
           drilldown: `${a.deptNumber}_${c}`
         }
-      }).sort((a, b) => { return a.y < b.y})
+      }).sort((a, b) => { return a.y < b.y })
     })
     
     // iterate through COST CENTERS, group by EXPENSE CATEGORIES
@@ -93,7 +93,7 @@ const Drilldown = ({ data }) => {
 
       drilldown.series.push({
         id: `${a.deptNumber}_${c}`,
-        name: "Expense Categories",
+        name: "Expense Category",
         colorByPoint: false,
         color: "#9fd5b3",
         data: Object.keys(expenseObjectGrouping).map(e => {
@@ -103,7 +103,7 @@ const Drilldown = ({ data }) => {
             y: expenseObjectPayments.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0),
             drilldown: `${a.deptNumber}_${c}_${e}`
           }
-        }).sort((a, b) => { return a.y < b.y})
+        }).sort((a, b) => { return a.y < b.y })
       })
 
       // iterate through EXPENSE OBJECTS, group by VENDOR
@@ -112,7 +112,7 @@ const Drilldown = ({ data }) => {
 
         drilldown.series.push({
           id: `${a.deptNumber}_${c}_${e}`,
-          name: "Vendors",
+          name: "Payee",
           colorByPoint: false,
           color: "#feb70d",
           data: Object.keys(vendorGrouping).map(v => {
@@ -124,11 +124,14 @@ const Drilldown = ({ data }) => {
               y: paymentsToVendor.reduce((a, p) => a + parseFloat(p.invoicePaymentDistAmount), 0), 
               drilldown: `${a.deptNumber}_${c}_${e}_vendor`
             }
-          }).sort((a, b) => { return a.y < b.y})
+          }).sort((a, b) => { return a.y < b.y })
         })
       })
     })
   })
+
+  let defaultTitle = 'Total Payments by Agency';
+  let drilldownTitle = 'Total Payments by ';
 
   let chartOptions = {
     chart: {
@@ -136,6 +139,12 @@ const Drilldown = ({ data }) => {
       height: 1200,
       events: {
         drilldown: function(e) { 
+          // change title if it's not the lowest level
+          if (e.point.drilldown.slice(-6) !== 'vendor') {
+            this.setTitle({ text: drilldownTitle + e.seriesOptions.name });
+          }
+          
+          // if it's the lowest level, navigate to filtered table view
           if (e.point.drilldown.slice(-6) === 'vendor') {
             let split = e.point.drilldown.split("_");
             let details = {
@@ -150,13 +159,16 @@ const Drilldown = ({ data }) => {
             });
           }
         },
+        drillup: function(e) {
+          this.setTitle({ text: drilldownTitle + e.seriesOptions.name });
+        }
       }
     },
     style: {
       fontFamily: ["Montserrat", "sans-serif"]
     },
     title: {
-      text: "Payments by Agency",
+      text: defaultTitle,
       style: {"font-family":"Montserrat"}
     },
     xAxis: {
