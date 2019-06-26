@@ -1,9 +1,13 @@
 /*******************************
         Global Overrides
 *******************************/
-a:hover{
+.content a:hover,
+header a:hover{
         background: #004445;
         color: white !important;
+}
+a.all-spending-btn:hover{
+        background: #f5b10e !important;
 }
 a.header-link:hover{
         color: #18252a;
@@ -12,4 +16,24 @@ a.header-link:hover{
 
 .highcharts-drillup-button tspan{
         font-weight: 900
+}
+
+body:after{
+  content: "beta";
+  position: fixed;
+  width: 80px;
+  height: 25px;
+  background: #279989;
+  top: 7px;
+  left: -20px;
+  text-align: center;
+  font-size: 12px;
+  font-family: 'Montserrat';
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
+  line-height: 27px;
+  -ms-transform:rotate(-45deg);
+  -webkit-transform:rotate(-45deg);
+  transform:rotate(-45deg);
 }

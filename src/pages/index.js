@@ -64,7 +64,7 @@ const IndexPage = ({ data }) => {
               </Header.Subheader>
             </Header>
             <div style={{marginTop: `25px`}}>
-              <a className="all-spending-btn" href="/drilldown" style={{background: `#feb70d`, padding: `1em`, color: `#18252a`, textDecoration: `none`, textTransform: `uppercase`, fontWeight: 900, fontSize: `14px`}}>View All Spending</a>
+              <a className="all-spending-btn" href="./drilldown" style={{background: `#feb70d`, padding: `1em`, color: `#18252a`, textDecoration: `none`, textTransform: `uppercase`, fontWeight: 900, fontSize: `14px`}}>View All Spending</a>
             </div>
           </Segment>
         </Grid.Column>
