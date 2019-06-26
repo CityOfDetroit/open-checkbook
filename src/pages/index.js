@@ -57,7 +57,7 @@ const IndexPage = ({ data }) => {
             </Header>
             <div style={{marginTop: `25px`}}>
               <Link to={`/drilldown/`} prefetch={false}>
-                <button className="all-spending-btn" style={{background: `#feb70d`, padding: `1em`, color: `#18252a`, textDecoration: `none`, textTransform: `uppercase`, fontWeight: 900, fontSize: `14px`}}>View All Payments</button>
+                <button className="all-spending-btn" style={{border: `none`, cursor:`pointer`, background: `#feb70d`, padding: `1em`, color: `#18252a`, textDecoration: `none`, textTransform: `uppercase`, fontWeight: 900, fontSize: `14px`}}>View All Payments</button>
               </Link>
             </div>
           </Segment>
