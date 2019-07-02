@@ -8,7 +8,7 @@ const AgencyHeader = ({ agency, grouped, slug }) => (
   <div>
     {agency} <Link to={`/agency/${slug}`}>>></Link>
     <p style={{ fontWeight: 500 }}>
-      {agency !== 'Default Cost Center' && agency ? `${grouped[agency].length} payments for ${Helpers.floatToMoney(grouped[agency].reduce((a, p) => { return a + parseFloat(p.invoicePaymentDistAmount) }, 0))}` : `TBD`}
+      {`${grouped[agency] ? grouped[agency].length : `No`} payments for ${grouped[agency] ? Helpers.floatToMoney(grouped[agency].reduce((a, p) => { return a + parseFloat(p.invoicePaymentDistAmount) }, 0)) : ``}`}
     </p>
   </div>
 );

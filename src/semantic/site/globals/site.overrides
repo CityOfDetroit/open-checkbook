@@ -6,7 +6,7 @@ header a:hover{
         background: #004445;
         color: white !important;
 }
-a.all-spending-btn:hover{
+.all-spending-btn:hover{
         background: #f5b10e !important;
 }
 a.header-link:hover{
