@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Grid, Header, Segment } from 'semantic-ui-react';
+import { List, Grid, Header, Segment, Label } from 'semantic-ui-react';
 import { graphql, Link } from 'gatsby';
 import _ from 'lodash';
 
@@ -11,6 +11,9 @@ import Footer from '../components/Footer';
 const IndexPage = ({ data }) => {
   let depts = data.postgres.allAgenciesList;
   let vendors = data.postgres.allVendorsList;
+
+  // use this for top level total payments stat (can't reduce vendor total amount because of show in stats filter!)
+  let deptsNotNull = _.filter(depts, function(d) { return d.totalAmount > 0 });
 
   let topDepts = _(depts)
     .groupBy('deptName') // dedupes dwsd
@@ -29,7 +32,8 @@ const IndexPage = ({ data }) => {
     .map((v) => ({
       'vendor': v.vendorName,
       'slug': v.vendorNumber,
-      'total': v.totalAmount
+      'total': v.totalAmount,
+      'pass': v.passThroughPayee
     }))
     .sortBy(['total'])
     .reverse()
@@ -50,7 +54,7 @@ const IndexPage = ({ data }) => {
         <Grid.Column width={12}>
           <Segment basic size='huge'>
             <Header as='h1'>
-              {Helpers.floatToMoney(vendors.reduce((a, v) => a + parseFloat(v.totalAmount), 0))}
+              {Helpers.floatToMoney(deptsNotNull.reduce((a, v) => a + parseFloat(v.totalAmount), 0))}
               <Header.Subheader>
                 Total Payments in Fiscal Year 2017-2018
               </Header.Subheader>
@@ -100,6 +104,11 @@ const IndexPage = ({ data }) => {
                   <List.Content style={{ marginLeft: '.5em' }}>
                     <List.Header>
                       <Link to={`/vendor/${v.slug}`}>{v.vendor} >></Link>
+                      {v.pass === true ? 
+                        <Label size='tiny' style={{ marginLeft: '1em', borderRadius: 0 }}>
+                          PASS THROUGH PAYEE
+                        </Label>
+                      : ``}
                     </List.Header>
                     <List.Description>
                       {Helpers.stringToMoney(v.total)}
@@ -131,6 +140,7 @@ export const query = graphql`
         vendorName
         vendorNumber
         totalAmount
+        passThroughPayee
       }    
     }
   }
