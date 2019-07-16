@@ -66,6 +66,9 @@ const AboutPage = () => {
               You may find it helpful to browse through the Open Data Finance Glossary for terminologies used in this data tool. For more information about the City of Detroit, please visit <a href='https://www.detroitmi.gov'>City of Detroit</a> and check out our <a href='https://detroitmi.gov/departments/office-chief-financial-officer/financial-reports'>Financial Reports page</a> which includes links to various City of Detroit financial reports, including the Comprehensive Annual Financial Report, Single Audit, Four-Year Financial Plan (annual budget), and Monthly Financial Reports. 
             </p>
             <p>
+              These transactions have not been audited. Legal and other sensitive data have been aggregated. This data cannot be compared with other financial and accounting reports released by the City.
+            </p>
+            <p>
               Thank you for visiting the City’s Open Checkbook website.
             </p>
           </section>

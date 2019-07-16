@@ -44,6 +44,12 @@ const IndexPage = ({ data }) => {
     <Layout>
       <Grid.Row>
         <Grid.Column width={12}>
+          Message from David P. Massaron, CFO, City of Detroit: One of the key functions of the Office of the CFO (OCFO) is to plan, direct, monitor, organize and control the City’s financial resources in an efficient and effective manner. The OCFO is responsible for ensuring that City resources are properly managed. We also have a role in promoting trust in government by being transparent of how the City is spending tax payer dollars. Open Checkbook provides residents, business owners, and other stakeholders the access and ability to see [insert text from Regina as to what exactly open checkbook data is]. Welcome, Detroit, to your Open Checkbook.
+        </Grid.Column>
+      </Grid.Row>
+      
+      <Grid.Row>
+        <Grid.Column width={12}>
           <Segment basic size='huge'>
             <Search agencies={depts} vendors={vendors} />
           </Segment>
