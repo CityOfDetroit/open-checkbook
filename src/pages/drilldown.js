@@ -20,7 +20,7 @@ const Drilldown = ({ data }) => {
   // Omit legacy agencies, Default Cost Center, and Non Departmental
   let sortedAgencies = _(agencies)
     .filter(function(o) { return o.accountsPayablesByAgencyCodeMaskedList.length > 0 })
-    .filter(function(p) { return p.deptName !== 'Default Cost Center' })
+    .filter(function(p) { return p.deptName !== 'Pass Through Payments' })
     .filter(function(q) { return q.deptName !== 'Non Departmental' })
     .sortBy('totalAmount')
     .reverse()
@@ -34,8 +34,8 @@ const Drilldown = ({ data }) => {
     color: "#004445",
     dataLabels: {
       enabled: true,
-      formatter: function () { 
-        return Helpers.stringToMoney(this.y); 
+      formatter: function() { 
+        return Helpers.formatMoney(this.y);
       }
     },
     data: sortedAgencies.map(a => {
@@ -65,7 +65,7 @@ const Drilldown = ({ data }) => {
     },
     activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif"},
     activeDataLabelStyle: {"color": "white", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", "font-weight":"400"},
-    series: []
+    series: [],
   }
 
   // iterate through AGENCIES, group by COST CENTER
@@ -185,14 +185,17 @@ const Drilldown = ({ data }) => {
           style: {"font-family":"Montserrat"}
       },
       labels: {
-        style: {"color": "#18252a", "fontSize": "12px"}
+        style: {"color": "#18252a", "fontSize": "12px"},
       }, 
       lineWidth: 0,
       minorGridLineWidth: 0,
       gridLineColor: 'transparent',
       lineColor: 'transparent',
       minorTickLength: 0,
-      tickLength: 0
+      tickLength: 0,
+      scrollbar: {
+        enabled: true
+      }
     },
     legend: {
       enabled: false
@@ -210,7 +213,7 @@ const Drilldown = ({ data }) => {
           enabled: true,
           style: {"font-weight":"400", "text-decoration":"none"},
           formatter: function() { 
-            return Helpers.stringToMoney(this.y);
+            return Helpers.formatMoney(this.y);
           }
         }
       }

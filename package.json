@@ -12,6 +12,7 @@
     "highcharts": "^7.1.2",
     "highcharts-react-official": "^2.2.2",
     "less": "^3.8.1",
+    "numeral": "^2.0.6",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-helmet": "^5.2.0",
