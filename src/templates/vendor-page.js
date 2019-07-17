@@ -1,7 +1,7 @@
 import React from "react";
 import _ from 'lodash';
 import { graphql, Link } from "gatsby";
-import { Header, Grid, Segment, List, Breadcrumb } from 'semantic-ui-react';
+import { Header, Grid, Segment, List, Breadcrumb, Message } from 'semantic-ui-react';
 
 import Helpers from '../helpers';
 import Layout from '../components/layout';
@@ -61,6 +61,7 @@ export default ({ data }) => {
               </Header.Subheader>
             </Header>
           </Segment>
+          <Message content='The City of Detroit collects revenue on this entity’s behalf and sends the revenue to this entity via these pass through payments.' />
         </Grid.Column>
       </Grid.Row>
 
@@ -130,6 +131,7 @@ export const query = graphql`
         vendorName
         vendorAddress
         vendorNumber
+        passThroughPayee
         payments: accountsPayablesByVendorNumberList(orderBy: AGENCY_DESC_ASC) {
           checkNumber
           checkDate

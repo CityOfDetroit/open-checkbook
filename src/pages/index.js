@@ -68,7 +68,7 @@ const IndexPage = ({ data }) => {
             basic
             inverted
             style={{ background: 'rgba(0,0,0,0.6)', margin: `.5em` }}
-            size={`huge`}
+            size={`regular`}
             textAlign="justify"
             padded
           >
@@ -76,15 +76,17 @@ const IndexPage = ({ data }) => {
               <i>Message from David P. Massaron, CFO, City of Detroit:</i>
             </p>
             <p>
-              One of the key functions of the Office of the CFO (OCFO) is to
-              plan, direct, monitor, organize and control the City’s financial
-              resources in an efficient and effective manner. The OCFO is
-              responsible for ensuring that City resources are properly managed.
-              We also have a role in promoting trust in government by being
-              transparent of how the City is spending tax payer dollars. Open
-              Checkbook provides residents, business owners, and other
-              stakeholders the access and ability to see [vendor payments in the
-              city of Detroit].
+              Under Mayor Mike Duggan and the Detroit City Council’s leadership,
+              the City of Detroit has strategically invested in improving the
+              quality of life for Detroiters. Through the efficient and
+              effective use of public resources, Detroit has reduced crime and
+              fires, improved our roads, provided vibrant parks, increased
+              access to affordable housing, removed blight, brought new jobs to
+              Detroit, and expanded job training to fill those jobs. To ensure
+              we have the public’s trust as we guide these investments, the City
+              of Detroit has launched Detroit’s Open Checkbook. Open Checkbook
+              will give Detroiters the ability to see city payments to vendors
+              that make government work for residents every day.
             </p>
 
             <p>
@@ -172,7 +174,7 @@ const IndexPage = ({ data }) => {
                           size="tiny"
                           style={{ marginLeft: '1em', borderRadius: 0 }}
                         >
-                          PASS THROUGH PAYEE
+                          PASS THROUGH PAYMENTS
                         </Label>
                       ) : (
                         ``
