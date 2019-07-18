@@ -19,16 +19,12 @@ let faqs = [
     answer: "The General Fund is the primary fund used by the City of Detroit. The activities being paid for through the General Fund constitute the core administrative and operational tasks of the City."
   },
   {
-    question: "Which types of payments are included in the open checkbook?",
-    answer: ""
-  }, 
-  {
     question: "Which types of payments are excluded or masked in the open checkbook?",
-    answer: ""
+    answer: "Some payments in the open checkbook that are made to individuals are masked to protect privacy. For instance, a payment for jury duty is made to an individual, but we redact their name and use the generic term 'Juror' in this tool."
   },
   {
     question: "Where can I access the data displayed in the open checkbook?",
-    answer: "Access this data on Detroit's open data portal."
+    answer: "You can access the underlying data on Detroit's open data portal at: https://data.detroitmi.gov/dataset/Vendor-Payments/tdf5-hd2x"
   },
   {
     question: "Where can I get detailed information on the City's budget and finances?",
@@ -104,7 +100,7 @@ const AboutPage = () => {
           </section>
           <section style={{ marginBottom: '1em' }}>
             <Header as="h2">Share Feedback</Header>
-            <p>Smartsheet Form link TBD</p>
+            <p>Do you have thoughts or comments about this tool? Please <a href='https://app.smartsheet.com/b/form/e1861595456b4d1c8a2d174d901a08ec'>share them with us here.</a></p>
           </section>
         </Grid.Column>
       </Grid.Row>

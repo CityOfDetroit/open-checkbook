@@ -17,7 +17,7 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
           deptNameAbbreviation
           deptSlug
         }
-        vendors: allVendorsList(condition: {showInStats: true}) {
+        vendors: allVendorsList(condition: {showInStats: true}, first: 1000) {
           vendorName
           vendorNumber
         }
