@@ -82,8 +82,9 @@ const AboutPage = () => {
               <List.Item>Payment:</List.Item>
               <List.Item>Vendor:</List.Item>
               <List.Item>Fund:</List.Item>
-              <List.Item>Cost Center:</List.Item>
-              <List.Item>Expense Object:</List.Item>
+              <List.Item>Cost center:</List.Item>
+              <List.Item>Expense object:</List.Item>
+              <List.Item>Pass through payment:</List.Item>
             </List>
           </section>
           <section style={{ marginBottom: '1em' }}>

@@ -61,7 +61,7 @@ export default ({ data }) => {
               </Header.Subheader>
             </Header>
           </Segment>
-          <Message content='The City of Detroit collects revenue on this entity’s behalf and sends the revenue to this entity via these pass through payments.' />
+          {v.passThroughPayee ? <Message content='The City of Detroit collects revenue on this entity’s behalf and sends the revenue to this entity via these pass through payments.' /> : ``}
         </Grid.Column>
       </Grid.Row>
 
