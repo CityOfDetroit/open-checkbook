@@ -68,7 +68,7 @@ const IndexPage = ({ data }) => {
             basic
             inverted
             style={{ background: 'rgba(0,0,0,0.6)', margin: `.5em` }}
-            size={`regular`}
+            size={`large`}
             textAlign="justify"
             padded
           >
@@ -85,10 +85,8 @@ const IndexPage = ({ data }) => {
               Detroit, and expanded job training to fill those jobs. To ensure
               we have the public’s trust as we guide these investments, the City
               of Detroit has launched Detroit’s Open Checkbook. In accordance
-              with the
-              <a href="https://detroitmi.gov/document/executive-order-2015-2-city-detroit-open-data-initiative-and-creation-detroit-go-data-government">
-                Mayor's Executive Order 2015-2
-              </a>
+              with the <a href="https://detroitmi.gov/document/executive-order-2015-2-city-detroit-open-data-initiative-and-creation-detroit-go-data-government">
+                Mayor's Executive Order 2015-2 </a>
               , the Open Checkbook will give Detroiters the ability to see city
               payments to vendors that make government work for residents every
               day.

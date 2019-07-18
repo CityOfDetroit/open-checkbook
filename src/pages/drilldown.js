@@ -136,7 +136,7 @@ const Drilldown = ({ data }) => {
   let chartOptions = {
     chart: {
       type: "bar",
-      height: 1200,
+      height: 1400,
       events: {
         drilldown: function(e) { 
           // change title if it's not the lowest level
@@ -236,9 +236,12 @@ const Drilldown = ({ data }) => {
             <Header as='h1'>
               Chart
               <Header.Subheader>
-                Click on a bar to filter payments by their categories. This visualization excludes <Link to="/agency/non-departmental">Non Departmental</Link> payments.
+                Click on a bar to filter payments by their categories. 
               </Header.Subheader>
             </Header>
+            <p>
+            This visualization excludes <Link to="/agency/non-departmental">Non Departmental</Link> payments, <Link to="/agency/pass-throughs">Pass Through</Link> payments, and employee salary costs.
+            </p>
             <HighchartsReact
               highcharts={Highcharts}
               options={chartOptions}
