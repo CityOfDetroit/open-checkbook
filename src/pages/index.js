@@ -84,9 +84,14 @@ const IndexPage = ({ data }) => {
               access to affordable housing, removed blight, brought new jobs to
               Detroit, and expanded job training to fill those jobs. To ensure
               we have the public’s trust as we guide these investments, the City
-              of Detroit has launched Detroit’s Open Checkbook. Open Checkbook
-              will give Detroiters the ability to see city payments to vendors
-              that make government work for residents every day.
+              of Detroit has launched Detroit’s Open Checkbook. In accordance
+              with the
+              <a href="https://detroitmi.gov/document/executive-order-2015-2-city-detroit-open-data-initiative-and-creation-detroit-go-data-government">
+                Mayor's Executive Order 2015-2
+              </a>
+              , the Open Checkbook will give Detroiters the ability to see city
+              payments to vendors that make government work for residents every
+              day.
             </p>
 
             <p>
