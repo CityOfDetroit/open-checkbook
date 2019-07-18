@@ -54,21 +54,22 @@ const IndexPage = ({ data }) => {
     .value()
 
   let headerContainerStyle = {
-    backgroundImage: `url('https://i.imgur.com/fcxclqB.jpg')`,
+    backgroundImage: `url('https://detroitmi.gov/sites/detroitmi.localhost/files/2019-07/gaberich.png')`,
     backgroundRepeat: `no-repeat`,
     backgroundSize: `cover`,
     backgroundPosition: 'center',
     width: '100vw',
+    padding: '5em'
   }
 
   return (
     <Layout pageTitle='home'>
-      <Grid.Row>
-        <Grid.Column width={12} style={headerContainerStyle}>
+      <Grid.Row style={headerContainerStyle}>
+        <Grid.Column width={12}>
           <Segment
             basic
             inverted
-            style={{ background: 'rgba(0,0,0,0.6)', margin: `.5em` }}
+            style={{ background: 'rgba(24, 37, 42, 0.85)', margin: `.5em` }}
             size={`large`}
             textAlign="justify"
             padded
@@ -133,6 +134,7 @@ const IndexPage = ({ data }) => {
                     textTransform: `uppercase`,
                     fontWeight: 900,
                     fontSize: `14px`,
+                    fontFamily: 'Montserrat'
                   }}
                 >
                   View All Payments
