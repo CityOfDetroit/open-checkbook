@@ -49,7 +49,7 @@ export default ({ data }) => {
   const structuredTableDataByAgency = Helpers.nest(simpler, ['agencyName', 'categories']);
 
   return (
-    <Layout>
+    <Layout pageTitle={v.vendorName}>
       <Grid.Row>
         <Grid.Column width={12}>
           <Segment basic>

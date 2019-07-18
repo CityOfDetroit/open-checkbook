@@ -228,7 +228,7 @@ const Drilldown = ({ data }) => {
   }
 
   return (
-    <Layout>
+    <Layout pageTitle='Chart'>
       <Grid.Row>
         <Grid.Column width={12}>
           <Responsive maxWidth={768} as={Message} content={`This chart is best viewed on a desktop computer.`} />

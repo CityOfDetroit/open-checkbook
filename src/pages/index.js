@@ -47,6 +47,7 @@ const IndexPage = ({ data }) => {
       total: v.totalAmount,
       pass: v.passThroughPayee,
     }))
+    .filter(l => l.total !== null)
     .sortBy(['total'])
     .reverse()
     .slice(0, 10)
@@ -61,7 +62,7 @@ const IndexPage = ({ data }) => {
   }
 
   return (
-    <Layout>
+    <Layout pageTitle='home'>
       <Grid.Row>
         <Grid.Column width={12} style={headerContainerStyle}>
           <Segment

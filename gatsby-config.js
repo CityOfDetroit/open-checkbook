@@ -4,7 +4,7 @@ require("dotenv").config({
 
 module.exports = {
   siteMetadata: {
-    title: 'Detroit open checkbook',
+    title: 'Open Checkbook Detroit',
   },
   pathPrefix: "/open-checkbook",
   plugins: [
