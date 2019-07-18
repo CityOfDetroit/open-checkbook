@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, navigate, Link } from 'gatsby';
 import _ from 'lodash';
-import { Grid, Segment, Header } from 'semantic-ui-react';
+import { Grid, Segment, Header, Responsive, Message } from 'semantic-ui-react';
 
 import Layout from '../components/layout';
 import Helpers from '../helpers';
@@ -231,6 +231,7 @@ const Drilldown = ({ data }) => {
     <Layout>
       <Grid.Row>
         <Grid.Column width={12}>
+          <Responsive maxWidth={768} as={Message} content={`This chart is best viewed on a desktop computer.`} />
           <Segment basic>
             <Header as='h1'>
               Chart
