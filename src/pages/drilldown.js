@@ -9,6 +9,7 @@ import Helpers from '../helpers';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import drilldown from 'highcharts/modules/drilldown';
+import Footer from '../components/Footer';
 
 if (typeof Highcharts === 'object') {
   drilldown(Highcharts);
@@ -29,7 +30,7 @@ const Drilldown = ({ data }) => {
   // top level chart data
   let series = [];
   series.push({
-    name: 'Agency',
+    name: 'Department',
     colorByPoint: false,
     color: "#004445",
     dataLabels: {
@@ -130,7 +131,7 @@ const Drilldown = ({ data }) => {
     })
   })
 
-  let defaultTitle = 'Total Payments by Agency';
+  let defaultTitle = 'Total Payments by Department';
   let drilldownTitle = 'Total Payments by ';
 
   let chartOptions = {
@@ -249,6 +250,7 @@ const Drilldown = ({ data }) => {
           </Segment>
         </Grid.Column>
       </Grid.Row>
+      <Footer/>
     </Layout>
   );
 }

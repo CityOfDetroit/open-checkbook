@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'gatsby';
-import { Header, Grid, List, Breadcrumb } from 'semantic-ui-react';
+import { Header, Grid, List, Breadcrumb, Table } from 'semantic-ui-react';
 
 import Layout from '../components/layout';
 import FAQ from '../components/faq';
+import Footer from '../components/Footer';
 
 let faqs = [
   {
@@ -56,7 +57,7 @@ const AboutPage = () => {
               Open Checkbook allows users to view the amount and category of City payments on a variety of dimensions. Users can navigate City payment data using various charts and graphs to see how dollars from various funding sources are being spent. 
             </p>
             <p>
-              Open Checkbook allows users to view payment data by Fund, Department, Division, Unit, Payment Category, and Payment Class. Because of the large number of individual values in certain cases, we have grouped the information for ease of reference. Grouped information can be expanded to view the underlying detail. Encumbrances are not included in this Open Payments Data tool. 
+              Open Checkbook allows users to view payment data by Fund, Department, Cost Center, Expense Category, and Expense. Because of the large number of individual values in certain cases, we have grouped the information for ease of reference. Grouped information can be expanded to view the underlying detail. Encumbrances are not included in this Open Payments Data tool.
             </p>
             <p>
               You may find it helpful to browse through the Open Data Finance Glossary for terminologies used in this data tool. For more information about the City of Detroit, please visit <a href='https://www.detroitmi.gov'>City of Detroit</a> and check out our <a href='https://detroitmi.gov/departments/office-chief-financial-officer/financial-reports'>Financial Reports page</a> which includes links to various City of Detroit financial reports, including the Comprehensive Annual Financial Report, Single Audit, Four-Year Financial Plan (annual budget), and Monthly Financial Reports. 
@@ -74,14 +75,54 @@ const AboutPage = () => {
           </section>
           <section style={{ marginBottom: '1em' }}>
             <Header as="h2">Glossary of terms</Header>
-            <List bulleted>
-              <List.Item>Payment:</List.Item>
-              <List.Item>Vendor:</List.Item>
-              <List.Item>Fund:</List.Item>
-              <List.Item>Cost center:</List.Item>
-              <List.Item>Expense object:</List.Item>
-              <List.Item>Pass through payment:</List.Item>
-            </List>
+            <Table definition>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Agency</Table.Cell>
+                  <Table.Cell><emphasis>See Department</emphasis>. Agency is sometimes used interchangeably with Department, though the City of Detroit's principal entities are designated by the City Charter as Departments. </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Appropriation</Table.Cell>
+                  <Table.Cell>An appropriation represents the funding approved by Detroit City Council for a government operation.</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Cost Center</Table.Cell>
+                  <Table.Cell>The cost center represents a division or activity within a City appropriation. </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Department</Table.Cell>
+                  <Table.Cell>Departments are the principal entities which execute the functions of the City government. </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Expense</Table.Cell>
+                  <Table.Cell>The expense column provides the specific type of expense incurred, such as those for office supplies, printing, or the repair of City vehicles. </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Expense Category</Table.Cell>
+                  <Table.Cell>The expense category column provides the broader category of the expense incurred, such as Operating Supplies or Professional and Contractual Services. This is used to classify expenses for the City's Comprehensive Annual Financial Report (CAFR).</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Fund</Table.Cell>
+                  <Table.Cell>The fund is used to record resources whose use has been limited by law, governing agencies, grant authority, donors, individuals, or organizations. The fund is an independent accounting entity established pursuant to the rules and regulations of the Governmental Accounting Standards Board (GASB). It consists of four numeric characters.</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Pass Through Payment</Table.Cell>
+                  <Table.Cell>Pass through payments occur when the City of Detroit collects revenues on behalf of another entity, such as the Detroit Public Schools Community District, and transfers those collected funds directly to the recipient. These funds are not part of the City's budget. </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Payee</Table.Cell>
+                  <Table.Cell>The person or company to which the City pays money. </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Payment</Table.Cell>
+                  <Table.Cell>The transfer of funds from the City of Detroit to an individual or company by either check or Automated Clearing House (ACH) transfer. </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Vendor</Table.Cell>
+                  <Table.Cell>A person or company providing goods or services to the City. </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
           </section>
           <section style={{ marginBottom: '1em' }}>
             <Header as='h2'>Disclaimer</Header>
@@ -104,6 +145,7 @@ const AboutPage = () => {
           </section>
         </Grid.Column>
       </Grid.Row>
+      <Footer/>
     </Layout>
   );
 }
