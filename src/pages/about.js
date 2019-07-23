@@ -44,7 +44,7 @@ const AboutPage = () => {
   ];
 
   return (
-    <Layout pageTitle='whole'>
+    <Layout pageTitle='About'>
       <Grid.Row>
         <Grid.Column width={12}>
           <Breadcrumb icon='right angle' sections={crumbs} />
