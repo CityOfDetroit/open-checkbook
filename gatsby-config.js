@@ -9,6 +9,11 @@ module.exports = {
   pathPrefix: "/open-checkbook",
   plugins: [
     'gatsby-plugin-react-helmet', 
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      trackingId: `UA-107915075-10`,
+      respectDNT: true
+    },
     'gatsby-plugin-less',
     {
       resolve: 'gatsby-source-pg',
