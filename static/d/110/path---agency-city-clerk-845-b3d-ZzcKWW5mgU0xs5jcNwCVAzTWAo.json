@@ -1,0 +1,1 @@
+{"data":{"site":{"pathPrefix":"/open-checkbook"},"postgres":{"agency":[{"deptName":"City Clerk","deptNameShorthand":"City Clerk","deptSlug":"city-clerk","totalAmount":950309.74,"accountsPayablesByAgencyCodeMaskedList":[]}]}},"pageContext":{"isCreatedByStatefulCreatePages":false,"name":"City Clerk"}}

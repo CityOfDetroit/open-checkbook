@@ -1,0 +1,1 @@
+{"data":{"site":{"pathPrefix":"/open-checkbook"},"postgres":{"agency":[{"deptName":"Airport","deptNameShorthand":"Airport","deptSlug":"airport","totalAmount":null,"accountsPayablesByAgencyCodeMaskedList":[]}]}},"pageContext":{"isCreatedByStatefulCreatePages":false,"name":"Airport"}}
