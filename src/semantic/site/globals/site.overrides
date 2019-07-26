@@ -21,18 +21,18 @@ a.header-link:hover{
 body:after{
   content: "beta";
   position: fixed;
-  width: 80px;
-  height: 25px;
+  width: 200px;
+  height: 55px;
   background: #279989;
-  top: 7px;
-  left: -20px;
+  top: 20px;
+  left: -60px;
   text-align: center;
-  font-size: 12px;
+  font-size: 24px;
   font-family: 'Montserrat';
   text-transform: uppercase;
-  font-weight: bold;
+  font-weight: 900 !important;
   color: #fff;
-  line-height: 27px;
+  line-height: 55px;
   -ms-transform:rotate(-45deg);
   -webkit-transform:rotate(-45deg);
   transform:rotate(-45deg);

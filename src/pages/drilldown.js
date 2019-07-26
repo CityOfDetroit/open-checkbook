@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, navigate, Link } from 'gatsby';
 import _ from 'lodash';
-import { Grid, Segment, Header } from 'semantic-ui-react';
+import { Grid, Segment, Header, Responsive, Message } from 'semantic-ui-react';
 
 import Layout from '../components/layout';
 import Helpers from '../helpers';
@@ -9,6 +9,7 @@ import Helpers from '../helpers';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import drilldown from 'highcharts/modules/drilldown';
+import Footer from '../components/Footer';
 
 if (typeof Highcharts === 'object') {
   drilldown(Highcharts);
@@ -20,7 +21,7 @@ const Drilldown = ({ data }) => {
   // Omit legacy agencies, Default Cost Center, and Non Departmental
   let sortedAgencies = _(agencies)
     .filter(function(o) { return o.accountsPayablesByAgencyCodeMaskedList.length > 0 })
-    .filter(function(p) { return p.deptName !== 'Default Cost Center' })
+    .filter(function(p) { return p.deptName !== 'Pass Through Payments' })
     .filter(function(q) { return q.deptName !== 'Non Departmental' })
     .sortBy('totalAmount')
     .reverse()
@@ -29,13 +30,13 @@ const Drilldown = ({ data }) => {
   // top level chart data
   let series = [];
   series.push({
-    name: 'Agency',
+    name: 'Department',
     colorByPoint: false,
     color: "#004445",
     dataLabels: {
       enabled: true,
-      formatter: function () { 
-        return Helpers.stringToMoney(this.y); 
+      formatter: function() { 
+        return Helpers.formatMoney(this.y);
       }
     },
     data: sortedAgencies.map(a => {
@@ -65,7 +66,7 @@ const Drilldown = ({ data }) => {
     },
     activeAxisLabelStyle: {"color": "#18252a", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif"},
     activeDataLabelStyle: {"color": "white", "cursor": "pointer", "fontSize": "12px", "text-decoration": "none", "font-family": "Montserrat, sans-serif", "font-weight":"400"},
-    series: []
+    series: [],
   }
 
   // iterate through AGENCIES, group by COST CENTER
@@ -130,13 +131,13 @@ const Drilldown = ({ data }) => {
     })
   })
 
-  let defaultTitle = 'Total Payments by Agency';
+  let defaultTitle = 'Total Payments by Department';
   let drilldownTitle = 'Total Payments by ';
 
   let chartOptions = {
     chart: {
       type: "bar",
-      height: 1200,
+      height: 1400,
       events: {
         drilldown: function(e) { 
           // change title if it's not the lowest level
@@ -185,14 +186,17 @@ const Drilldown = ({ data }) => {
           style: {"font-family":"Montserrat"}
       },
       labels: {
-        style: {"color": "#18252a", "fontSize": "12px"}
+        style: {"color": "#18252a", "fontSize": "12px"},
       }, 
       lineWidth: 0,
       minorGridLineWidth: 0,
       gridLineColor: 'transparent',
       lineColor: 'transparent',
       minorTickLength: 0,
-      tickLength: 0
+      tickLength: 0,
+      scrollbar: {
+        enabled: true
+      }
     },
     legend: {
       enabled: false
@@ -210,7 +214,7 @@ const Drilldown = ({ data }) => {
           enabled: true,
           style: {"font-weight":"400", "text-decoration":"none"},
           formatter: function() { 
-            return Helpers.stringToMoney(this.y);
+            return Helpers.formatMoney(this.y);
           }
         }
       }
@@ -225,16 +229,20 @@ const Drilldown = ({ data }) => {
   }
 
   return (
-    <Layout>
+    <Layout pageTitle='Chart'>
       <Grid.Row>
         <Grid.Column width={12}>
+          <Responsive maxWidth={768} as={Message} content={`This chart is best viewed on a desktop computer.`} />
           <Segment basic>
             <Header as='h1'>
               Chart
               <Header.Subheader>
-                Click on a bar to filter payments by their categories. This visualization excludes <Link to="/agency/non-departmental">Non Departmental</Link> payments.
+                Click on a bar to filter payments by their categories. 
               </Header.Subheader>
             </Header>
+            <p>
+            This visualization excludes <Link to="/agency/non-departmental">Non Departmental</Link> payments, <Link to="/agency/pass-throughs">Pass Through</Link> payments, and employee salary costs.
+            </p>
             <HighchartsReact
               highcharts={Highcharts}
               options={chartOptions}
@@ -242,6 +250,7 @@ const Drilldown = ({ data }) => {
           </Segment>
         </Grid.Column>
       </Grid.Row>
+      <Footer/>
     </Layout>
   );
 }

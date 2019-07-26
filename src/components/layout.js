@@ -8,7 +8,7 @@ import SiteHeader from './SiteHeader'
 
 import 'semantic-ui-less/semantic.less'
 
-const Layout = ({ children, data }) => (
+const Layout = ({ children, data, pageTitle }) => (
   <StaticQuery
     query={graphql`
       query SiteTitleQuery {
@@ -22,7 +22,7 @@ const Layout = ({ children, data }) => (
     render={data => (
       <>
         <Helmet
-          title={data.site.siteMetadata.title}
+          title={`${pageTitle}: ${data.site.siteMetadata.title}`}
           meta={[
             { name: 'description', content: 'Sample' },
             { name: 'keywords', content: 'sample, something' },

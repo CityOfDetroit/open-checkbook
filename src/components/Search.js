@@ -7,10 +7,11 @@ export const Search = ({ agencies, vendors }) => {
 
   let [input, setInput] = useState('')
   
-  let exclude = ['Inactive GL Entities'];
+  let exclude = ['Inactive GL Entities', 'Arts', 'Civic Center', 'Homeland Security Department', 'Recreation'];
   let dropdownAgencies = _(agencies)
     .uniqBy('deptName') // dedupes dwsd
     .filter(a => !_.includes(exclude, a.parent)) // cleans out Arts, Civic Center, etc
+    .filter(a => exclude.indexOf(a.deptName) === -1)
     .sortBy('deptName')
     .map(a => { // structures as Semantic's dropdown format
       return { 

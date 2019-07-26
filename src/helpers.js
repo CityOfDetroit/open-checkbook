@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import numeral from 'numeral'
 
 const Helpers = {
   // graphql queries return strings, format them as currency
@@ -6,6 +7,10 @@ const Helpers = {
     return new Intl.NumberFormat('en-US', {
       style: 'currency', currency: 'USD'
     }).format(parseFloat(str));
+  },
+
+  formatMoney: function(str) {
+    return numeral(str).format('$0.0a').toUpperCase()
   },
 
   // reduce returns floats, format that as currency too

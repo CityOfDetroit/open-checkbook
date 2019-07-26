@@ -9,6 +9,8 @@ import Helpers from '../helpers';
 const ChartDetail = ({ location, data }) => {
   let payments = [];
   const crumbs = [];
+
+
   
   // if you navigate to this page from the drilldown chart, we start with filter params
   if (location.state) {
@@ -27,7 +29,7 @@ const ChartDetail = ({ location, data }) => {
     crumbs.push(
       {key: 'Home', content: <Link to="/">Home</Link>},
       {key: 'Agency', content: 'Agency', link: false},
-      {key: `${params.agency}`, content: `${params.agency}`, link: true},
+      {key: `${params.agency}`, content: `${payments[0].agencyDesc}`, link: true},
       {key: 'CC', content: 'Cost Center', link: false},
       {key: `${params.cc}`, content: `${params.cc}`, link: false},
       {key: 'Expense', content: 'Expense Category', link: false},

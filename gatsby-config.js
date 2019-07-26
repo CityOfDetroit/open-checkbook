@@ -4,11 +4,16 @@ require("dotenv").config({
 
 module.exports = {
   siteMetadata: {
-    title: 'Detroit open checkbook',
+    title: 'Open Checkbook Detroit',
   },
   pathPrefix: "/open-checkbook",
   plugins: [
     'gatsby-plugin-react-helmet', 
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      trackingId: `UA-107915075-10`,
+      respectDNT: true
+    },
     'gatsby-plugin-less',
     {
       resolve: 'gatsby-source-pg',

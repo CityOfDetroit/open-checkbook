@@ -1,10 +1,11 @@
 {
-  "name": "gatsby-starter-semantic-ui",
-  "description": "Gatsby 2 Semantic UI Starter",
+  "name": "open-checkbook",
+  "description": "Open Checkbook",
   "version": "1.0.0",
-  "author": "Richard Blechinger <me@blechi.at>",
+  "author": "IET Team <iet@detroitmi.gov>",
   "dependencies": {
     "gatsby": "next",
+    "gatsby-plugin-google-analytics": "^2.1.4",
     "gatsby-plugin-less": "^2.0.0-beta.5",
     "gatsby-plugin-react-helmet": "next",
     "gatsby-source-pg": "^0.1.4",
@@ -12,6 +13,7 @@
     "highcharts": "^7.1.2",
     "highcharts-react-official": "^2.2.2",
     "less": "^3.8.1",
+    "numeral": "^2.0.6",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-helmet": "^5.2.0",
@@ -34,9 +36,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pretzelhands/gatsby-starter-semantic-ui.git"
+    "url": "git+https://github.com/CityOfDetroit/open-checkbook.git"
   },
   "bugs": {
-    "url": "https://github.com/pretzelhands/gatsby-starter-semantic-ui/issues"
+    "url": "https://github.com/CityOfDetroit/open-checkbook/issues"
   }
 }

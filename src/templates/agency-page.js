@@ -93,7 +93,7 @@ export default ({ data }) => {
   });
 
   return (
-    <Layout>
+    <Layout pageTitle={a.deptName}>
       <Grid.Row>
         <Grid.Column width={12}>
           <Segment basic>
