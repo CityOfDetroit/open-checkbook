@@ -70,7 +70,7 @@ const IndexPage = ({ data }) => {
     <Layout pageTitle='Homepage'>
       <Grid.Row style={headerContainerStyle}>
         <Grid.Column width={12}>
-          <Responsive as={Segment} minWidth={800} basic inverted style={{ background: 'rgba(24, 37, 42, 0.85)', margin: `.5em` }} size={`large`} textAlign='justify' padded>
+          <Responsive as={Segment} minWidth={800} basic inverted style={{ background: 'rgba(24, 37, 42, 0.85)', margin: `.5em` }} size={`regular`} textAlign='justify' padded>
             <p>
               Under Mayor Mike Duggan and the Detroit City Council’s leadership,
               the City of Detroit has strategically invested in improving the
@@ -91,7 +91,7 @@ const IndexPage = ({ data }) => {
               <b>Welcome, Detroit, to your Open Checkbook.</b>
             </p>
           </Responsive>
-          <Responsive as={Segment} maxWidth={800} basic inverted style={{ background: 'rgba(24, 37, 42, 0.85)', margin: `.1em` }} size={`tiny`} textAlign='justify'>
+          <Responsive as={Segment} maxWidth={800} basic inverted style={{ background: 'rgba(24, 37, 42, 0.85)', margin: `.1em` }} size={`regular`} textAlign='justify'>
             <p>
               Under Mayor Mike Duggan and the Detroit City Council’s leadership,
               the City of Detroit has strategically invested in improving the
