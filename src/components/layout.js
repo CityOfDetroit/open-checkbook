@@ -26,8 +26,9 @@ const Layout = ({ children, data, pageTitle }) => (
           meta={[
             { name: 'description', content: 'Sample' },
             { name: 'keywords', content: 'sample, something' },
-          ]}
-        />
+          ]}>
+            <link href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,900&display=swap" rel="stylesheet"></link>
+          </Helmet>
 
         <SiteHeader siteTitle={data.site.siteMetadata.title} />
 

@@ -63,7 +63,7 @@ const IndexPage = ({ data }) => {
   }
 
   return (
-    <Layout pageTitle='home'>
+    <Layout pageTitle='Homepage'>
       <Grid.Row style={headerContainerStyle}>
         <Grid.Column width={12}>
           <Segment
