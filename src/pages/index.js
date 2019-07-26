@@ -7,6 +7,7 @@ import {
   Label,
   Container,
   Image,
+  Responsive,
 } from 'semantic-ui-react'
 import { graphql, Link } from 'gatsby'
 import _ from 'lodash'
@@ -15,6 +16,10 @@ import Layout from '../components/layout'
 import { Search } from '../components/Search'
 import Helpers from '../helpers'
 import Footer from '../components/Footer'
+
+const OrangeLink = ({ url, text }) => {
+  return <a href={url} style={{color: '#feb70d'}}>{text}</a>
+}
 
 const IndexPage = ({ data }) => {
   let depts = data.postgres.allAgenciesList
@@ -59,24 +64,13 @@ const IndexPage = ({ data }) => {
     backgroundSize: `cover`,
     backgroundPosition: 'center',
     width: '100vw',
-    padding: '5em'
   }
 
   return (
     <Layout pageTitle='Homepage'>
       <Grid.Row style={headerContainerStyle}>
         <Grid.Column width={12}>
-          <Segment
-            basic
-            inverted
-            style={{ background: 'rgba(24, 37, 42, 0.85)', margin: `.5em` }}
-            size={`large`}
-            textAlign="justify"
-            padded
-          >
-            <p>
-              <i>Message from David P. Massaron, CFO, City of Detroit:</i>
-            </p>
+          <Responsive as={Segment} minWidth={800} basic inverted style={{ background: 'rgba(24, 37, 42, 0.85)', margin: `.5em` }} size={`large`} textAlign='justify' padded>
             <p>
               Under Mayor Mike Duggan and the Detroit City Council’s leadership,
               the City of Detroit has strategically invested in improving the
@@ -87,8 +81,7 @@ const IndexPage = ({ data }) => {
               Detroit, and expanded job training to fill those jobs. To ensure
               we have the public’s trust as we guide these investments, the City
               of Detroit has launched Detroit’s Open Checkbook. In accordance
-              with the <a href="https://detroitmi.gov/document/executive-order-2015-2-city-detroit-open-data-initiative-and-creation-detroit-go-data-government">
-                Mayor's Executive Order 2015-2 </a>
+              with the <OrangeLink url={`https://detroitmi.gov/document/executive-order-2015-2-city-detroit-open-data-initiative-and-creation-detroit-go-data-government`} text={` Mayor's Executive Order 2015-2 `} />
               , the Open Checkbook will give Detroiters the ability to see city
               payments to vendors that make government work for residents every
               day.
@@ -97,7 +90,28 @@ const IndexPage = ({ data }) => {
             <p>
               <b>Welcome, Detroit, to your Open Checkbook.</b>
             </p>
-          </Segment>
+          </Responsive>
+          <Responsive as={Segment} maxWidth={800} basic inverted style={{ background: 'rgba(24, 37, 42, 0.85)', margin: `.1em` }} size={`tiny`} textAlign='justify'>
+            <p>
+              Under Mayor Mike Duggan and the Detroit City Council’s leadership,
+              the City of Detroit has strategically invested in improving the
+              quality of life for Detroiters. Through the efficient and
+              effective use of public resources, Detroit has reduced crime and
+              fires, improved our roads, provided vibrant parks, increased
+              access to affordable housing, removed blight, brought new jobs to
+              Detroit, and expanded job training to fill those jobs. To ensure
+              we have the public’s trust as we guide these investments, the City
+              of Detroit has launched Detroit’s Open Checkbook. In accordance
+              with the <OrangeLink url={`https://detroitmi.gov/document/executive-order-2015-2-city-detroit-open-data-initiative-and-creation-detroit-go-data-government`} text={` Mayor's Executive Order 2015-2 `} />
+              , the Open Checkbook will give Detroiters the ability to see city
+              payments to vendors that make government work for residents every
+              day.
+            </p>
+
+            <p>
+              <b>Welcome, Detroit, to your Open Checkbook.</b>
+            </p>
+          </Responsive>
         </Grid.Column>
       </Grid.Row>
 
