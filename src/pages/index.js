@@ -27,10 +27,10 @@ const IndexPage = ({ data }) => {
 
   // use this for top level total payments stat (can't reduce vendor total amount because of show in stats filter!)
   let deptsNotNull = _.filter(depts, function(d) {
-    return d.totalAmount > 0
+    return d.totalAmount > 0 && d.totalAmount !== null
   })
 
-  let topDepts = _(depts)
+  let topDepts = _(deptsNotNull)
     .groupBy('deptName') // dedupes dwsd
     .map((objs, key) => ({
       dept: key,
@@ -42,9 +42,9 @@ const IndexPage = ({ data }) => {
     })
     .sortBy(['total'])
     .reverse()
-    .slice(0, 10)
+    .slice(0,10)
     .value()
-
+    
   let topVendors = _(vendors)
     .map(v => ({
       vendor: v.vendorName,
