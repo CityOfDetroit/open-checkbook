@@ -100,7 +100,7 @@ export default ({ data }) => {
             <Breadcrumb icon='right angle' sections={crumbs} />
             <Header as='h2'>
               {a.deptName}
-              <Header.Subheader>{Helpers.stringToMoney(a.totalAmount)} total payments in fiscal year 2017-2018</Header.Subheader>
+              <Header.Subheader>{Helpers.stringToMoney(a.totalAmount)} total payments in fiscal year 2018-2019</Header.Subheader>
             </Header>
           </Segment>
         </Grid.Column>

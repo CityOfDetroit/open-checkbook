@@ -25,7 +25,7 @@ let faqs = [
   },
   {
     question: "Where can I access the data displayed in the open checkbook?",
-    answer: "You can access the underlying data on Detroit's open data portal at: https://data.detroitmi.gov/dataset/Vendor-Payments/tdf5-hd2x"
+    answer: "You can access the underlying data on Detroit's open data portal at: https://data.detroitmi.gov/datasets/open-checkbook-payments"
   },
   {
     question: "Where can I get detailed information on the City's budget and finances?",

@@ -131,7 +131,7 @@ const IndexPage = ({ data }) => {
                 deptsNotNull.reduce((a, v) => a + parseFloat(v.totalAmount), 0)
               )}
               <Header.Subheader>
-                Total Payments in Fiscal Year 2017-2018
+                Total Payments in Fiscal Year 2018-2019
               </Header.Subheader>
             </Header>
             <div style={{ marginTop: `25px` }}>
