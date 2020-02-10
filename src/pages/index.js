@@ -7,6 +7,8 @@ import {
   Label,
   Container,
   Image,
+  Icon,
+  Popup,
   Responsive,
 } from 'semantic-ui-react'
 import { graphql, Link } from 'gatsby'
@@ -16,6 +18,7 @@ import Layout from '../components/layout'
 import { Search } from '../components/Search'
 import Helpers from '../helpers'
 import Footer from '../components/Footer'
+import Term from '../components/Term'
 
 const OrangeLink = ({ url, text }) => {
   return <a href={url} style={{color: '#feb70d'}}>{text}</a>
@@ -27,7 +30,7 @@ const IndexPage = ({ data }) => {
 
   // use this for top level total payments stat (can't reduce vendor total amount because of show in stats filter!)
   let deptsNotNull = _.filter(depts, function(d) {
-    return d.totalAmount > 0 && d.totalAmount !== null
+    return d.totalAmount > 0 && d.totalAmount !== null && d.deptName != 'Pass Through Payments'
   })
 
   let topDepts = _(deptsNotNull)
@@ -162,7 +165,10 @@ const IndexPage = ({ data }) => {
       <Grid.Row>
         <Grid.Column width={6}>
           <Segment basic>
-            <Header as="h2" content="Top Agencies" />
+            <div style={{display: 'flex', alignItems: 'center'}}>
+            <Header as="h2" content="Top Agencies" style={{padding: 0, margin: 0}} />
+            <Term term='agency' />
+            </div>
             <List ordered relaxed divided size="big">
               {topDepts.map((d, i) => (
                 <List.Item key={i}>
@@ -182,14 +188,17 @@ const IndexPage = ({ data }) => {
 
         <Grid.Column width={6}>
           <Segment basic>
-            <Header as="h2" content="Top Payees" />
+          <div style={{display: 'flex', alignItems: 'center'}}>
+
+<Header as="h2" content="Top Payees" style={{padding: 0, margin: 0}} />
+<Term term='payee' /></div>
             <List ordered relaxed divided size="big">
               {topVendors.map((v, i) => (
                 <List.Item key={i}>
                   <List.Content style={{ marginLeft: '.5em' }}>
                     <List.Header>
                       <Link to={`/vendor/${v.slug}`}>{v.vendor} >></Link>
-                      {v.pass === true ? (
+                      {/* {v.pass === true ? (
                         <Label
                           size="tiny"
                           style={{ marginLeft: '1em', borderRadius: 0 }}
@@ -198,7 +207,7 @@ const IndexPage = ({ data }) => {
                         </Label>
                       ) : (
                         ``
-                      )}
+                      )} */}
                     </List.Header>
                     <List.Description>
                       {Helpers.stringToMoney(v.total)}

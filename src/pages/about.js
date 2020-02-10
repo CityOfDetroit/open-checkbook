@@ -105,10 +105,10 @@ const AboutPage = () => {
                   <Table.Cell>Fund</Table.Cell>
                   <Table.Cell>The fund is used to record resources whose use has been limited by law, governing agencies, grant authority, donors, individuals, or organizations. The fund is an independent accounting entity established pursuant to the rules and regulations of the Governmental Accounting Standards Board (GASB). It consists of four numeric characters.</Table.Cell>
                 </Table.Row>
-                <Table.Row>
+                {/* <Table.Row>
                   <Table.Cell>Pass Through Payment</Table.Cell>
                   <Table.Cell>Pass through payments occur when the City of Detroit collects revenues on behalf of another entity, such as the Detroit Public Schools Community District, and transfers those collected funds directly to the recipient. These funds are not part of the City's budget. </Table.Cell>
-                </Table.Row>
+                </Table.Row> */}
                 <Table.Row>
                   <Table.Cell>Payee</Table.Cell>
                   <Table.Cell>The person or company to which the City pays money. </Table.Cell>

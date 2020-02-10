@@ -7,7 +7,7 @@ export const Search = ({ agencies, vendors }) => {
 
   let [input, setInput] = useState('')
   
-  let exclude = ['Inactive GL Entities', 'Arts', 'Civic Center', 'Homeland Security Department', 'Recreation'];
+  let exclude = ['Inactive GL Entities', 'Arts', 'Civic Center', 'Homeland Security Department', 'Recreation', 'Pass Through Payments'];
   let dropdownAgencies = _(agencies)
     .uniqBy('deptName') // dedupes dwsd
     .filter(a => !_.includes(exclude, a.parent)) // cleans out Arts, Civic Center, etc

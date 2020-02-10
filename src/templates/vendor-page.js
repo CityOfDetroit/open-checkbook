@@ -10,7 +10,7 @@ import Footer from '../components/Footer';
 
 export default ({ data }) => {
   const v = data.postgres.vendor[0];
-  const vendorPayments = v.payments;
+  const vendorPayments = v.payments.filter(p => p.agencyDesc !== 'Pass Through Payments');
   
   const byCostCenter = _(v.payments)
     .groupBy('costcenterDesc')
@@ -27,7 +27,7 @@ export default ({ data }) => {
     .orderBy('sumPayments', 'desc')
     .value();
 
-  const byObject = _.groupBy(v.payments, 'objectDescShorthand');
+  const byObject = _.groupBy(vendorPayments, 'objectDescShorthand');
 
   // set up breadcrumbs
   const crumbs = [
@@ -61,7 +61,7 @@ export default ({ data }) => {
               </Header.Subheader>
             </Header>
           </Segment>
-          {v.passThroughPayee ? <Message content='The City of Detroit collects revenue on this entity’s behalf and sends the revenue to this entity via these pass through payments.' /> : ``}
+          {/* {v.passThroughPayee ? <Message content='The City of Detroit collects revenue on this entity’s behalf and sends the revenue to this entity via these pass through payments.' /> : ``} */}
         </Grid.Column>
       </Grid.Row>
 

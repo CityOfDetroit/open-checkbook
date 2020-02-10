@@ -26,7 +26,7 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
   `);
 
   // Make a page for each agency or department
-  res.data.postgres.agencies.forEach(a => {
+  res.data.postgres.agencies.filter(a => a.deptName !== 'Pass Through Payments').forEach(a => {
     createPage({
       path: `/agency/${a.deptSlug}`,
       component: path.resolve('./src/templates/agency-page.js'),
@@ -37,7 +37,7 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
   });
 
   // Make a page for each vendor
-  res.data.postgres.vendors.forEach(v => {
+  res.data.postgres.vendors.slice(0,10).forEach(v => {
     createPage({
       path: `/vendor/${v.vendorNumber}`,
       component: path.resolve('./src/templates/vendor-page.js'),
