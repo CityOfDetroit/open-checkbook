@@ -37,7 +37,7 @@ exports.createPages = async ({ graphql, actions: { createPage }}) => {
   });
 
   // Make a page for each vendor
-  res.data.postgres.vendors.slice(0,10).forEach(v => {
+  res.data.postgres.vendors.forEach(v => {
     createPage({
       path: `/vendor/${v.vendorNumber}`,
       component: path.resolve('./src/templates/vendor-page.js'),
