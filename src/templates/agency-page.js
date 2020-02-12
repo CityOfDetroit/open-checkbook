@@ -136,7 +136,10 @@ export default ({ data }) => {
           <Segment basic>
             <Breadcrumb icon="right angle" sections={crumbs} />
             <Header as="h1">
+              <div style={{display: 'flex', alignContent: 'center'}}>
               {a.deptName}
+              {a.deptName === 'Non Departmental' ? <Term term='non-departmental' size='regular' /> : null}
+              </div>
               <Header.Subheader>
                 {Helpers.stringToMoney(totalSpending)} total payments in fiscal
                 year 2018-2019

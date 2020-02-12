@@ -10,6 +10,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import drilldown from 'highcharts/modules/drilldown';
 import Footer from '../components/Footer';
+import Term from '../components/Term';
 
 if (typeof Highcharts === 'object') {
   drilldown(Highcharts);
@@ -241,7 +242,7 @@ const Drilldown = ({ data }) => {
               </Header.Subheader>
             </Header>
             <p>
-            This visualization excludes <Link to="/agency/non-departmental">Non Departmental</Link> payments, <Link to="/agency/pass-throughs">Pass Through</Link> payments, and employee salary costs.
+            This visualization excludes <Link to="/agency/non-departmental">Non Departmental</Link><Term term='non-departmental' /> payments and employee salary costs.
             </p>
             <HighchartsReact
               highcharts={Highcharts}
