@@ -34,19 +34,21 @@ const IndexPage = ({ data }) => {
   })
 
   let topDepts = _(deptsNotNull)
-    .groupBy('deptName') // dedupes dwsd
+    .groupBy('deptName') // dedupes 
     .map((objs, key) => ({
       dept: key,
       slug: objs[0].deptSlug,
       total: objs.reduce((a, p) => a + parseFloat(p.totalAmount), 0),
     }))
     .filter(function(o) {
-      return o.total > 0
+      return o.total > 0 && o.dept !== 'Non Departmental'
     })
     .sortBy(['total'])
     .reverse()
     .slice(0,10)
     .value()
+
+  console.log(topDepts)
     
   let topVendors = _(vendors)
     .map(v => ({
